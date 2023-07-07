@@ -1,4 +1,5 @@
 using EcommerceApp1.Data;
+using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Models.Repositories;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Builder;
@@ -33,9 +34,8 @@ namespace EcommerceApp1
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddIdentity<AppUser, AppRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                                                    .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddTransient<CompanyRepository>();
             services.AddTransient<CompanyService>();
