@@ -4,18 +4,22 @@ using System.Security.Claims;
 namespace EcommerceApp1.Services
 {
 
-    public class UserService : IUserService
+    public class UserService
     {
-        private readonly IHttpContextAccessor accessor;
+        private readonly IHttpContextAccessor _httpContext;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UserService(IHttpContextAccessor accessor)
+        public UserService(IHttpContextAccessor httpContext, UserManager<AppUser> userManager)
         {
-            this.accessor = accessor;
+            _httpContext = httpContext;
+            _userManager = userManager;
         }
 
-        public ClaimsPrincipal GetUser()
+        public AppUser GetCurrentUser()
         {
-            return accessor?.HttpContext?.User as ClaimsPrincipal;
+            var userID = _userManager.GetUserId(_httpContext.HttpContext.User);
+            var user = _userManager.FindByIdAsync(userID).Result;
+            return user;
         }
     }
 }
