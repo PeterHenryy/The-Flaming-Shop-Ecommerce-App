@@ -40,6 +40,8 @@ namespace EcommerceApp1
             services.AddTransient<CompanyRepository>();
             services.AddTransient<CompanyService>();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+
+            
             services.AddHttpContextAccessor();
             services.AddTransient<IUserService, UserService>();
         }
