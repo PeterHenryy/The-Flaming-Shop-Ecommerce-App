@@ -39,9 +39,10 @@ namespace EcommerceApp1
             services.AddControllersWithViews();
             services.AddTransient<CompanyRepository>();
             services.AddTransient<CompanyService>();
+
+            
             services.AddRazorPages().AddRazorRuntimeCompilation();
-            services.AddHttpContextAccessor();
-            services.AddTransient<IUserService, UserService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
