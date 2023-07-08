@@ -4,6 +4,7 @@ using EcommerceApp1.Models.Repositories;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -39,10 +40,10 @@ namespace EcommerceApp1
             services.AddControllersWithViews();
             services.AddTransient<CompanyRepository>();
             services.AddTransient<CompanyService>();
-
-
-            
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddTransient<ProductRepository>();
+            services.AddTransient<ProductService>();
+            services.AddTransient<UserService>();
+            services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
