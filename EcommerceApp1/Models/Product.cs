@@ -15,8 +15,7 @@ namespace EcommerceApp1.Models
 
         [ForeignKey("Companies")]
         public int CompanyID { get; set; }
-        public virtual Company Company { get; set; }
-
+   
         [ForeignKey("AspNetUsers")]
         public int UserID { get; set; }
         
