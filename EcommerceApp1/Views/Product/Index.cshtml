@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Product>
+
+<a class="btn btn-primary" href="@Url.Action("Create", "Product")">Add Product</a>
+<table class="table table-striped table-dark">
+  <tr>
+    <th>ProductID</th>
+    <th>Name</th>
+    <th>Stock</th>
+    <th>Price</th>
+    <th>Image</th>
+    <th>ReleaseDate</th>
+    <th>CompanyID</th>
+    <th>UserID</th>
+    <th>Action</th>
+    <th>Action</th>
+  </tr>
+
+    @foreach (var product in @Model)
+    {
+      <tr>
+        <td>@product.ID</td>
+        <td>@product.Name</td>
+        <td>@product.Stock</td>
+        <td>@product.Price</td>
+        <td> <img style="width: 200px;" src="@product.Image"> </td>
+        <td>@product.ReleaseDate</td>
+        <td>@product.CompanyID</td>
+        <td>@product.UserID</td>
+        <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Product", new {productID = product.ID})">Update</a></td>
+        <td> <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new {productID = product.ID})">Delete</a></td>
+      </tr>
+    }
+
+</table>
