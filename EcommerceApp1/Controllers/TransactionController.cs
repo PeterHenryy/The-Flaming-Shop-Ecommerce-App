@@ -26,6 +26,7 @@ namespace EcommerceApp1.Controllers
         {
             var transaction = new Transaction();
             transaction.ProductID = productID;
+            transaction.CurrentProduct = _transactionService.GetProductByID(productID);
             return View(transaction);
         }
 
@@ -34,6 +35,7 @@ namespace EcommerceApp1.Controllers
         {
             var currentUser = _userService.GetCurrentUser();
             transaction.UserID = currentUser.Id;
+            transaction.Total = _transactionService.CalculateTransactionTotal(transaction);
             bool createdTransaction = _transactionService.Create(transaction);
             if (createdTransaction)
             {
