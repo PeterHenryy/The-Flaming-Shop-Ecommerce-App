@@ -44,5 +44,6 @@ namespace EcommerceApp1.Services
             var total = transaction.CurrentProduct.Price * transaction.QuantityBought;
             return total;
         }
+
     }
 }

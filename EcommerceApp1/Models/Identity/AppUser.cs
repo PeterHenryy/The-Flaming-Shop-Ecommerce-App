@@ -10,6 +10,6 @@ namespace EcommerceApp1.Models.Identity
         public string LastName { get; set; }
         public string Password { get; set; }
         public string ProfilePicture { get; set; }
-        public int UserRewardPoints { get; set; }
+        public double UserRewardPoints { get; set; }
     }
 }
