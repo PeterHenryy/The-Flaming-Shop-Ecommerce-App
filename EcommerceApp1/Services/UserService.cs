@@ -23,5 +23,11 @@ namespace EcommerceApp1.Services
             var user = _userManager.FindByIdAsync(userID).Result;
             return user;
         }
+
+        public static double CalculateUserRewardPoints(double productPrice)
+        {
+            double rewardPoints = productPrice / 2;
+            return rewardPoints;
+        }
     }
 }
