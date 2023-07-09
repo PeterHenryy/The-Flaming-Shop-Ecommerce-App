@@ -3,7 +3,9 @@
 <form asp-controller="Transaction" asp-action="Create">
 
   <div class="form-row">
-    <input type="text" hidden value="@Model.ProductID" asp-for="ProductID"/>
+    <input type="hidden" asp-for="ProductID" />
+    <input type="hidden" asp-for="CurrentProduct.Price" />
+    <input type="hidden" asp-for="CurrentProduct.Name" />
     <div class="form-group col-md-6">
       <label for="inputEmail4">First Name</label>
       <input type="text" class="form-control" placeholder="First Name" asp-for="FirstName">

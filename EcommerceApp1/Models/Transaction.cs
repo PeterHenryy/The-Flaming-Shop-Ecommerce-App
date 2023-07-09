@@ -18,7 +18,6 @@ namespace EcommerceApp1.Models
 
         [ForeignKey("Products")]
         public int ProductID { get; set; }
-        [NotMapped]
         public virtual Product CurrentProduct { get; set; }
         [ForeignKey("AspNetUsers")]
         public int UserID { get; set; }

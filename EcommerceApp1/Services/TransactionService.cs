@@ -38,5 +38,11 @@ namespace EcommerceApp1.Services
             var product = _transactionRepos.GetProductByID(productID);
             return product;
         }
+
+        public double CalculateTransactionTotal(Transaction transaction)
+        {
+            var total = transaction.CurrentProduct.Price * transaction.QuantityBought;
+            return total;
+        }
     }
 }

@@ -18,6 +18,7 @@ namespace EcommerceApp1.Models.Repositories
         {
             try
             {
+                transaction.CurrentProduct = null;
                 _context.Transactions.Add(transaction);
                 _context.SaveChanges();
                 return true;
@@ -31,7 +32,7 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<Transaction> GetAllTransactions()
         {
-            var transactions = _context.Transactions.ToList();
+            var transactions = _context.Transactions.Include(x => x.CurrentProduct).ToList();
             return transactions;
         }
 
