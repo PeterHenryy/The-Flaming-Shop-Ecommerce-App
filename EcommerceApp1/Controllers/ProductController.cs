@@ -1,4 +1,5 @@
 ﻿using EcommerceApp1.Models;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,7 +49,9 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            ProductViewModel viewModel = new ProductViewModel();
+            viewModel.Categories = _productService.GetAllCategories();
+            return View(viewModel);
         }
 
         [HttpPost]

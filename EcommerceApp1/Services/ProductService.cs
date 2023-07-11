@@ -44,5 +44,11 @@ namespace EcommerceApp1.Services
             return updatedProduct;
         }
 
+        public List<Category> GetAllCategories()
+        {
+            var categories = _productRepos.GetAllCategories();
+            return categories;
+        }
+
     }
 }

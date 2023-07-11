@@ -1,5 +1,6 @@
 ﻿using EcommerceApp1.Data;
 using EcommerceApp1.Models.IRepositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,7 +47,7 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<Product> GetAllProducts()
         {
-            var products = _context.Products.ToList();
+            var products = _context.Products.Include(x => x.Category).ToList();
             return products;
         }
 
@@ -69,6 +70,12 @@ namespace EcommerceApp1.Models.Repositories
 
                 return false;
             }
+        }
+
+        public List<Category> GetAllCategories()
+        {
+            var categories = _context.Categories.ToList();
+            return categories;
         }
     }
 }
