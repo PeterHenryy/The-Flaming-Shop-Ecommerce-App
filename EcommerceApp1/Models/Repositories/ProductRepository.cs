@@ -47,7 +47,8 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<Product> GetAllProducts()
         {
-            var products = _context.Products.Include(x => x.Category).ToList();
+            var products = _context.Products.Include(x => x.Category).
+                                              Include(x => x.Company).ToList();
             return products;
         }
 
@@ -76,6 +77,12 @@ namespace EcommerceApp1.Models.Repositories
         {
             var categories = _context.Categories.ToList();
             return categories;
+        }
+
+        public List<Company> GetAllCompanies()
+        {
+            var companies = _context.Companies.ToList();
+            return companies;
         }
     }
 }

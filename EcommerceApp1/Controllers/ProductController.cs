@@ -51,6 +51,7 @@ namespace EcommerceApp1.Controllers
         {
             ProductViewModel viewModel = new ProductViewModel();
             viewModel.Categories = _productService.GetAllCategories();
+            viewModel.Companies = _productService.GetAllCompanies();
             return View(viewModel);
         }
 

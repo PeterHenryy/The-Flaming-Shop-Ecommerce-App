@@ -8,6 +8,10 @@
             asp-items="@(new SelectList(Model.Categories, nameof(Category.ID), nameof(Category.Name)))">
         <option>Select a Category</option>
     </select>
+    <select asp-for="Product.CompanyID"
+        asp-items="@(new SelectList(Model.Companies, nameof(Company.ID), nameof(Company.Name)))">
+        <option>Select a Company</option>
+    </select>
     <div class="form-group col-md-6">
       <label for="inputEmail4">Product Name</label>
       <input type="text" class="form-control" placeholder="Name" asp-for="Product.Name">
@@ -28,10 +32,6 @@
   <div class="form-group col-md-6">
     <label for="inputEmail4">Release Date</label>
     <input type="text" class="form-control" placeholder="Release Date" asp-for="Product.ReleaseDate">
-  </div>
-  <div class="form-group col-md-6">
-    <label for="inputEmail4">CompanyID</label>
-    <input type="text" class="form-control" placeholder="CompanyID" asp-for="Product.CompanyID">
   </div>
   <button type="submit" class="btn btn-primary">Add Product</button>
 </form>
