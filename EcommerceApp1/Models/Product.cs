@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EcommerceApp1.Models.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EcommerceApp1.Models
@@ -19,7 +20,10 @@ namespace EcommerceApp1.Models
    
         [ForeignKey("AspNetUsers")]
         public int UserID { get; set; }
-        
+
+        [ForeignKey("Categories")]
+        public int CategoryID { get; set; }
+        public virtual Category Category { get; set; }
 
     }
 }
