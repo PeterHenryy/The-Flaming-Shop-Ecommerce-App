@@ -50,5 +50,11 @@ namespace EcommerceApp1.Services
             return categories;
         }
 
+        public List<Company> GetAllCompanies()
+        {
+            var companies = _productRepos.GetAllCompanies();
+            return companies;
+        }
+
     }
 }
