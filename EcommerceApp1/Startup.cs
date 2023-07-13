@@ -45,6 +45,8 @@ namespace EcommerceApp1
             services.AddTransient<UserService>();
             services.AddTransient<TransactionRepository>();
             services.AddTransient<TransactionService>();
+            services.AddTransient<CreditCardRepository>();
+            services.AddTransient<CreditCardService>();
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

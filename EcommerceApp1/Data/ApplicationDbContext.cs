@@ -19,5 +19,6 @@ namespace EcommerceApp1.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CreditCard> CreditCards { get; set; }
     }
 }

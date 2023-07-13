@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CreditCard>
+
+<a class="btn btn-outline-primary" href="@Url.Action("Create", "CreditCard")">Add a Credit Card</a>
+<table class="table table-striped table-dark">
+    <tr>
+        <th>Card Number</th>
+        <th>Name On Card</th>
+        <th>CVV</th>
+        <th>Expiry</th>
+        <th>Action</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach(var card in @Model)
+    {
+        <tr>
+
+            <td>@card.CardNumber</td>
+            <td>@card.NameOnCard</td>
+            <td>@card.CVV</td>
+            <td>@card.Expiry</td>
+            <td> <a class="btn btn-info" href="@Url.Action("Update", "CreditCard", new {cardID = card.ID})">Update Credit Card</a></td>
+            <td> <a class="btn btn-danger" href="@Url.Action("Delete", "CreditCard", new {cardID = card.ID})">Remove Credit Card</a></td>
+        </tr>
+        
+    }
+</table>

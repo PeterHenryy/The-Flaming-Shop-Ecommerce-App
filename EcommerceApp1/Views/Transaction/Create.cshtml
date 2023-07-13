@@ -27,6 +27,13 @@
     <label for="inputEmail4">Phone Number</label>
     <input type="text" class="form-control" placeholder="Phone Number" asp-for="PhoneNumber">
   </div>
+  <div class="form-group col-md-6">
+    <label for="inputEmail4">Payment Method</label>
+    <select asp-for="PaymentType">
+        <option value="CreditCard">Credit Card</option>
+        <option value="RewardPoints">Reward Points</option>
+    </select>
+  </div>
   <button type="submit" class="btn btn-primary">Purchase</button>
 </form>
 
