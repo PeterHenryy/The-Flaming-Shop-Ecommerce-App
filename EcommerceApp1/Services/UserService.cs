@@ -24,10 +24,15 @@ namespace EcommerceApp1.Services
             return user;
         }
 
-        public static double CalculateUserRewardPoints(double productPrice)
+        public double CalculateUserRewardPoints(double productPrice)
         {
             double rewardPoints = productPrice / 2;
             return rewardPoints;
+        }
+
+        public bool ValidatePointsForTransaction(AppUser user, double transactionTotal)
+        {
+            return user.UserRewardPoints < transactionTotal * 5;
         }
     }
 }

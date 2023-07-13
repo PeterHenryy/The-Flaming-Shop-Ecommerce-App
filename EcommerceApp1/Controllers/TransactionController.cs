@@ -1,4 +1,6 @@
-﻿using EcommerceApp1.Models;
+﻿using EcommerceApp1.Helpers.Enums;
+using EcommerceApp1.Helpers.Payments;
+using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
@@ -41,21 +43,44 @@ namespace EcommerceApp1.Controllers
             var currentUser = _userService.GetCurrentUser();
             transaction.UserID = currentUser.Id;
             transaction.Total = _transactionService.CalculateTransactionTotal(transaction);
+            bool pointsPayment = transaction.PaymentType == PaymentTypes.RewardPoints.ToString();
+            if (pointsPayment)
+            {
+                var pointsPaymentValidator = new PointsPayment();
+                pointsPayment = pointsPaymentValidator.ValidatePointsForTransaction(currentUser, transaction.Total);
+                if (!pointsPayment)
+                {
+                    return View(transaction);
+                }
+            }
+            else if (!currentUser.HasCreditCard)
+            {
+                return RedirectToAction("Create", "CreditCard");
+            }
+
             bool createdTransaction = _transactionService.Create(transaction);
             if (createdTransaction)
             {
-                await UpdateUserRewardPoints(transaction.Total);
+                await UpdateUserRewardPoints(transaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("Index", "Transaction");
             }
             return View(transaction);
         }
 
-        public async Task UpdateUserRewardPoints(double transactionTotal)
+        public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)
         {
-            var rewardPoints = UserService.CalculateUserRewardPoints(transactionTotal);
-            var currentUser = _userService.GetCurrentUser();
-            currentUser.UserRewardPoints += rewardPoints;
+            if (paidWithPoints)
+            {
+                currentUser.UserRewardPoints -= transactionTotal * 5;                
+            }
+            else
+            {
+                var rewardPoints = _userService.CalculateUserRewardPoints(transactionTotal);
+                currentUser.UserRewardPoints += rewardPoints;
+            }
             await _userManager.UpdateAsync(currentUser);
         }
+
+
     }
 }

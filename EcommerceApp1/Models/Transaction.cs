@@ -15,6 +15,7 @@ namespace EcommerceApp1.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string PaymentType { get; set; }
 
         [ForeignKey("Products")]
         public int ProductID { get; set; }

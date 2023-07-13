@@ -11,5 +11,6 @@ namespace EcommerceApp1.Models.Identity
         public string Password { get; set; }
         public string ProfilePicture { get; set; }
         public double UserRewardPoints { get; set; }
+        public bool HasCreditCard { get; set; }
     }
 }
