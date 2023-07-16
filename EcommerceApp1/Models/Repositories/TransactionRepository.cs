@@ -47,5 +47,11 @@ namespace EcommerceApp1.Models.Repositories
             var product = _context.Products.SingleOrDefault(x => x.ID == productID);
             return product;
         }
+
+        public List<CreditCard> GetSpecificUserCards(int userID)
+        {
+            var userCards = _context.CreditCards.Where(x => x.UserID == userID).ToList();
+            return userCards;
+        }
     }
 }

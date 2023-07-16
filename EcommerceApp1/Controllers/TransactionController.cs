@@ -2,6 +2,7 @@
 using EcommerceApp1.Helpers.Payments;
 using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,26 +32,31 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Create(int productID)
         {
-            var transaction = new Transaction();
-            transaction.ProductID = productID;
-            transaction.CurrentProduct = _transactionService.GetProductByID(productID);
-            return View(transaction);
+            AppUser currentUser = _userService.GetCurrentUser();
+            var transactionViewModel= new TransactionViewModel();
+            transactionViewModel.Transaction = new Transaction();
+            Transaction currentTransaction = transactionViewModel.Transaction;
+            currentTransaction.ProductID = productID;
+            currentTransaction.CurrentProduct = _transactionService.GetProductByID(productID);
+            transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
+            return View(transactionViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Transaction transaction)
+        public async Task<IActionResult> Create(TransactionViewModel transactionViewModel)
         {
-            var currentUser = _userService.GetCurrentUser();
-            transaction.UserID = currentUser.Id;
-            transaction.Total = _transactionService.CalculateTransactionTotal(transaction);
-            bool pointsPayment = transaction.PaymentType == PaymentTypes.RewardPoints.ToString();
+            AppUser currentUser = _userService.GetCurrentUser();
+            Transaction currentTransaction = transactionViewModel.Transaction;
+            currentTransaction.UserID = currentUser.Id;
+            currentTransaction.Total = _transactionService.CalculateTransactionTotal(transactionViewModel);
+            bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
             if (pointsPayment)
             {
                 var pointsPaymentValidator = new PointsPayment();
-                pointsPayment = pointsPaymentValidator.ValidatePointsForTransaction(currentUser, transaction.Total);
+                pointsPayment = pointsPaymentValidator.ValidatePointsForTransaction(currentUser, currentTransaction.Total);
                 if (!pointsPayment)
                 {
-                    return View(transaction);
+                    return View(transactionViewModel);
                 }
             }
             else if (!currentUser.HasCreditCard)
@@ -58,13 +64,13 @@ namespace EcommerceApp1.Controllers
                 return RedirectToAction("Create", "CreditCard");
             }
 
-            bool createdTransaction = _transactionService.Create(transaction);
+            bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
-                await UpdateUserRewardPoints(transaction.Total, currentUser, pointsPayment);
+                await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("Index", "Transaction");
             }
-            return View(transaction);
+            return View(transactionViewModel);
         }
 
         public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)
