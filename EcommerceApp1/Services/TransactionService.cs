@@ -3,6 +3,7 @@ using EcommerceApp1.Models;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using EcommerceApp1.Models.ViewModels;
 
 namespace EcommerceApp1.Services
 {
@@ -45,5 +46,10 @@ namespace EcommerceApp1.Services
             return total;
         }
 
+        public List<CreditCard> GetSpecificUserCards(int userID)
+        {
+            var userCards = _transactionRepos.GetSpecificUserCards(userID);
+            return userCards;
+        }
     }
 }

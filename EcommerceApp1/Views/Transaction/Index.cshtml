@@ -13,6 +13,7 @@
         <th>ProductID</th>
         <th>Product Name</th>
         <th>UserID</th>
+        <th>PaymentType</th>
     </tr>
 
     @foreach(var transaction in @Model)
@@ -29,6 +30,7 @@
             <td>@transaction.ProductID</td>
             <td>@transaction.CurrentProduct.Name</td>
             <td>@transaction.UserID</td>
+            <td>@transaction.PaymentType</td>
         </tr>
     }
 </table>
