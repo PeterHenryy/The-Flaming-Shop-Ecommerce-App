@@ -67,5 +67,11 @@ namespace EcommerceApp1.Controllers
             }
             return View(product);
         }
+
+        public IActionResult Details(int productID)
+        {
+            var product = _productService.GetProductByID(productID);
+            return View(product);
+        }
     }
 }
