@@ -16,6 +16,7 @@
     <th>Action</th>
     <th>Action</th>
     <th>Action</th>
+    <th>Action</th>
   </tr>
 
     @foreach (var product in @Model)
@@ -34,6 +35,7 @@
         <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Product", new {productID = product.ID})">Update</a></td>
         <td> <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new {productID = product.ID})">Delete</a></td>
         <td> <a class="btn btn-warning" href="@Url.Action("Create", "Transaction", new {productID = product.ID})">Purchase</a></td>
+        <td> <a class="btn btn-primary" href="@Url.Action("Details", "Product", new {productID = product.ID})">Details</a></td>
       </tr>
     }
 
