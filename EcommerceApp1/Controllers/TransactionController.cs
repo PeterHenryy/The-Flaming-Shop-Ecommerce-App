@@ -48,7 +48,7 @@ namespace EcommerceApp1.Controllers
             AppUser currentUser = _userService.GetCurrentUser();
             Transaction currentTransaction = transactionViewModel.Transaction;
             currentTransaction.UserID = currentUser.Id;
-            currentTransaction.Total = _transactionService.CalculateTransactionTotal(transactionViewModel);
+            currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
             bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
             if (pointsPayment)
             {
