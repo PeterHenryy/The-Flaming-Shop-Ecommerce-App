@@ -2,6 +2,7 @@
 using EcommerceApp1.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcommerceApp1.Services
 {
@@ -56,5 +57,17 @@ namespace EcommerceApp1.Services
             return companies;
         }
 
+        public IEnumerable<Review> GetReviewsOfSpecificProduct(int productID)
+        {
+            var productReviews = _productRepos.GetReviews().Where(x => x.ProductID == productID);
+            return productReviews;
+        }
+
+        public bool HasUserBoughtProduct(int productID, int userID)
+        {
+            var productTransactions = _productRepos.GetTransactions().Where(x => x.UserID == userID)
+                                                                        .Where(x => x.ProductID == productID);
+            return productTransactions.Any();
+        }
     }
 }

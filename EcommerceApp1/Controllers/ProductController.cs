@@ -2,6 +2,7 @@
 using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace EcommerceApp1.Controllers
 {
@@ -49,10 +50,10 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ProductViewModel viewModel = new ProductViewModel();
-            viewModel.Categories = _productService.GetAllCategories();
-            viewModel.Companies = _productService.GetAllCompanies();
-            return View(viewModel);
+            ProductCreateViewModel createViewModel = new ProductCreateViewModel();
+            createViewModel.Categories = _productService.GetAllCategories();
+            createViewModel.Companies = _productService.GetAllCompanies();
+            return View(createViewModel);
         }
 
         [HttpPost]
@@ -66,6 +67,17 @@ namespace EcommerceApp1.Controllers
                 return RedirectToAction("Index", "Product");
             }
             return View(product);
+        }
+
+        public IActionResult Details(int productID)
+        {
+            var currentUser = _userService.GetCurrentUser();
+            var product = _productService.GetProductByID(productID);
+            var detailsViewModel = new ProductDetailsViewModel();
+            detailsViewModel.Product = product;
+            detailsViewModel.Reviews = _productService.GetReviewsOfSpecificProduct(productID).ToList();
+            detailsViewModel.HasUserBoughtProduct = _productService.HasUserBoughtProduct(productID, currentUser.Id);
+            return View(detailsViewModel);
         }
     }
 }
