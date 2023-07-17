@@ -84,5 +84,17 @@ namespace EcommerceApp1.Models.Repositories
             var companies = _context.Companies.ToList();
             return companies;
         }
+
+        public IEnumerable<Review> GetReviews()
+        {
+            var reviews = _context.Reviews.Include(x => x.User);
+            return reviews;
+        }
+
+        public IEnumerable<Transaction> GetTransactions()
+        {
+            var transactions = _context.Transactions.ToList();
+            return transactions;
+        }
     }
 }

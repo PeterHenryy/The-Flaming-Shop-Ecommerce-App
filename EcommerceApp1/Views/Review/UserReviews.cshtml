@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Review>
+
+<h2>YOUR REVIEWS SON</h2>
+<table class="table table-striped table-light">
+    <tr>
+        <th>Product</th>
+        <th>Body</th>
+        <th>Rating</th>
+        <th>Action</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach(var review in @Model)
+    {
+        <tr>
+            <td>@review.Product.Name</td>
+            <td>@review.Body</td>
+            <td>@review.Rating</td>
+            <td> <a class="btn btn-danger" href="@Url.Action("Delete", "Review", new {reviewID = review.ID})">Delete</a></td>
+            <td> <a class="btn btn-primary" href="@Url.Action("Update", "Review", new {reviewID = review.ID})">Update</a></td>
+        </tr>
+    }
+</table>
