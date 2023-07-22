@@ -17,6 +17,7 @@ namespace EcommerceApp1.Models.ViewModels
         public Dislike DislikeForm { get; set; }
         public AppUser CurrentUser { get; set; }
         public int ProductID { get; set; }
+        public bool HasUserReviewedProduct { get; set; }
 
         public IEnumerable<Comment> GetCommentsForReview(int reviewID)
         {

@@ -87,5 +87,11 @@ namespace EcommerceApp1.Services
             var dislikes = _productRepos.GetDislikes();
             return dislikes;
         }
+
+        public bool HasUserReviewedProduct(int productID, int userID)
+        {
+            var userReview = GetReviewsOfSpecificProduct(productID).Where(x => x.UserID == userID);
+            return userReview.Any();
+        }
     }
 }

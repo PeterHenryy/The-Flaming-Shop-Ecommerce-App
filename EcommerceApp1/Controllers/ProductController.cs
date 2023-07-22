@@ -82,6 +82,7 @@ namespace EcommerceApp1.Controllers
             detailsViewModel.Dislikes = _productService.GetDislikes().ToList();
             detailsViewModel.CurrentUser = currentUser;
             detailsViewModel.ProductID = productID;
+            detailsViewModel.HasUserReviewedProduct = _productService.HasUserReviewedProduct(productID, currentUser.Id);
             return View(detailsViewModel);
         }
 
