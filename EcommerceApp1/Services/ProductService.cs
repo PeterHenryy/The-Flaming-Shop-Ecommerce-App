@@ -89,6 +89,12 @@ namespace EcommerceApp1.Services
             return dislikes;
         }
 
+        public bool HasUserReviewedProduct(int productID, int userID)
+        {
+            var userReview = GetReviewsOfSpecificProduct(productID).Where(x => x.UserID == userID);
+            return userReview.Any();
+        }
+      
         public double CalculateProductAverageRating(int productID)
         {
             var productReviews = GetReviewsOfSpecificProduct(productID);

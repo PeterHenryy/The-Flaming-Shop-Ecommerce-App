@@ -9,7 +9,7 @@
         <th>Company</th>
         <th>Category</th>
         <th>Average Rating</th>
-        @if (Model.HasUserBoughtProduct)
+        @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
         {
             <th>Action</th>
         }
@@ -24,7 +24,7 @@
         <td>@Model.Product.Company.Name</td>
         <td>@Model.Product.Category.Name</td>
         <td>@Model.Product.AverageRating.ToString("0.0")</td>
-        @if (Model.HasUserBoughtProduct)
+        @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
         {
             <td> <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a></td>
         }
