@@ -1,6 +1,7 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -86,6 +87,14 @@ namespace EcommerceApp1.Services
         {
             var dislikes = _productRepos.GetDislikes();
             return dislikes;
+        }
+
+        public double CalculateProductAverageRating(int productID)
+        {
+            var productReviews = GetReviewsOfSpecificProduct(productID);
+            double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
+            double roundedRating = Math.Round(rating, 1);
+            return roundedRating;
         }
     }
 }
