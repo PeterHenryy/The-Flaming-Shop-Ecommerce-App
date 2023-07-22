@@ -73,6 +73,8 @@ namespace EcommerceApp1.Controllers
         {
             var currentUser = _userService.GetCurrentUser();
             var product = _productService.GetProductByID(productID);
+            product.AverageRating = _productService.CalculateProductAverageRating(productID);
+            _productService.Update(product);
             var detailsViewModel = new ProductDetailsViewModel();
             detailsViewModel.Product = product;
             detailsViewModel.Reviews = _productService.GetReviewsOfSpecificProduct(productID).ToList();
