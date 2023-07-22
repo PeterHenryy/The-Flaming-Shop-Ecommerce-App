@@ -13,6 +13,8 @@ namespace EcommerceApp1.Models
         public double Price { get; set; }
         public string Image { get; set; }
         public string ReleaseDate { get; set; }
+        public double AverageRating { get; set; }
+
         [ForeignKey("Companies")]
         public int CompanyID { get; set; }
         public virtual Company Company { get; set; }
