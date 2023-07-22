@@ -77,7 +77,14 @@ namespace EcommerceApp1.Controllers
             detailsViewModel.Product = product;
             detailsViewModel.Reviews = _productService.GetReviewsOfSpecificProduct(productID).ToList();
             detailsViewModel.HasUserBoughtProduct = _productService.HasUserBoughtProduct(productID, currentUser.Id);
+            detailsViewModel.Comments = _productService.GetAllComments().ToList();
+            detailsViewModel.Likes = _productService.GetLikes().ToList();
+            detailsViewModel.Dislikes = _productService.GetDislikes().ToList();
+            detailsViewModel.CurrentUser = currentUser;
+            detailsViewModel.ProductID = productID;
             return View(detailsViewModel);
         }
+
+      
     }
 }

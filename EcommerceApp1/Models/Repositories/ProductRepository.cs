@@ -96,5 +96,23 @@ namespace EcommerceApp1.Models.Repositories
             var transactions = _context.Transactions.ToList();
             return transactions;
         }
+
+        public IEnumerable<Comment> GetAllComments()
+        {
+            var comments = _context.Comments.Include(x => x.User).ToList();
+            return comments;
+        }
+
+        public IEnumerable<Like> GetLikes()
+        {
+            var likes = _context.Likes.ToList();
+            return likes;
+        }
+
+        public IEnumerable<Dislike> GetDislikes()
+        {
+            var dislikes = _context.Dislikes.ToList();
+            return dislikes;
+        }
     }
 }
