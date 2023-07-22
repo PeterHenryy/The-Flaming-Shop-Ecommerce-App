@@ -8,11 +8,9 @@
         <th>ReleaseDate</th>
         <th>Company</th>
         <th>Category</th>
-        @{
-            if (Model.HasUserBoughtProduct)
-            {
-                <th>Action</th>
-            }
+        @if (Model.HasUserBoughtProduct)
+        {
+            <th>Action</th>
         }
     </tr>
 
@@ -24,12 +22,12 @@
         <td>@Model.Product.ReleaseDate</td>
         <td>@Model.Product.Company.Name</td>
         <td>@Model.Product.Category.Name</td>
-        @{
-            if (Model.HasUserBoughtProduct)
-            {
-                <td> <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a></td>
-            }
+
+        @if (Model.HasUserBoughtProduct)
+        {
+            <td> <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a></td>
         }
+        
     </tr>
 </table>
 
@@ -37,25 +35,184 @@
 
     if(@Model.Reviews.Count != 0){
         <h2>PRODUCT REVIEWS</h2>
-        <table class="table table-striped table-dark">
-            <tr>
-                <th>Reviewer</th>
-                <th>Body</th>
-                <th>Rating</th>
-            </tr>
 
-            @foreach(var review in Model.Reviews)
+        <table class="table table-striped table-dark">
+          <tr>
+            <th>Reviewer</th>
+            <th>Body</th>
+            <th>Rating</th>
+            <th>Review Likes</th>
+            <th>Review Dislikes</th>
+            <th>Action</th>
+            <th>Action</th>
+            <th>Comments</th>
+          </tr>
+
+            @foreach (var review in Model.Reviews)
             {
-                <tr>
-                    <td>@review.User.UserName</td>
-                    <td>@review.Body</td>
-                    <td>@review.Rating</td>
-                </tr>
+                var comments = Model.GetCommentsForReview(review.ID);
+                int reviewLikeCounter = Model.GetLikesPerReview(review.ID);
+                int reviewDislikeCounter = Model.GetDislikesPerReview(review.ID);
+                Like userLikeInReview = Model.FindUserLikeInReview(Model.CurrentUser.Id, review.ID);
+                Dislike userDislikeInReview = Model.FindUserDislikeInReview(Model.CurrentUser.Id, review.ID);
+              <tr>
+                <td>@review.User.UserName</td>
+                <td>@review.Body</td>
+                <td>@review.Rating</td>
+                <td>@reviewLikeCounter</td>
+                <td>@reviewDislikeCounter</td>
+                    @if (userLikeInReview != null)
+                    {
+                        <td><a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 1, ratingID = userLikeInReview.ID, productID = Model.ProductID})">Remove Like</a> </td>
+                        <td><a class="btn btn-danger">Dislike</a></td>
+                    }
+                    else if (userDislikeInReview != null)
+                    {
+                        <td><a class="btn btn-primary">Like</a></td>
+                        <td><a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 2, ratingID = userDislikeInReview.ID, productID = Model.ProductID})">Remove Dislike</a> </td>
+                    }
+                    else
+                    {
+                        <td>
+                          <form asp-controller="Rating" asp-action="Create">
+                            <input type="text" hidden value="@review.ID" asp-for="LikeForm.ReviewID">
+                            <input type="text" hidden value="@Model.CurrentUser.Id" asp-for="LikeForm.UserID">
+                            <input type="text" hidden value="@Model.ProductID" asp-for="ProductID">
+                            <button class="btn btn-primary" type="submit">Like</button>
+                          </form>
+                        </td>
+                        <td>
+                          <form asp-controller="Rating" asp-action="Create">
+                            <input type="text" hidden value="@review.ID" asp-for="DislikeForm.ReviewID">
+                            <input type="text" hidden value="@Model.CurrentUser.Id" asp-for="DislikeForm.UserID">
+                            <input type="text" hidden value="@Model.ProductID" asp-for="ProductID">
+                            <button class="btn btn-danger" type="submit">Dislike</button>
+                          </form>
+                        </td>
+                    }
+                    @if (@comments.Any())
+                    {
+
+                        <td>
+                          <table class="table table-striped table-primary">
+                            <tr>
+                              <th>Commentator</th>
+                              <th>Body</th>
+                              <th>Comment Likes</th>
+                              <th>Comment Dislikes</th>
+                              <th>Action</th>
+                              <th>Action</th>
+                            </tr>
+
+                            @foreach (var comment in comments)
+                            {
+                                int commentLikeCounter = Model.GetLikePerComment(comment.ID);
+                                int commentDislikeCounter = Model.GetDislikesPerComment(comment.ID);
+                                Like userLikeInComment = Model.FindUserLikeInComment(Model.CurrentUser.Id, comment.ID);
+                                Dislike userDislikeInComment = Model.FindUserDislikeInComment(Model.CurrentUser.Id, comment.ID);
+
+                                <tr>
+                                    <td>@comment.User.UserName</td>
+                                    <td>@comment.Body</td>
+                                    <td>@commentLikeCounter</td>
+                                    <td>@commentDislikeCounter</td>
+
+                                    @if (userLikeInComment != null)
+                                    {
+                                        <td><a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 1, ratingID = userLikeInComment.ID, productID = Model.ProductID})">Remove Like</a> </td>
+                                        <td> <a class="btn btn-danger">Dislike</a></td>
+                                    }
+                                    else if (userDislikeInComment != null)
+                                    {
+                                        <td><a class="btn btn-primary">Like</a></td>
+                                        <td><a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 2, ratingID = userDislikeInComment.ID, productID = Model.ProductID})">Remove Dislike</a> </td>
+                                    }
+                                    else
+                                    {
+                                      <td>
+                                        <form asp-controller="Rating" asp-action="Create">
+                                          <input type="text" hidden value="@Model.CurrentUser.Id" asp-for="LikeForm.UserID">
+                                          <input type="text" hidden value="@comment.ID" asp-for="LikeForm.CommentID">
+                                          <input type="text" hidden value="@Model.ProductID" asp-for="ProductID">
+                                          <button type="submit" class="btn btn-primary">Like</button>
+                                        </form>
+                                      </td>
+                                      <td>
+                                        <form asp-controller="Rating" asp-action="Create">
+                                          <input type="text" hidden value="@Model.CurrentUser.Id" asp-for="DislikeForm.UserID">
+                                          <input type="text" hidden value="@comment.ID" asp-for="DislikeForm.CommentID">
+                                          <input type="text" hidden value="@Model.ProductID" asp-for="ProductID">
+                                          <button type="submit" class="btn btn-danger">Dislike</button>
+                                        </form>
+                                      </td>
+                                    }
+
+                                    @if(Model.CurrentUser.Id == comment.UserID)
+                                    {
+                                        <td>
+                                            <button class="btn btn-info edit-comment-btn" data-comment-id="@comment.ID">Edit</button>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-danger" href="@Url.Action("Delete", "Comment", new {commentID = comment.ID})">Remove</a>
+                                        </td>
+                                    }
+                                </tr>
+
+                                <tr class="edit-comment-row" data-comment-id="@comment.ID" style="display:none;">
+                                  <td colspan="6">
+                                    <form asp-controller="Comment" asp-action="Update">
+                                      <input type="text" hidden value="@comment.ID" asp-for="Comment.ID">
+                                      <input type="text" hidden value="@comment.ProductID" asp-for="Comment.ProductID">
+                                      <input type="text" hidden value="@comment.UserID" asp-for="Comment.UserID">
+                                      <input type="text" hidden value="@comment.ReviewID" asp-for="Comment.ReviewID">
+                                      <div class="form-row">
+                                        <div style="width: 400px;">
+                                          <label for="inputEmail4"></label>
+                                          <input type="text" class="form-control" asp-for="Comment.Body" value="@comment.Body">
+                                        </div>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                  </td>
+                                </tr>
+                            }
+                          </table>
+                        </td>
+                    }
+              </tr>
+
+              <tr>
+                <td>
+                  <form asp-controller="Comment" asp-action="Create">
+                    <input type="text" hidden value="@Model.Product.ID" asp-for="Comment.ProductID">
+                    <input type="text" hidden value="@review.ID" asp-for="Comment.ReviewID">
+                    <div class="form-row">
+                      <div style="width: 400px;">
+                        <label for="inputEmail4"></label>
+                        <input type="text" class="form-control" placeholder="Type your comment..." asp-for="Comment.Body">
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                  </form>
+                </td>
+              </tr>
             }
         </table>
+
+
     }
     else
     {
         <h2>THIS PRODUCT HAS NO REVIEWS YET</h2>
     }
 }
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.edit-comment-btn').click(function () {
+            var commentID = $(this).data('comment-id');
+            $('.edit-comment-row[data-comment-id="' + commentID + '"]').toggle();
+        });
+    });
+</script>

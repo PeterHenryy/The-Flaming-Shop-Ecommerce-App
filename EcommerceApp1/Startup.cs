@@ -49,6 +49,10 @@ namespace EcommerceApp1
             services.AddTransient<CreditCardService>();
             services.AddTransient<ReviewRepository>();
             services.AddTransient<ReviewService>();
+            services.AddTransient<CommentRepository>();
+            services.AddTransient<CommentService>();
+            services.AddTransient<RatingRepository>();
+            services.AddTransient<RatingService>();
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

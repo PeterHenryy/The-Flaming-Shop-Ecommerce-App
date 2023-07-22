@@ -69,5 +69,23 @@ namespace EcommerceApp1.Services
                                                                         .Where(x => x.ProductID == productID);
             return productTransactions.Any();
         }
+
+        public IEnumerable<Comment> GetAllComments()
+        {
+            var comments = _productRepos.GetAllComments();
+            return comments;
+        }
+
+        public IEnumerable<Like> GetLikes()
+        {
+            var likes = _productRepos.GetLikes();
+            return likes;
+        }
+
+        public IEnumerable<Dislike> GetDislikes()
+        {
+            var dislikes = _productRepos.GetDislikes();
+            return dislikes;
+        }
     }
 }

@@ -21,5 +21,8 @@ namespace EcommerceApp1.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<CreditCard> CreditCards { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Dislike> Dislikes { get; set; }
     }
 }
