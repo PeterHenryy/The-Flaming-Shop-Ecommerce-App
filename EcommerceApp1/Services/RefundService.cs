@@ -1,0 +1,59 @@
+﻿using EcommerceApp1.Helpers.Enums.Refunds;
+using EcommerceApp1.Models;
+using EcommerceApp1.Models.Repositories;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace EcommerceApp1.Services
+{
+    public class RefundService
+    {
+        private readonly RefundRepository _refundRepos;
+
+        public RefundService(RefundRepository refundRepos)
+        {
+            _refundRepos = refundRepos;
+        }
+
+        public bool Create(Refund refund)
+        {
+            bool createdRefund = _refundRepos.Create(refund);
+            return createdRefund;
+        }
+
+        public bool Update(Refund refund)
+        {
+            bool updatedRefund = _refundRepos.Update(refund);
+            return updatedRefund;
+        }
+
+        public IEnumerable<Refund> GetCompanyRefunds(int companyID)
+        {
+            var companyRefunds = _refundRepos.GetCompanyRefunds(companyID);
+            return companyRefunds;
+        }
+
+        public IEnumerable<Refund> GetUserRefunds(int userID)
+        {
+            var userRefunds = _refundRepos.GetUserRefunds(userID);
+            return userRefunds;
+        }
+
+        public Refund GetRefundByID(int refundID)
+        {
+            Refund refund = _refundRepos.GetRefundByID(refundID);
+            return refund;
+        }
+        public bool HasAdminAcceptedRefund(bool accepted, Refund refund)
+        {
+            if (accepted)
+            {
+                refund.Status = RefundStatus.Accepted.ToString();
+                return true;
+            }
+            refund.Status = RefundStatus.Denied.ToString();
+            return false;
+
+        }
+    }
+}

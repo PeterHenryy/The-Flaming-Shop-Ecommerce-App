@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Refund>
+
+<table class="table table-striped table-secondary">
+    <tr>
+        <th>Product</th>
+        <th>Refund Reason</th>
+        <th>Order Value</th>
+        <th>Transaction ID</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach(var refund in @Model)
+    {
+        <tr>
+            <td>@refund.Product.Name</td>
+            <td>@refund.Reason</td>
+            <td>$@refund.Transaction.Total</td>
+            <td>@refund.TransactionID</td>
+            <td>@refund.Status</td>
+        </tr>
+    }
+</table>

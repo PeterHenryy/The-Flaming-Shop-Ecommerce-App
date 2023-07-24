@@ -53,5 +53,11 @@ namespace EcommerceApp1.Models.Repositories
             var userCards = _context.CreditCards.Where(x => x.UserID == userID).ToList();
             return userCards;
         }
+
+        public IEnumerable<Refund> GetAllRefunds()
+        {
+            var refunds = _context.Refunds.ToList();
+            return refunds;
+        }
     }
 }

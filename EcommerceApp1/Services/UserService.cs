@@ -29,10 +29,5 @@ namespace EcommerceApp1.Services
             double rewardPoints = productPrice / 2;
             return rewardPoints;
         }
-
-        public bool ValidatePointsForTransaction(AppUser user, double transactionTotal)
-        {
-            return user.UserRewardPoints < transactionTotal * 5;
-        }
     }
 }
