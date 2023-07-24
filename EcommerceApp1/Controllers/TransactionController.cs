@@ -23,10 +23,12 @@ namespace EcommerceApp1.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult UserTransactions(int userID)
         {
-            var transactions = _transactionService.GetAllTransactions();
-            return View(transactions);
+            var userTransactionsViewModel = new UserTransactionsViewModel();
+            userTransactionsViewModel.UserTransactions = _transactionService.GetTransactionsByUserID(userID);
+            userTransactionsViewModel.UserRefunds = _transactionService.GetAllUserRefunds(userID);
+            return View(userTransactionsViewModel);
         }
 
         [HttpGet]
@@ -69,7 +71,7 @@ namespace EcommerceApp1.Controllers
             if (createdTransaction)
             {
                 await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
-                return RedirectToAction("Index", "Transaction");
+                return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }
             return View(transactionViewModel);
         }

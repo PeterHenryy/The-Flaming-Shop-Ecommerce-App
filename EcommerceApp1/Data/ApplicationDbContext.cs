@@ -24,5 +24,6 @@ namespace EcommerceApp1.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Dislike> Dislikes { get; set; }
+        public DbSet<Refund> Refunds { get; set; }
     }
 }

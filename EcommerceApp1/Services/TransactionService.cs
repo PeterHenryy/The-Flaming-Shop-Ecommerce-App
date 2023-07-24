@@ -51,5 +51,17 @@ namespace EcommerceApp1.Services
             var userCards = _transactionRepos.GetSpecificUserCards(userID);
             return userCards;
         }
+
+        public IEnumerable<Transaction> GetTransactionsByUserID(int userID)
+        {
+            var userTransactions = GetAllTransactions().Where(x => x.UserID == userID);
+            return userTransactions;
+        }
+
+        public IEnumerable<Refund> GetAllUserRefunds(int userID)
+        {
+            var refunds = _transactionRepos.GetAllRefunds().Where(x => x.UserID == userID);
+            return refunds;
+        }
     }
 }

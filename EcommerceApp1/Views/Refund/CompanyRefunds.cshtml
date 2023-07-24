@@ -1,0 +1,30 @@
+﻿@using EcommerceApp1.Helpers.Enums.Refunds;
+@model IEnumerable<Refund>
+
+<table class="table table-striped table-primary">
+  <tr>
+    <th>User Name</th>
+    <th>Refund Reason</th>
+    <th>Product</th>
+    <th>Order Value</th>
+    <th>Transaction ID</th>
+    <th>Status</th>
+  </tr>
+
+    @foreach (var refund in @Model)
+    {
+        <tr>
+            <td>@refund.User.UserName</td>
+            <td>@refund.Reason</td>
+            <td>@refund.Product.Name</td>
+            <td>$@refund.Transaction.Total</td>
+            <td>@refund.TransactionID</td>
+            <td>@refund.Status</td>
+            @if(refund.Status == RefundStatus.Pending.ToString())
+            {
+                <td> <a class="btn btn-success" href="@Url.Action("UpdateRefundStatus", "Refund", new {refundID = refund.ID, accepted = true, transactionTotal = refund.Transaction.Total, paymentType = refund.Transaction.PaymentType})">Accept</a></td>
+            <td> <a class="btn btn-danger" href="@Url.Action("UpdateRefundStatus", "Refund", new {refundID = refund.ID, accepted = false, transactionTotal = refund.Transaction.Total, paymentType = refund.Transaction.PaymentType})">Deny</a></td>
+            }
+        </tr>
+    }
+</table>
