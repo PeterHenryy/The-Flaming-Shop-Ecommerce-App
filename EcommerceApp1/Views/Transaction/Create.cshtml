@@ -5,7 +5,9 @@
   <div class="form-row">
     <input type="hidden" asp-for="Transaction.ProductID" />
     <input type="hidden" asp-for="Transaction.CurrentProduct.Price" />
-    <input type="hidden" asp-for="Transaction.CurrentProduct.Name" />
+    <input type="hidden" asp-for="Transaction.CurrentProduct.CompanyID" />
+    <input type="hidden" asp-for="Transaction.CurrentProduct.CategoryID" />
+    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" />
     <div class="form-group col-md-6">
       <label for="inputEmail4">First Name</label>
       <input type="text" class="form-control" placeholder="First Name" asp-for="Transaction.FirstName">
@@ -26,6 +28,10 @@
   <div class="form-group">
     <label for="inputAddress2">Phone Number</label>
     <input type="text" class="form-control" placeholder="Phone Number" asp-for="Transaction.PhoneNumber">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Coupon Code</label>
+    <input type="text" class="form-control" placeholder="Coupon Code" asp-for="Transaction.CouponCode">
   </div>
   <div class="form-group col-md-6">
     <label for="inputEmail4">Payment Method</label>

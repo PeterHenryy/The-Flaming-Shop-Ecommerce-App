@@ -40,9 +40,13 @@ namespace EcommerceApp1.Services
             return product;
         }
 
-        public double CalculateTransactionTotal(Transaction transaction)
+        public double CalculateTransactionTotal(Transaction transaction, double discountPercentage = 0)
         {
             var total = transaction.CurrentProduct.Price * transaction.QuantityBought;
+            if (discountPercentage != 0)
+            {
+                total -= (discountPercentage / 100) * total;
+            }
             return total;
         }
 
@@ -62,6 +66,18 @@ namespace EcommerceApp1.Services
         {
             var refunds = _transactionRepos.GetAllRefunds().Where(x => x.UserID == userID);
             return refunds;
+        }
+
+        public Coupon GetCoupon(string code, int companyID)
+        {
+            Coupon coupon = _transactionRepos.GetCoupons().SingleOrDefault(x => x.Code == code && x.CompanyID == companyID);
+            return coupon;
+        }
+
+        public bool UpdateCouponQuantity(Coupon coupon)
+        {
+            bool updatedCoupon = _transactionRepos.UpdateCouponQuantity(coupon);
+            return updatedCoupon;
         }
     }
 }

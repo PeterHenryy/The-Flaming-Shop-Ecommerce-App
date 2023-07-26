@@ -1,4 +1,5 @@
-﻿using EcommerceApp1.Helpers.Enums;
+﻿using EcommerceApp1.Helpers;
+using EcommerceApp1.Helpers.Enums;
 using EcommerceApp1.Helpers.Payments;
 using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
@@ -50,7 +51,14 @@ namespace EcommerceApp1.Controllers
             AppUser currentUser = _userService.GetCurrentUser();
             Transaction currentTransaction = transactionViewModel.Transaction;
             currentTransaction.UserID = currentUser.Id;
-            currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
+            if(currentTransaction.CouponCode != null)
+            {
+                ValidateCoupon(currentTransaction);
+            }
+            else
+            {
+                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
+            }
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
             bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
             if (pointsPayment)
@@ -74,6 +82,22 @@ namespace EcommerceApp1.Controllers
                 return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }
             return View(transactionViewModel);
+        }
+
+        public void ValidateCoupon(Transaction currentTransaction)
+        {
+            Coupon coupon = _transactionService.GetCoupon(currentTransaction.CouponCode, currentTransaction.CurrentProduct.CompanyID);
+            CouponValidator couponValidator = new CouponValidator();
+            bool isCouponValid = couponValidator.Validate(coupon, currentTransaction.CurrentProduct);
+            if (isCouponValid)
+            {
+                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction, coupon.DiscountPercentage);
+                bool updatedCoupon = _transactionService.UpdateCouponQuantity(coupon);
+            }
+            else
+            {
+                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
+            }
         }
 
         public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)
