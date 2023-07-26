@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Coupon>
+
+<a class="btn btn-success" href="@Url.Action("Create", "Coupon")">Add Coupon</a>
+<table class="table table-striped table-dark">
+    <tr>
+        <th>ID</th>
+        <th>Discount Percentage</th>
+        <th>Code</th>
+        <th>Active</th>
+        <th>Quantity</th>
+    </tr>
+
+    @foreach(var coupon in @Model)
+    {
+        <tr>
+            <td>@coupon.ID</td>
+            <td>@coupon.DiscountPercentage%</td>
+            <td>@coupon.Code</td>
+            <td>@coupon.Active</td>
+            <td>@coupon.Quantity</td>
+            @if(coupon.Product != null)
+            {
+                <td>@coupon.Product.Name</td>
+            }
+            @if(coupon.Category != null)
+            {
+                <td>@coupon.Category.Name</td>
+            }
+            <td><a class="btn btn-danger" href="@Url.Action("Delete", "Coupon", new {couponID = coupon.ID})">Delete</a></td>
+        </tr>
+    }
+</table>

@@ -55,6 +55,8 @@ namespace EcommerceApp1
             services.AddTransient<RatingService>();
             services.AddTransient<RefundRepository>();
             services.AddTransient<RefundService>();
+            services.AddTransient<CouponRepository>();
+            services.AddTransient<CouponService>();
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

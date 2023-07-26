@@ -59,5 +59,28 @@ namespace EcommerceApp1.Models.Repositories
             var refunds = _context.Refunds.ToList();
             return refunds;
         }
+
+        public IEnumerable<Coupon> GetCoupons()
+        {
+            var coupons = _context.Coupons.ToList();
+            return coupons;
+        }
+
+        public bool UpdateCouponQuantity(Coupon coupon)
+        {
+            try
+            {
+                coupon.Quantity--;
+                _context.Coupons.Update(coupon);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
+        }
+
     }
 }

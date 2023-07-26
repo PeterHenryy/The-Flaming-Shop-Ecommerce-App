@@ -16,11 +16,13 @@ namespace EcommerceApp1.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string PaymentType { get; set; }
+        public string CouponCode { get; set; }
 
         [ForeignKey("Products")]
         public int ProductID { get; set; }
         public virtual Product CurrentProduct { get; set; }
         [ForeignKey("AspNetUsers")]
         public int UserID { get; set; }
+        
     }
 }
