@@ -42,7 +42,7 @@ namespace EcommerceApp1.Models.Repositories
             return transaction;
         }
 
-        public Product GetProductByID(int productID)
+        public Product GetProductByID(int? productID)
         {
             var product = _context.Products.SingleOrDefault(x => x.ID == productID);
             return product;
@@ -78,6 +78,20 @@ namespace EcommerceApp1.Models.Repositories
             catch (System.Exception)
             {
 
+                return false;
+            }
+        }
+
+        public bool UpdateProductStock(Product product)
+        {
+            try
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
                 return false;
             }
         }
