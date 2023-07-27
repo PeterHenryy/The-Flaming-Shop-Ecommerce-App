@@ -1,5 +1,4 @@
-﻿using EcommerceApp1.Models.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EcommerceApp1.Models
@@ -14,16 +13,17 @@ namespace EcommerceApp1.Models
         public string Image { get; set; }
         public string ReleaseDate { get; set; }
         public double AverageRating { get; set; }
+        public bool Archived { get; set; }
 
         [ForeignKey("Companies")]
-        public int CompanyID { get; set; }
+        public int? CompanyID { get; set; }
         public virtual Company Company { get; set; }
 
         [ForeignKey("AspNetUsers")]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
 
         [ForeignKey("Categories")]
-        public int CategoryID { get; set; }
+        public int? CategoryID { get; set; }
         public virtual Category Category { get; set; }
 
     }
