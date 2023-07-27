@@ -34,7 +34,7 @@ namespace EcommerceApp1.Services
             return transaction;
         }
 
-        public Product GetProductByID(int productID)
+        public Product GetProductByID(int? productID)
         {
             var product = _transactionRepos.GetProductByID(productID);
             return product;
@@ -78,6 +78,14 @@ namespace EcommerceApp1.Services
         {
             bool updatedCoupon = _transactionRepos.UpdateCouponQuantity(coupon);
             return updatedCoupon;
+        }
+
+        public bool UpdateProductStock(int? productID)
+        {
+            Product product = _transactionRepos.GetProductByID(productID);
+            product.Stock--;
+            bool updatedProduct = _transactionRepos.UpdateProductStock(product);
+            return updatedProduct;
         }
     }
 }
