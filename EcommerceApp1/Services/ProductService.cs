@@ -30,7 +30,7 @@ namespace EcommerceApp1.Services
 
         public IEnumerable<Product> GetAllProducts()
         {
-            var products = _productRepos.GetAllProducts();
+            var products = _productRepos.GetAllProducts().Where(x => !x.Archived);
             return products;
         }
 
@@ -102,5 +102,26 @@ namespace EcommerceApp1.Services
             double roundedRating = Math.Round(rating, 1);
             return roundedRating;
         }
+
+        public IEnumerable<Product> GetCompanyProducts(int companyID)
+        {
+            var companyProducts = _productRepos.GetAllProducts().Where(x => x.CompanyID == companyID);
+            return companyProducts;
+        }
+
+        public void ManageProductArchiving(int productID, int option)
+        {
+            Product product = GetProductByID(productID);
+            if (option == 1)
+            {
+                product.Archived = true;
+            }
+            else
+            {
+                product.Archived = false;
+            }
+            _productRepos.Update(product);
+        }
+
     }
 }

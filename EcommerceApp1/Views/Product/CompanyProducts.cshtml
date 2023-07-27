@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Product>
+
+<a class="btn btn-primary" href="@Url.Action("Create", "Product")">Add Product</a>
+<table class="table table-striped table-primary">
+  <tr>
+    <th>ProductID</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Stock</th>
+    <th>Price</th>
+    <th>Image</th>
+    <th>ReleaseDate</th>
+    <th>UserID</th>
+    <th>Action</th>
+    <th>Action</th>
+    <th>Action</th>
+  </tr>
+
+    @foreach (var product in @Model)
+    {
+      <tr>
+        <td>@product.ID</td>
+        <td>@product.Name</td>
+        <td>@product.Category.Name</td>
+        <td>@product.Stock</td>
+        <td>@product.Price</td>
+        <td> <img style="width: 200px;" src="@product.Image"> </td>
+        <td>@product.ReleaseDate</td>
+        <td>@product.UserID</td>
+        <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Product", new {productID = product.ID})">Update</a></td>
+        <td> <a class="btn btn-danger" href="@Url.Action("Delete", "Product", new {productID = product.ID})">Delete</a></td>
+        @if (!product.Archived)
+        {
+            <td> <a class="btn btn-primary" href="@Url.Action("ManageProductArchiving", "Product", new {productID = product.ID, option = 1})">Archive</a></td>
+        }
+        else{
+            <td> <a class="btn btn-success" href="@Url.Action("ManageProductArchiving", "Product", new {productID = product.ID, option = 2})">Un-Archive</a></td>
+        }
+      </tr>
+    }
+
+</table>
