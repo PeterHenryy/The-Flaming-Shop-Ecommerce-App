@@ -78,7 +78,7 @@ namespace EcommerceApp1.Controllers
             bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
-                _transactionService.UpdateProductStock(currentTransaction.ProductID);
+                _transactionService.UpdateProductStock(currentTransaction.ProductID, currentTransaction.QuantityBought);
                 await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }

@@ -80,10 +80,10 @@ namespace EcommerceApp1.Services
             return updatedCoupon;
         }
 
-        public bool UpdateProductStock(int? productID)
+        public bool UpdateProductStock(int? productID, int quantity)
         {
             Product product = _transactionRepos.GetProductByID(productID);
-            product.Stock--;
+            product.Stock -= quantity;
             bool updatedProduct = _transactionRepos.UpdateProductStock(product);
             return updatedProduct;
         }
