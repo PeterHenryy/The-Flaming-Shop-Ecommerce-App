@@ -68,7 +68,7 @@ namespace EcommerceApp1.Controllers
             return RedirectToAction("CompanyRefunds", "Refund");
         }
 
-        public async Task RefundUserRewardPoints(double transactionTotal, string paymentType, int userID)
+        public async Task RefundUserRewardPoints(double transactionTotal, string paymentType, int? userID)
         {
             AppUser user = _userManager.FindByIdAsync(userID.ToString()).Result;
             if(paymentType == PaymentTypes.CreditCard.ToString())

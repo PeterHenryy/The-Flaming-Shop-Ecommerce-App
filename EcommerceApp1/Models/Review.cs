@@ -12,10 +12,10 @@ namespace EcommerceApp1.Models
         public int Rating { get; set; }
 
         [ForeignKey("Products")]
-        public int ProductID { get; set; }
+        public int? ProductID { get; set; }
         public virtual Product Product { get; set; }
         [ForeignKey("AspNetUsers")]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         public virtual AppUser User { get; set; }
     }
 }

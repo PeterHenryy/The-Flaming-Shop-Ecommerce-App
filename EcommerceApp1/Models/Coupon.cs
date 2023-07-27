@@ -13,7 +13,7 @@ namespace EcommerceApp1.Models
         public int Quantity { get; set; }
 
         [ForeignKey("Companies")]
-        public int CompanyID { get; set; }
+        public int? CompanyID { get; set; }
 
         [ForeignKey("Products")]
         public int? ProductID { get; set; }

@@ -8,11 +8,11 @@ namespace EcommerceApp1.Models
         [Key]
         public int ID { get; set; }
         [ForeignKey("AspNetUsers")]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
         [ForeignKey("Reviews")]
-        public int ReviewID { get; set; }
+        public int? ReviewID { get; set; }
         [ForeignKey("Comments")]
-        public int CommentID { get; set; }
+        public int? CommentID { get; set; }
 
     }
 }

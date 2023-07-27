@@ -14,7 +14,7 @@ namespace EcommerceApp1.Models
         public DateTime Expiry { get; set; }
 
         [ForeignKey("AspNetUsers")]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
 
     }
 }

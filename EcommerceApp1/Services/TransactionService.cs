@@ -68,7 +68,7 @@ namespace EcommerceApp1.Services
             return refunds;
         }
 
-        public Coupon GetCoupon(string code, int companyID)
+        public Coupon GetCoupon(string code, int? companyID)
         {
             Coupon coupon = _transactionRepos.GetCoupons().SingleOrDefault(x => x.Code == code && x.CompanyID == companyID);
             return coupon;
