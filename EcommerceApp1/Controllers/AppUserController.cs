@@ -10,10 +10,11 @@ namespace EcommerceApp1.Controllers
 {
     public class AppUserController : Controller
     {
-        private SignInManager<AppUser> _signInManager; 
-        private RoleManager<AppRole> _roleManager;
-        private UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager; 
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly UserService _userService;
+        private readonly AppUser _currentUser;
 
         public AppUserController(SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager, UserManager<AppUser> userManger, UserService userService)
@@ -22,6 +23,7 @@ namespace EcommerceApp1.Controllers
             _userService = userService;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _currentUser = userService.GetCurrentUser();
 
         }
         public IActionResult Index()
@@ -57,7 +59,6 @@ namespace EcommerceApp1.Controllers
             {
                 await _signInManager.SignInAsync(user, false);
                 return RedirectToAction("Index", "Product");
-
             }
             return View();
         }
@@ -71,20 +72,34 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Update()
         {
-            AppUser user = _userService.GetCurrentUser();
-            return View(user);
+            return View(_currentUser);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(AppUser updatedUser)
         {
             updatedUser.SecurityStamp = Guid.NewGuid().ToString();
-            AppUser currentUser = _userService.GetCurrentUser();
-            AppUser mappedUser = await _userService.MapUserUpdates(updatedUser, currentUser, _userManager);
+            AppUser mappedUser = await _userService.MapUserUpdates(updatedUser, _currentUser, _userManager);
             var user = await _userManager.UpdateAsync(mappedUser);
             return RedirectToAction("Index", "Product");
         }
 
+        [HttpGet]
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(AppUser admin)
+        {
+            admin.CompanyID = _currentUser.CompanyID;
+            admin.IsAdmin = true;
+            var registeredAdmin = await _userManager.CreateAsync(admin);
+            var role = UserRolesEnum.Admin.ToString();
+            var assignedRole = await _userManager.AddToRoleAsync(admin, role);
+            return RedirectToAction("CompanyStats", "Company");
+        }
         
 
     }
