@@ -1,7 +1,9 @@
 ﻿using EcommerceApp1.Helpers.Enums;
 using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace EcommerceApp1.Controllers
@@ -10,12 +12,14 @@ namespace EcommerceApp1.Controllers
     {
         private SignInManager<AppUser> _signInManager; 
         private RoleManager<AppRole> _roleManager;
-        private UserManager<AppUser> _userManger; 
+        private UserManager<AppUser> _userManager;
+        private readonly UserService _userService;
 
         public AppUserController(SignInManager<AppUser> signInManager,
-            RoleManager<AppRole> roleManager, UserManager<AppUser> userManger)
+            RoleManager<AppRole> roleManager, UserManager<AppUser> userManger, UserService userService)
         {
-            _userManger = userManger;
+            _userManager = userManger;
+            _userService = userService;
             _signInManager = signInManager;
             _roleManager = roleManager;
 
@@ -34,8 +38,8 @@ namespace EcommerceApp1.Controllers
         {
 
             var role = UserRolesEnum.Customer.ToString();
-            var userRegister = await _userManger.CreateAsync(appUser);
-            var assignRole = await _userManger.AddToRoleAsync(appUser, role);
+            var userRegister = await _userManager.CreateAsync(appUser);
+            var assignRole = await _userManager.AddToRoleAsync(appUser, role);
 
             return RedirectToAction("Login", "AppUser");
         }
@@ -48,7 +52,7 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AppLogin appLogin)
         {
-            AppUser user = await _userManger.FindByNameAsync(appLogin.Username);
+            AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
             if (user.Password == appLogin.Password)
             {
                 await _signInManager.SignInAsync(user, false);
@@ -57,12 +61,31 @@ namespace EcommerceApp1.Controllers
             }
             return View();
         }
+
         public async Task<RedirectToActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "AppUser");
         }
 
+        [HttpGet]
+        public IActionResult Update()
+        {
+            AppUser user = _userService.GetCurrentUser();
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(AppUser updatedUser)
+        {
+            updatedUser.SecurityStamp = Guid.NewGuid().ToString();
+            AppUser currentUser = _userService.GetCurrentUser();
+            AppUser mappedUser = _userService.MapUserUpdates(updatedUser, currentUser);
+            var user = await _userManager.UpdateAsync(mappedUser);
+            return RedirectToAction("Index", "Product");
+        }
+
+        
 
     }
 }
