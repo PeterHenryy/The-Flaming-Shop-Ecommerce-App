@@ -8,6 +8,7 @@
     <th>Company Revenue</th>
     <th>Action</th>
     <th>Action</th>
+    <th>Action</th>
   </tr>
 
     <tr>
@@ -17,6 +18,7 @@
         <td>$@Model.Revenue</td>
         <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Company", new {companyID = @Model.ID})">Update</a></td>
         <td> <a class="btn btn-danger" href="@Url.Action("Delete", "Company", new {companyID = @Model.ID})">Delete</a></td>
+        <td> <a class="btn btn-success" href="@Url.Action("RegisterAdmin", "AppUser")">Add Admin</a></td>
     </tr>
     
 
