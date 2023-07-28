@@ -96,5 +96,26 @@ namespace EcommerceApp1.Models.Repositories
             }
         }
 
+        public Company GetCompanyByID(int? companyID)
+        {
+            Company company = _context.Companies.SingleOrDefault(x => x.ID == companyID);
+            return company;
+        }
+
+        public bool UpdateCompany(Company company)
+        {
+            try
+            {
+                _context.Companies.Update(company);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
+        }
+
     }
 }
