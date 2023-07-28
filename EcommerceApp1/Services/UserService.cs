@@ -1,6 +1,7 @@
 ﻿using EcommerceApp1.Models.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Security.Claims;
 
 namespace EcommerceApp1.Services
@@ -28,6 +29,39 @@ namespace EcommerceApp1.Services
         {
             double rewardPoints = productPrice / 2;
             return rewardPoints;
+        }
+
+        public AppUser MapUserUpdates(AppUser updatedUser, AppUser currentUser)
+        {
+            if (!String.IsNullOrEmpty(updatedUser.FirstName))
+            {
+                currentUser.FirstName = updatedUser.FirstName;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.LastName))
+            {
+                currentUser.LastName = updatedUser.LastName;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.Password))
+            {
+                currentUser.Password = updatedUser.Password;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.ProfilePicture))
+            {
+                currentUser.ProfilePicture = updatedUser.ProfilePicture;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.Email))
+            {
+                currentUser.Email = updatedUser.Email;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.PhoneNumber))
+            {
+                currentUser.PhoneNumber = updatedUser.PhoneNumber;
+            }
+            if (!String.IsNullOrEmpty(updatedUser.UserName))
+            {
+                currentUser.UserName = updatedUser.UserName;
+            }
+            return currentUser;
         }
     }
 }

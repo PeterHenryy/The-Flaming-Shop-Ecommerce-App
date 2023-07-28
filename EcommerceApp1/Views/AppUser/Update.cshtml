@@ -1,0 +1,36 @@
+﻿@model AppUser
+
+<form asp-controller="AppUser" asp-action="Update">
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">FirstName</label>
+      <input type="text" class="form-control" placeholder="FirstName" value="@Model.FirstName" asp-for="FirstName">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">LastName</label>
+      <input type="text" class="form-control" placeholder="LastName" value="@Model.LastName" asp-for="LastName">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Password</label>
+    <input type="password" class="form-control" placeholder="Password" value="@Model.Password" asp-for="Password">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">ProfilePicture</label>
+    <input type="text" class="form-control" placeholder="ProfilePicture" value="@Model.ProfilePicture" asp-for="ProfilePicture">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">PhoneNumber</label>
+    <input type="text" class="form-control" placeholder="PhoneNumber" value="@Model.PhoneNumber" asp-for="PhoneNumber">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">UserName</label>
+    <input type="text" class="form-control" placeholder="UserName" value="@Model.UserName" asp-for="UserName">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Email</label>
+    <input type="text" class="form-control" placeholder="Email" value="@Model.Email" asp-for="Email">
+  </div>
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
