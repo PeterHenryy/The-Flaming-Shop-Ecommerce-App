@@ -123,5 +123,39 @@ namespace EcommerceApp1.Services
             _productRepos.Update(product);
         }
 
+        public bool UpdateCompanyProductStock(int? companyID, int quantity, string action)
+        {
+            Company company = _productRepos.GetCompanyByID(companyID);
+            if(action == "increase")
+            {
+                company.ProductsInStock += quantity;
+            }
+            else
+            {
+                company.ProductsInStock -= quantity;
+            }
+            bool updatedCompany = _productRepos.UpdateCompanyProductStock(company);
+            return updatedCompany;
+        }
+
+        public void CheckProductStockChange(int productID, int productNewStock)
+        {
+            Product product = GetProductByID(productID);
+            int quantity;
+            if (product.Stock == productNewStock) return;
+            else if(product.Stock > productNewStock)
+            {
+                quantity = product.Stock - productNewStock;
+                UpdateCompanyProductStock(product.CompanyID, quantity, "decrease");
+            }
+            else
+            {
+                quantity = productNewStock - product.Stock;
+                UpdateCompanyProductStock(product.CompanyID, quantity, "increase");
+
+            }
+
+        }
+
     }
 }

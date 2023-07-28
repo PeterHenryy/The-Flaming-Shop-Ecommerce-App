@@ -22,6 +22,9 @@
       <li class="nav-item">
         <a class="nav-link text-dark" href="@Url.Action("CompanyProducts", "Product", new {companyID = currentUser.CompanyID})">Company Products</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link text-dark" href="@Url.Action("CompanyStats", "Company")">Company Stats</a>
+      </li>
     }
     @if (SignInManager.IsSignedIn(User))
     {

@@ -35,14 +35,15 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Update(int productID)
         {
-            var product = _productService.GetProductByID(productID);
+            Product product = _productService.GetProductByID(productID);
             return View(product);
         }
 
         [HttpPost]
         public IActionResult Update(Product product)
         {
-            var updatedProduct = _productService.Update(product);
+            _productService.CheckProductStockChange(product.ID, product.Stock);
+            bool updatedProduct = _productService.Update(product);
             if (updatedProduct)
             {
                 return RedirectToAction("CompanyProducts", "Product");
@@ -55,7 +56,7 @@ namespace EcommerceApp1.Controllers
         {
             ProductCreateViewModel createViewModel = new ProductCreateViewModel();
             createViewModel.Categories = _productService.GetAllCategories();
-            createViewModel.Companies = _productService.GetAllCompanies();
+            createViewModel.User = _user;
             return View(createViewModel);
         }
 
@@ -66,6 +67,7 @@ namespace EcommerceApp1.Controllers
             var createdProduct = _productService.Create(product);
             if (createdProduct)
             {
+                bool updatedStock = _productService.UpdateCompanyProductStock(product.CompanyID, product.Stock, "increase");
                 return RedirectToAction("Index", "Product");
             }
             return View(product);

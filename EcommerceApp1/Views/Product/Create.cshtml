@@ -3,14 +3,10 @@
 <form asp-controller="Product" asp-action="Create">
 
   <div class="form-row">
-
+    <input type="text" hidden value="@Model.User.CompanyID" asp-for="Product.CompanyID" />
     <select asp-for="Product.CategoryID"
             asp-items="@(new SelectList(Model.Categories, nameof(Category.ID), nameof(Category.Name)))">
         <option>Select a Category</option>
-    </select>
-    <select asp-for="Product.CompanyID"
-        asp-items="@(new SelectList(Model.Companies, nameof(Company.ID), nameof(Company.Name)))">
-        <option>Select a Company</option>
     </select>
     <div class="form-group col-md-6">
       <label for="inputEmail4">Product Name</label>

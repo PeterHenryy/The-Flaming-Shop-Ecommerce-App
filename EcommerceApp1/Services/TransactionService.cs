@@ -87,5 +87,15 @@ namespace EcommerceApp1.Services
             bool updatedProduct = _transactionRepos.UpdateProductStock(product);
             return updatedProduct;
         }
+
+        public bool UpdateCompanyProperties(int? companyID, double transactionTotal, int quantityBought)
+        {
+            Company company = _transactionRepos.GetCompanyByID(companyID);
+            company.Revenue += transactionTotal;
+            company.ProductsInStock -= quantityBought;
+            company.TotalSales += quantityBought;
+            bool updatedCompany = _transactionRepos.UpdateCompany(company);
+            return updatedCompany;
+        }
     }
 }

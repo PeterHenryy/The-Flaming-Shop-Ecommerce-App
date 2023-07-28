@@ -62,6 +62,7 @@ namespace EcommerceApp1.Models.Repositories
         {
             try
             {
+                _context.ChangeTracker.Clear();
                 _context.Products.Update(product);
                 _context.SaveChanges();
                 return true;
@@ -83,6 +84,12 @@ namespace EcommerceApp1.Models.Repositories
         {
             var companies = _context.Companies.ToList();
             return companies;
+        }
+
+        public Company GetCompanyByID(int? companyID)
+        {
+            Company company = _context.Companies.SingleOrDefault(x => x.ID == companyID);
+            return company;
         }
 
         public IEnumerable<Review> GetReviews()
@@ -113,6 +120,20 @@ namespace EcommerceApp1.Models.Repositories
         {
             var dislikes = _context.Dislikes.ToList();
             return dislikes;
+        }
+
+        public bool UpdateCompanyProductStock(Company company)
+        {
+            try
+            {
+                _context.Companies.Update(company);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
     }
 }
