@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace EcommerceApp1.Services
 {
@@ -31,8 +32,16 @@ namespace EcommerceApp1.Services
             return rewardPoints;
         }
 
-        public AppUser MapUserUpdates(AppUser updatedUser, AppUser currentUser)
+        public async Task<AppUser> MapUserUpdates(AppUser updatedUser, AppUser currentUser, UserManager<AppUser> userManager)
         {
+            if (!String.IsNullOrEmpty(updatedUser.Email))
+            {
+                var findUserByEmail = await _userManager.FindByEmailAsync(updatedUser.Email);
+                if(findUserByEmail == null)
+                {
+                    currentUser.Email = updatedUser.Email;
+                }
+            }
             if (!String.IsNullOrEmpty(updatedUser.FirstName))
             {
                 currentUser.FirstName = updatedUser.FirstName;
@@ -48,10 +57,6 @@ namespace EcommerceApp1.Services
             if (!String.IsNullOrEmpty(updatedUser.ProfilePicture))
             {
                 currentUser.ProfilePicture = updatedUser.ProfilePicture;
-            }
-            if (!String.IsNullOrEmpty(updatedUser.Email))
-            {
-                currentUser.Email = updatedUser.Email;
             }
             if (!String.IsNullOrEmpty(updatedUser.PhoneNumber))
             {
