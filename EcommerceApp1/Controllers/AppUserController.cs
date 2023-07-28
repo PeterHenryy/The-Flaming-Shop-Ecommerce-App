@@ -80,7 +80,7 @@ namespace EcommerceApp1.Controllers
         {
             updatedUser.SecurityStamp = Guid.NewGuid().ToString();
             AppUser currentUser = _userService.GetCurrentUser();
-            AppUser mappedUser = _userService.MapUserUpdates(updatedUser, currentUser);
+            AppUser mappedUser = await _userService.MapUserUpdates(updatedUser, currentUser, _userManager);
             var user = await _userManager.UpdateAsync(mappedUser);
             return RedirectToAction("Index", "Product");
         }
