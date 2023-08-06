@@ -24,7 +24,7 @@
         <td>@product.Category.Name</td>
         <td>@product.Stock</td>
         <td>@product.Price</td>
-        <td> <img style="width: 200px;" src="@product.Image"> </td>
+        <td> <img style="width: 200px;" src="~/Img/@product.Image"> </td>
         <td>@product.ReleaseDate</td>
         <td>@product.UserID</td>
         <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Product", new {productID = product.ID})">Update</a></td>

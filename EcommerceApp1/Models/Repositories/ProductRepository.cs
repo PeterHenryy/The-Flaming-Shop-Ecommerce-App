@@ -135,5 +135,25 @@ namespace EcommerceApp1.Models.Repositories
                 return false;
             }
         }
+
+        public bool CreateImage(Image image)
+        {
+            try
+            {
+                _context.Images.Add(image);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        public List<Image> GetImages()
+        {
+            List<Image> images = _context.Images.ToList();
+            return images;
+        }
     }
 }

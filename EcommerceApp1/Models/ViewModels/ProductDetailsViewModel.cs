@@ -18,6 +18,7 @@ namespace EcommerceApp1.Models.ViewModels
         public AppUser CurrentUser { get; set; }
         public int ProductID { get; set; }
         public bool HasUserReviewedProduct { get; set; }
+        public List<Image> ProductImages { get; set; }
 
         public IEnumerable<Comment> GetCommentsForReview(int reviewID)
         {
