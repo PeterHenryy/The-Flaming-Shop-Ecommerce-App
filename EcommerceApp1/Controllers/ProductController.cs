@@ -2,7 +2,12 @@
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace EcommerceApp1.Controllers
@@ -42,8 +47,11 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public IActionResult Update(Product product)
         {
+            var files = HttpContext.Request.Form.Files;
+            product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
             _productService.CheckProductStockChange(product.ID, product.Stock);
             bool updatedProduct = _productService.Update(product);
+            _productService.HandleProductImages(product, files);
             if (updatedProduct)
             {
                 return RedirectToAction("CompanyProducts", "Product");
@@ -63,13 +71,17 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public IActionResult Create(Product product)
         {
+            var files = HttpContext.Request.Form.Files;
+            product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
             product.UserID = _user.Id;
-            var createdProduct = _productService.Create(product);
+            bool createdProduct = _productService.Create(product);
+            _productService.HandleProductImages(product, files);
             if (createdProduct)
             {
                 bool updatedStock = _productService.UpdateCompanyProductStock(product.CompanyID, product.Stock, "increase");
-                return RedirectToAction("Index", "Product");
+                return RedirectToAction("CompanyProducts", "Product");
             }
+
             return View(product);
         }
 
@@ -88,6 +100,7 @@ namespace EcommerceApp1.Controllers
             detailsViewModel.CurrentUser = _user;
             detailsViewModel.ProductID = productID;
             detailsViewModel.HasUserReviewedProduct = _productService.HasUserReviewedProduct(productID, _user.Id);
+            detailsViewModel.ProductImages = _productService.GetProductImages(productID);
             return View(detailsViewModel);
         }
 

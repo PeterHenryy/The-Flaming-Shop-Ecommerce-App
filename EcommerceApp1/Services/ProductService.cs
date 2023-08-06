@@ -1,8 +1,12 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Repositories;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace EcommerceApp1.Services
@@ -10,10 +14,12 @@ namespace EcommerceApp1.Services
     public class ProductService
     {
         private readonly ProductRepository _productRepos;
+        private readonly IWebHostEnvironment _environment;
 
-        public ProductService(ProductRepository productRepos)
+        public ProductService(ProductRepository productRepos, IWebHostEnvironment environment)
         {
             _productRepos = productRepos;
+            _environment = environment;
         }
 
         public bool Create(Product product)
@@ -157,5 +163,45 @@ namespace EcommerceApp1.Services
 
         }
 
+        public bool CreateImage(Image image)
+        {
+            bool createdImage = _productRepos.CreateImage(image);
+            return createdImage;
+        }
+
+        public void HandleProductImages(Product product, IFormFileCollection files)
+        {
+            string fileName;
+            string path;
+
+            if (files.Count > 0)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    var extension = Path.GetExtension(files[i].FileName);
+                    fileName = (i == 0) ? product.Image : Guid.NewGuid().ToString() + extension;
+                    path = Path.Combine(_environment.WebRootPath, "Img") + "/" + fileName;
+
+                    Image img = new Image();
+                    img.Name = fileName;
+                    img.ProductID = product.ID;
+
+                    bool createdImage = CreateImage(img);
+
+                    using (FileStream fs = System.IO.File.Create(path))
+                    {
+                        files[i].CopyTo(fs);
+                        fs.Flush();
+                    }
+                }
+            }
+
+        }
+
+        public List<Image> GetProductImages(int productID)
+        {
+            var images = _productRepos.GetImages().Where(x => x.ProductID == productID).ToList();
+            return images;
+        }
     }
 }

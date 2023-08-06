@@ -26,5 +26,6 @@ namespace EcommerceApp1.Data
         public DbSet<Dislike> Dislikes { get; set; }
         public DbSet<Refund> Refunds { get; set; }
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<Image> Images { get; set; }
     }
 }
