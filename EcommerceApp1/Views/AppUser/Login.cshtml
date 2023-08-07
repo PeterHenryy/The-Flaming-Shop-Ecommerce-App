@@ -1,16 +1,18 @@
-﻿@model AppLogin
+﻿@{
+    Layout = null;
+}
+@model AppLogin
 
-<form asp-controller="AppUser" asp-action="Login">
+<link rel="stylesheet" href="~/css/loginForm.css" />
+<link rel="stylesheet" href="~/css/general.css" />
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputEmail4">Username</label>
-            <input type="text" class="form-control" placeholder="Username" asp-for="Username">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputPassword4">Password</label>
-            <input type="password" class="form-control" placeholder="Password" asp-for="Password">
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Login User</button>
-</form>
+<div class="login-form-container">
+    <h1>Welcome!</h1>
+    <form asp-controller="AppUser" asp-action="Login">
+
+      <input type="text"  placeholder="Username" asp-for="Username">
+
+      <input type="password"  placeholder="Password" asp-for="Password">
+      <button type="submit" >Login</button>
+    </form>
+</div>
