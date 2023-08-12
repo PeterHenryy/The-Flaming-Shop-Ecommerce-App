@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -27,8 +29,25 @@ namespace EcommerceApp1.Controllers
 
         public IActionResult Index()
         {
-            var products = _productService.GetAllProducts();
-            return View(products);
+            var productIndexViewModel = new ProductIndexViewModel();
+            productIndexViewModel.Products = _productService.GetAllProducts().ToList();
+            var reviews = _productService.GetReviews();
+            CalculateProductAverageRating(productIndexViewModel.Products, reviews);
+            return View(productIndexViewModel);
+        }
+        public void CalculateProductAverageRating(IEnumerable<Product> products, IEnumerable<Review> reviews)
+        {
+            foreach (var product in products)
+            {
+                var productReviews = reviews.Where(x => x.ProductID == product.ID);
+                if(productReviews.Count() != 0)
+                {
+                    double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
+                    double roundedRating = Math.Round(rating, 1);
+                    product.AverageRating = roundedRating;
+                    _productService.Update(product);
+                }
+            }
         }
 
         public IActionResult Delete(int productID)
@@ -48,7 +67,10 @@ namespace EcommerceApp1.Controllers
         public IActionResult Update(Product product)
         {
             var files = HttpContext.Request.Form.Files;
-            product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
+            if(files.Count > 0)
+            {
+                product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
+            }
             _productService.CheckProductStockChange(product.ID, product.Stock);
             bool updatedProduct = _productService.Update(product);
             _productService.HandleProductImages(product, files);
@@ -88,8 +110,6 @@ namespace EcommerceApp1.Controllers
         public IActionResult Details(int productID)
         {
             Product product = _productService.GetProductByID(productID);
-            product.AverageRating = _productService.CalculateProductAverageRating(productID);
-            _productService.Update(product);
             var detailsViewModel = new ProductDetailsViewModel();
             detailsViewModel.Product = product;
             detailsViewModel.Reviews = _productService.GetReviewsOfSpecificProduct(productID).ToList();

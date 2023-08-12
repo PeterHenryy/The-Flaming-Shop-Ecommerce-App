@@ -70,6 +70,12 @@ namespace EcommerceApp1.Services
             return productReviews;
         }
 
+        public IEnumerable<Review> GetReviews()
+        {
+            var reviews = _productRepos.GetReviews();
+            return reviews;
+        }
+
         public bool HasUserBoughtProduct(int productID, int userID)
         {
             var productTransactions = _productRepos.GetTransactions().Where(x => x.UserID == userID)
@@ -195,7 +201,6 @@ namespace EcommerceApp1.Services
                     }
                 }
             }
-
         }
 
         public List<Image> GetProductImages(int productID)
@@ -203,5 +208,7 @@ namespace EcommerceApp1.Services
             var images = _productRepos.GetImages().Where(x => x.ProductID == productID).ToList();
             return images;
         }
+
+        
     }
 }
