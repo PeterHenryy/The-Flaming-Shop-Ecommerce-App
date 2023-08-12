@@ -1,0 +1,28 @@
+﻿.header {
+    background-color: rgb(25,39,52);
+    margin-bottom: 20px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+}
+
+.header-items-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    list-style: none;
+    column-gap: 20px;
+}
+
+.header-items-list a{
+    text-decoration: none;
+    color: white;
+}
+
+.header-items-list a:hover{
+    color: palevioletred;
+}
+
+
+
+

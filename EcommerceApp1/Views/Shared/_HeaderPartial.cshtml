@@ -1,0 +1,63 @@
+﻿@using EcommerceApp1.Helpers.Enums;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@{
+    string userID = UserManager.GetUserId(@User);
+    AppUser currentUser = UserManager.FindByIdAsync(userID).Result;
+    int userIntID = Convert.ToInt32(userID);
+
+}
+
+<link rel="stylesheet" href="~/css/header.css" />
+
+<ul class="header-items-list">
+    @if (User.IsInRole(UserRolesEnum.Admin.ToString()))
+    {
+      <li >
+        <a href="@Url.Action("CompanyRefunds", "Refund", new {companyID = currentUser.CompanyID})">Refund Requests</a>
+      </li>
+      <li >
+        <a  href="@Url.Action("CompanyCoupons", "Coupon", new {companyID = currentUser.CompanyID})">Manage Coupons</a>
+      </li>
+      <li>
+        <a  href="@Url.Action("CompanyProducts", "Product", new {companyID = currentUser.CompanyID})">Company Products</a>
+      </li>
+      <li>
+        <a  href="@Url.Action("CompanyStats", "Company")">Company Stats</a>
+      </li>
+    }
+    @if (SignInManager.IsSignedIn(User))
+    {
+      <li>
+        <a  asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
+      </li>
+      <li>
+        <a href="@Url.Action("Update", "AppUser")">Update Profile</a>
+      </li>
+      <li>
+        <form class="form-inline" asp-controller="AppUser" asp-action="Logout">
+          <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+        </form>
+      </li>
+      <li>
+        <a href="@Url.Action("UserCards", "CreditCard", new {userID = userIntID})">Your Credit Cards</a>
+      </li>
+      <li>
+        <a  href="@Url.Action("UserRefunds", "Refund", new {userID = userIntID})">Your Refunds</a>
+      </li>
+      <li>
+        <a  href="@Url.Action("UserTransactions", "Transaction", new {userID = userIntID})">Activity</a>
+      </li>
+    }
+    else
+    {
+      <li>
+        <a  asp-controller="AppUser" asp-action="Register">Register</a>
+      </li>
+      <li>
+        <a  asp-controller="AppUser" asp-action="Login">Login</a>
+      </li>
+    }
+</ul>
