@@ -45,6 +45,9 @@
     .responsive-container {
         max-width: 475px;
     }
+    .header{
+        max-width: 475px;
+    }
 }
 
 /* xs */
