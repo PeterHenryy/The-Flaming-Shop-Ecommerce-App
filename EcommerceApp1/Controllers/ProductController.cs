@@ -32,22 +32,15 @@ namespace EcommerceApp1.Controllers
             var productIndexViewModel = new ProductIndexViewModel();
             productIndexViewModel.Products = _productService.GetAllProducts().ToList();
             var reviews = _productService.GetReviews();
-            CalculateProductAverageRating(productIndexViewModel.Products, reviews);
             return View(productIndexViewModel);
         }
-        public void CalculateProductAverageRating(IEnumerable<Product> products, IEnumerable<Review> reviews)
+
+        public IActionResult ProductsDisplay()
         {
-            foreach (var product in products)
-            {
-                var productReviews = reviews.Where(x => x.ProductID == product.ID);
-                if(productReviews.Count() != 0)
-                {
-                    double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
-                    double roundedRating = Math.Round(rating, 1);
-                    product.AverageRating = roundedRating;
-                    _productService.Update(product);
-                }
-            }
+            var productIndexViewModel = new ProductIndexViewModel();
+            productIndexViewModel.Products = _productService.GetAllProducts().ToList();
+            var reviews = _productService.GetReviews();
+            return View(productIndexViewModel);
         }
 
         public IActionResult Delete(int productID)

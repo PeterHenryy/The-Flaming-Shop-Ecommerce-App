@@ -9,6 +9,7 @@ namespace EcommerceApp1.Models.IRepositories
         bool Delete(int reviewID);
         IEnumerable<Review> GetSpecificUserReviews(int userID);
         Review GetReviewByID(int reviewID);
+        IEnumerable<Review> GetReviews();
 
 
     }

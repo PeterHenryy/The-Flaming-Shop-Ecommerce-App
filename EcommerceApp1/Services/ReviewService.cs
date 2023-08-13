@@ -1,7 +1,9 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Repositories;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcommerceApp1.Services
 {
@@ -42,6 +44,45 @@ namespace EcommerceApp1.Services
         {
             Review review = _reviewRepos.GetReviewByID(reviewID);
             return review;
+        }
+
+        public Product GetProductByID(int? productID)
+        {
+            Product product = _reviewRepos.GetProductByID(productID);
+            return product;
+        }
+
+        public bool UpdateProductRating(Product product)
+        {
+            bool updatedProduct = _reviewRepos.UpdateProductRating(product);
+            return updatedProduct;
+        }
+
+        public IEnumerable<Review> GetReviews()
+        {
+            var reviews = _reviewRepos.GetReviews();
+            return reviews;
+        }
+
+        public void CalculateProductAverageRating(int? productID)
+        {
+            var product = GetProductByID(productID);
+            var reviews = GetReviews();
+
+            var productReviews = reviews.Where(x => x.ProductID == productID);
+            if (productReviews.Count() != 0)
+            {
+                double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
+                double roundedRating = Math.Round(rating, 1);
+                product.AverageRating = roundedRating;
+                UpdateProductRating(product);
+            }
+            else
+            {
+                product.AverageRating = 0;
+                UpdateProductRating(product);
+            }
+            
         }
     }
 }
