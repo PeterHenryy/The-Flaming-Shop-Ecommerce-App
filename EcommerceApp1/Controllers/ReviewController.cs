@@ -2,6 +2,9 @@
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace EcommerceApp1.Controllers
 {
@@ -39,6 +42,7 @@ namespace EcommerceApp1.Controllers
             bool createdReview = _reviewService.Create(review);
             if (createdReview)
             {
+                _reviewService.CalculateProductAverageRating(review.ProductID);
                 return RedirectToAction("UserReviews", "Review");
             }
             return View(review);
@@ -57,6 +61,7 @@ namespace EcommerceApp1.Controllers
             bool updatedReview = _reviewService.Update(review);
             if (updatedReview)
             {
+                _reviewService.CalculateProductAverageRating(review.ProductID);
                 return RedirectToAction("UserReviews", "Review");
             }
             return View(review);
@@ -65,8 +70,13 @@ namespace EcommerceApp1.Controllers
         public IActionResult Delete(int reviewID)
         {
             Review review = _reviewService.GetReviewByID(reviewID);
-            var deletedReview = _reviewService.Delete(reviewID);
+            bool deletedReview = _reviewService.Delete(reviewID);
+            if (deletedReview)
+            {
+                _reviewService.CalculateProductAverageRating(review.ProductID);
+            }
             return RedirectToAction("UserReviews", "Review");
         }
+
     }
 }

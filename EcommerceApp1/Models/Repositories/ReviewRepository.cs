@@ -71,5 +71,31 @@ namespace EcommerceApp1.Models.Repositories
                 return false;
             }
         }
+
+        public Product GetProductByID(int? productID)
+        {
+            Product product = _context.Products.SingleOrDefault(x => x.ID == productID);
+            return product;
+        }
+
+        public bool UpdateProductRating(Product product)
+        {
+            try
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        public IEnumerable<Review> GetReviews()
+        {
+            var reviews = _context.Reviews.ToList();
+            return reviews;
+        }
     }
 }
