@@ -1,7 +1,13 @@
-﻿.header-items-container {
-    position: relative;
+﻿header{
     background-color: rgb(25,39,52);
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
+}
+
+.header-items-container {
+    width: 60%;
+    position: relative;
     height: 75px;
     display: flex;
     align-items: center;
@@ -10,7 +16,6 @@
     font-size: 18px;
     font-weight: 700;
 }
-
 
 .user-options{
     display: flex;

@@ -14,6 +14,7 @@ namespace EcommerceApp1.Models
         public string ReleaseDate { get; set; }
         public double AverageRating { get; set; }
         public bool Archived { get; set; }
+        public string Description { get; set; }
 
         [ForeignKey("Companies")]
         public int? CompanyID { get; set; }
