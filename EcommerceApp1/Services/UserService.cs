@@ -1,7 +1,9 @@
 ﻿using EcommerceApp1.Models.Identity;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -12,11 +14,13 @@ namespace EcommerceApp1.Services
     {
         private readonly IHttpContextAccessor _httpContext;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public UserService(IHttpContextAccessor httpContext, UserManager<AppUser> userManager)
+        public UserService(IHttpContextAccessor httpContext, UserManager<AppUser> userManager, IWebHostEnvironment environment)
         {
             _httpContext = httpContext;
             _userManager = userManager;
+            _environment = environment;
         }
 
         public AppUser GetCurrentUser()
@@ -67,6 +71,16 @@ namespace EcommerceApp1.Services
                 currentUser.UserName = updatedUser.UserName;
             }
             return currentUser;
+        }
+
+        public void HandleUserProfilePicture(IFormFileCollection files)
+        {
+            var path = Path.Combine(_environment.WebRootPath, "profilepics") + "/" + files[0].FileName;
+            using(FileStream fs = System.IO.File.Create(path))
+            {
+                files[0].CopyTo(fs);
+                fs.Flush();
+            }
         }
     }
 }

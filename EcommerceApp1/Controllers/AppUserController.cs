@@ -38,7 +38,7 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public async Task<RedirectToActionResult> Register(AppUser appUser)
         {
-
+            appUser.ProfilePicture = "user-solid.svg";
             var role = UserRolesEnum.Customer.ToString();
             var userRegister = await _userManager.CreateAsync(appUser);
             var assignRole = await _userManager.AddToRoleAsync(appUser, role);
@@ -78,6 +78,12 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AppUser updatedUser)
         {
+            var files = HttpContext.Request.Form.Files;
+            if(files.Count > 0)
+            {
+                updatedUser.ProfilePicture = files[0].FileName;
+                _userService.HandleUserProfilePicture(files);
+            }
             updatedUser.SecurityStamp = Guid.NewGuid().ToString();
             AppUser mappedUser = await _userService.MapUserUpdates(updatedUser, _currentUser, _userManager);
             var user = await _userManager.UpdateAsync(mappedUser);
