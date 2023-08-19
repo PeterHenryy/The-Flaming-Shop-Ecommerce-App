@@ -19,6 +19,7 @@ namespace EcommerceApp1.Models.ViewModels
         public int ProductID { get; set; }
         public bool HasUserReviewedProduct { get; set; }
         public List<Image> ProductImages { get; set; }
+        public int ProductSales { get; set; }
 
         public IEnumerable<Comment> GetCommentsForReview(int reviewID)
         {
@@ -87,5 +88,6 @@ namespace EcommerceApp1.Models.ViewModels
             int starQuantityOnReview= Reviews.Count(x => x.Rating == starQuantity);
             return starQuantityOnReview;
         }
+
     }
 }

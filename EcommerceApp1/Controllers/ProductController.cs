@@ -114,6 +114,7 @@ namespace EcommerceApp1.Controllers
             detailsViewModel.ProductID = productID;
             detailsViewModel.HasUserReviewedProduct = _productService.HasUserReviewedProduct(productID, _user.Id);
             detailsViewModel.ProductImages = _productService.GetProductImages(productID);
+            detailsViewModel.ProductSales = _productService.GetProductSales(productID);
             return View(detailsViewModel);
         }
 

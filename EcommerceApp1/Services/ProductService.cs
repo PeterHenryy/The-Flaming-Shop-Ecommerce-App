@@ -209,6 +209,11 @@ namespace EcommerceApp1.Services
             return images;
         }
 
-        
+        public int GetProductSales(int productID)
+        {
+            var transactions = _productRepos.GetTransactions();
+            int sales = transactions.Count(x => x.ProductID == productID);
+            return sales;
+        }
     }
 }
