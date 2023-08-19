@@ -16,7 +16,7 @@
     </header>
     <main>
         <section>
-            <div class="responsive-container">
+            <div class="master-flexbox">
                 <div class="product-flexbox">
                     <div class="image-info-container">
                         <div class="image-container">
@@ -26,21 +26,23 @@
                             <p class="product-title">@Model.Product.Name</p>
                             <div class="rating-container">
                                 <p class="average-rating">@Model.Product.AverageRating /5</p>
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    if (i <= Model.Product.AverageRating)
+                                <div class="stars-container">
+                                    @for (int i = 1; i <= 5; i++)
                                     {
-                                        <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                        if (i <= Model.Product.AverageRating)
+                                        {
+                                            <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                        }
+                                        else if (Model.Product.AverageRating >= (i - 1) + 0.5 && Model.Product.AverageRating < i)
+                                        {
+                                            <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa-regular fa-star fa-sm"></i>
+                                        }
                                     }
-                                    else if (Model.Product.AverageRating >= (i - 1) + 0.5 && Model.Product.AverageRating < i)
-                                    {
-                                        <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-regular fa-star fa-sm"></i>
-                                    }
-                                }
+                                </div>
                                 @{
                                     string ratingCount = (Model.Reviews.Count()) > 1 ? "Ratings" : "Rating";
                                 }
@@ -66,27 +68,35 @@
         <section>
             @if (Model.Reviews.Any())
             {
-                <div class="responsive-container">
+                <div class="master-flexbox">
                     <div class="reviews-box">
                         <p class="ratings-and-reviews">Ratings and Reviews</p>
                         <div class="review-statistics">
-                            <div class="rating-container">
-                                <p class="big-average-rating">@Model.Product.AverageRating /5</p>
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    if (i <= Model.Product.AverageRating)
-                                    {
-                                        <i class="fa-solid fa-star fa-xl" style="color: #29db47;"></i>
-                                    }
-                                    else if (Model.Product.AverageRating >= (i - 1) + 0.5 && Model.Product.AverageRating < i)
-                                    {
-                                        <i class="fa-solid fa-star-half-stroke fa-xl" style="color: #29db47;"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-regular fa-star fa-xl"></i>
-                                    }
+                            <div class="big-rating-container">
+                                <div class="rating-container">
+                                    <p class="big-average-rating">@Model.Product.AverageRating /5</p>
+                                    <div class="stars-container">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= Model.Product.AverageRating)
+                                            {
+                                                <i class="fa-solid fa-star fa-xl" style="color: #29db47;"></i>
+                                            }
+                                            else if (Model.Product.AverageRating >= (i - 1) + 0.5 && Model.Product.AverageRating < i)
+                                            {
+                                                <i class="fa-solid fa-star-half-stroke fa-xl" style="color: #29db47;"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa-regular fa-star fa-xl"></i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                @{
+                                    string reviewCounter = (Model.Reviews.Count()) > 1 ? "Reviews" : "Review";
                                 }
+                                <p class="reviews-count">@Model.Reviews.Count() @reviewCounter</p>
                             </div>
                             <div class="percentage-bars-container">
                                 @for(int i = 5; i >= 1; i--)
@@ -95,7 +105,7 @@
                                     int starQuantityOnReview = @Model.GetStarQuantityPerReview(i);
                                     string starCount = (i != 1) ? "Stars" : "Star";
                                     <div class="percentage-bar">
-                                        <p class="star-quantity">@i @starCount</p>
+                                        <p class="@starCount-quantity">@i @starCount</p>
                                         <div class="percentage-empty">
                                             <span class="percentage-filled" style="width: @percentageFilled%"></span>
                                         </div>
@@ -104,10 +114,7 @@
                                 }
                             </div>
                         </div>
-                        @{
-                            string reviewCounter = (Model.Reviews.Count()) > 1 ? "Reviews" : "Review";
-                        }
-                        <p class="reviews-count">@Model.Reviews.Count() @reviewCounter</p>
+
                         @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
                         {
                             <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
@@ -123,21 +130,23 @@
                             <div class="@reviewVibe">
                                 <div class="rating-container">
                                     <p class="review-rating">@review.Rating</p>
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        if (i <= review.Rating)
+                                    <div class="stars-container">
+                                        @for (int i = 1; i <= 5; i++)
                                         {
-                                            <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                            if (i <= review.Rating)
+                                            {
+                                                <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                            }
+                                            else if (review.Rating >= (i - 1) + 0.5 && review.Rating < i)
+                                            {
+                                                <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="fa-regular fa-star fa-sm"></i>
+                                            }
                                         }
-                                        else if (review.Rating >= (i - 1) + 0.5 && review.Rating < i)
-                                        {
-                                            <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
-                                        }
-                                        else
-                                        {
-                                            <i class="fa-regular fa-star fa-sm"></i>
-                                        }
-                                    }
+                                    </div>
                                 </div>
                                 <p class="username">@review.User.UserName</p>
                                 <p class="review-body">@review.Body</p>
@@ -210,10 +219,6 @@
                                             </div>
                                         </div>
                                     }
-                                }
-                                else
-                                {
-                                    <p>Be the first to comment this review</p>
                                 }
                                 <form asp-controller="Comment" asp-action="Create" id="comment-form">
                                     <input type="text" hidden value="@Model.Product.ID" asp-for="Comment.ProductID">
