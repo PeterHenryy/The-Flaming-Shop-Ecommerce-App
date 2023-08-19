@@ -1,4 +1,12 @@
-﻿.product-flexbox,
+﻿.master-flexbox {
+    max-width: 1536px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.product-flexbox,
 .reviews-box
 {
     background-color: white;
@@ -29,9 +37,9 @@
 
 .product-image{
     width: 100%;
-    height: 100%;
+    max-height: 600px;
     border-radius: 8px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+
 }
 
 .product-info{
@@ -69,7 +77,9 @@
 .review-statistics{
     display: flex;
     justify-content: center;
+    align-items: center;
     column-gap: 100px;
+    margin-bottom: 50px;
 }
 
 .percentage-bars-container{
@@ -85,10 +95,17 @@
     column-gap: 15px;
 }
 
-.star-quantity{
+.Stars-quantity{
     white-space: nowrap;
     margin: 0;
-    width: 15%;
+}
+
+.Star-quantity{
+    white-space: nowrap;
+    margin-right: 10px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-top: 0;
 }
 
 .percentage-empty{
@@ -107,10 +124,15 @@
     position: relative;
     display: flex;
     align-items: center;
+    column-gap: 30px;
+}
+
+.stars-container{
+    display: flex;
     column-gap: 10px;
 }
 
-.rating-container p{
+.rating-container p:not(.ratings-count){
     margin: 0;
 }
 
@@ -136,6 +158,11 @@
     color: lightgray;
 }
 
+.ratings-count{
+    margin-bottom: 0;
+    margin-left: 20px;
+}
+
 .ratings-and-reviews{
     margin-bottom: 30px;
 }
@@ -144,8 +171,15 @@
     color: lightgray;
 }
 
+.big-rating-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .big-average-rating{
     font-size: 3em;
+    white-space: nowrap;
 }
 
 .reviews-count{
@@ -156,14 +190,15 @@
 .review-container-red{
     border-radius: 8px;
     padding: 30px;
+    margin-bottom: 50px;
 }
 
 .review-container-red{
-    box-shadow: 0px 0px 9px rgb(255, 0, 0, 0.9);
+    box-shadow: 0px 0px 5px rgb(255, 0, 0, 0.9);
 }
 
 .review-container-green {
-    box-shadow: 0px 0px 9px rgb(0, 255, 0, 0.9);
+    box-shadow: 0px 0px 5px rgb(128, 128, 0, 0.9);
 }
 
 .username{
@@ -173,7 +208,10 @@
 .comment-container{
     display: none;
     margin-top: 25px;
-    padding: 30px;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-right: 20px;
     box-shadow: 0px 0px 5px rgb(0,0,255, 0.5);
     border-radius: 7px;
 }

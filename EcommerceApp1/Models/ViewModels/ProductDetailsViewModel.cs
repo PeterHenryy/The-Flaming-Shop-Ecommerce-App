@@ -78,7 +78,7 @@ namespace EcommerceApp1.Models.ViewModels
         {
             int starQuantityOnReview = GetStarQuantityPerReview(starQuantity);
             int reviewCount = Reviews.Count();
-            double percentage = (starQuantityOnReview / reviewCount) * 100;
+            double percentage = (starQuantityOnReview / (double)reviewCount) * 100;
             return percentage;
         }
 
