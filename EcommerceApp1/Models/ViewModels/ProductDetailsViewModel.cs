@@ -1,4 +1,5 @@
 ﻿using EcommerceApp1.Models.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -75,11 +76,11 @@ namespace EcommerceApp1.Models.ViewModels
             return userDislikeInComment;
         }
         
-        public double CalculateRatingPercentagePerStar(int starQuantity)
+        public int CalculateRatingPercentagePerStar(int starQuantity)
         {
             int starQuantityOnReview = GetStarQuantityPerReview(starQuantity);
             int reviewCount = Reviews.Count();
-            double percentage = (starQuantityOnReview / (double)reviewCount) * 100;
+            int percentage = Convert.ToInt32((starQuantityOnReview / (double)reviewCount) * 100);
             return percentage;
         }
 

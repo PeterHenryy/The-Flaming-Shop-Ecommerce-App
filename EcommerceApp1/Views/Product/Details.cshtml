@@ -52,6 +52,7 @@
                             <p class="product-company">Company: <span class="info-text">@Model.Product.Company.Name</span></p>
                             <p class="release-date">Release Date: <span class="info-text">@Model.Product.ReleaseDate</span></p>
                             <p class="product-stock">In Stock: <span class="info-text">@Model.Product.Stock</span></p>
+                            <p class="product-sales">Sold: <span class="info-text">@Model.ProductSales</span></p>
                             <p class="product-price">$@Model.Product.Price</p>
                             <div class="purchase-button-flexbox">
                                 <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = Model.Product.ID})" class="big-purchase-button">Purchase</a>
@@ -64,7 +65,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section>     
         <section>
             @if (Model.Reviews.Any())
             {
@@ -97,11 +98,15 @@
                                     string reviewCounter = (Model.Reviews.Count()) > 1 ? "Reviews" : "Review";
                                 }
                                 <p class="reviews-count">@Model.Reviews.Count() @reviewCounter</p>
-                            </div>
+                                @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
+                                {
+                                    <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
+                                }
+                             </div>
                             <div class="percentage-bars-container">
                                 @for(int i = 5; i >= 1; i--)
                                 {
-                                    double percentageFilled = @Model.CalculateRatingPercentagePerStar(i);
+                                    int percentageFilled = @Model.CalculateRatingPercentagePerStar(i);
                                     int starQuantityOnReview = @Model.GetStarQuantityPerReview(i);
                                     string starCount = (i != 1) ? "Stars" : "Star";
                                     <div class="percentage-bar">
@@ -113,12 +118,7 @@
                                     </div>
                                 }
                             </div>
-                        </div>
-
-                        @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
-                        {
-                            <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
-                        }
+                        </div> 
                         @foreach (var review in Model.Reviews)
                         {
                             var reviewComments = Model.GetCommentsForReview(review.ID);
@@ -148,9 +148,12 @@
                                         }
                                     </div>
                                 </div>
-                                <p class="username">@review.User.UserName</p>
+                                <div class="user">
+                                    <img class="user-profile-picture" src="~/profilepics/@review.User.ProfilePicture">
+                                    <p class="username">@review.User.UserName</p>
+                                </div>
                                 <p class="review-body">@review.Body</p>
-                                <div class="rating-container">
+                                <div class="rating-buttons-container">
                                     @if (userLikeInReview != null)
                                     {
                                         <a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 1, ratingID = userLikeInReview.ID, productID = Model.ProductID})"><i class="fa-solid fa-thumbs-up fa-sm"></i> @reviewLikeCounter</a>
@@ -187,9 +190,12 @@
                                         Like userLikeInComment = Model.FindUserLikeInComment(Model.CurrentUser.Id, comment.ID);
                                         Dislike userDislikeInComment = Model.FindUserDislikeInComment(Model.CurrentUser.Id, comment.ID);
                                         <div class="comment-container">
-                                            <p class="username">@comment.User.UserName</p>
+                                            <div class="user">
+                                                <img class="user-profile-picture" src="~/profilepics/@comment.User.ProfilePicture">
+                                                <p class="username">@comment.User.UserName</p>
+                                            </div>
                                             <p class="comment-body">@comment.Body</p>
-                                            <div class="rating-container">
+                                            <div class="rating-buttons-container">
                                                 @if (userLikeInComment != null)
                                                 {
                                                     <a class="btn btn-secondary" href="@Url.Action("Delete", "Rating", new {ratingChoice = 1, ratingID = userLikeInComment.ID, productID = Model.ProductID})"><i class="fa-solid fa-thumbs-up fa-sm"></i> @commentLikeCounter</a>
@@ -235,12 +241,14 @@
             }
             else
             {
-                <p>THIS PRODUCT HAS NO REVIEWS YET</p>
-                @if (Model.HasUserBoughtProduct)
-                {
-                    <p>Be the first to review this product</p>
-                    <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
-                }
+                <div class="no-review-announcement">
+                    <p>THIS PRODUCT HAS NO REVIEWS YET</p>
+                    @if (Model.HasUserBoughtProduct)
+                    {
+                        <p>Be the first to review this product</p>
+                        <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
+                    }
+                </div>
             }
         </section>
     </main>
