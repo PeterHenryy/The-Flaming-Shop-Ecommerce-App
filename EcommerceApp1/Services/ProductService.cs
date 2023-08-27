@@ -215,5 +215,36 @@ namespace EcommerceApp1.Services
             int sales = transactions.Count(x => x.ProductID == productID);
             return sales;
         }
+
+        public IEnumerable<Product> CategoryFilter(int categoryID)
+        {
+            var filteredProducts = GetAllProducts().Where(x => x.CategoryID == categoryID);
+            return filteredProducts;
+        }
+
+        public IEnumerable<Product> PriceFilter(string order)
+        {
+            IEnumerable<Product> filteredProducts;
+            if (order.Equals("ascending"))
+            {
+                filteredProducts = GetAllProducts().OrderBy(x => x.Price);
+                return filteredProducts;
+            }
+            filteredProducts = GetAllProducts().OrderByDescending(x => x.Price);
+            return filteredProducts;
+        }
+
+        public IEnumerable<Product> RatingFilter(string order)
+        {
+            IEnumerable<Product> filteredProducts;
+            if (order.Equals("ascending"))
+            {
+                filteredProducts = GetAllProducts().OrderBy(x => x.AverageRating);
+                return filteredProducts;
+            }
+            filteredProducts = GetAllProducts().OrderByDescending(x => x.AverageRating);
+            return filteredProducts;
+        }
+
     }
 }
