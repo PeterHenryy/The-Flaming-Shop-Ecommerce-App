@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace EcommerceApp1.Controllers
             _userService = userService;
             _user = userService.GetCurrentUser();
         }
-
+        
         public IActionResult Index()
         {
             var productIndexViewModel = new ProductIndexViewModel();
@@ -37,10 +38,21 @@ namespace EcommerceApp1.Controllers
 
         public IActionResult ProductsDisplay()
         {
-            var productIndexViewModel = new ProductIndexViewModel();
-            productIndexViewModel.Products = _productService.GetAllProducts().ToList();
-            var reviews = _productService.GetReviews();
-            return View(productIndexViewModel);
+            var productDisplayViewModel = new ProductDisplayViewModel();
+            productDisplayViewModel.Companies = _productService.GetAllCompanies();
+            productDisplayViewModel.Categories = _productService.GetAllCategories();
+
+            if (TempData["FilteredProducts"] != null)
+            {
+                var filteredProductsJson = TempData["FilteredProducts"].ToString();
+                productDisplayViewModel.Products = JsonConvert.DeserializeObject<List<Product>>(filteredProductsJson);
+            }
+            else
+            {
+                productDisplayViewModel.Products = _productService.GetAllProducts();
+            }
+
+            return View(productDisplayViewModel);
         }
 
         public IActionResult Delete(int productID)
@@ -129,6 +141,33 @@ namespace EcommerceApp1.Controllers
             _productService.ManageProductArchiving(productID, option);
             return RedirectToAction("CompanyProducts", "Product");
         }
-      
+
+        public IActionResult CategoryFilter(int categoryID)
+        {
+            var filteredProducts = _productService.CategoryFilter(categoryID);
+            TempData["FilteredProducts"] = JsonConvert.SerializeObject(filteredProducts); 
+            return RedirectToAction("ProductsDisplay", "Product");
+        }
+
+        public IActionResult CompanyFilter(int companyID)
+        {
+            var filteredProducts = _productService.GetCompanyProducts(companyID);
+            TempData["FilteredProducts"] = JsonConvert.SerializeObject(filteredProducts); 
+            return RedirectToAction("ProductsDisplay", "Product");
+        }
+
+        public IActionResult PriceFilter(string order)
+        {
+            var filteredProducts = _productService.PriceFilter(order);
+            TempData["FilteredProducts"] = JsonConvert.SerializeObject(filteredProducts); 
+            return RedirectToAction("ProductsDisplay", "Product");
+        }
+
+        public IActionResult RatingFilter(string order)
+        {
+            var filteredProducts = _productService.RatingFilter(order);
+            TempData["FilteredProducts"] = JsonConvert.SerializeObject(filteredProducts);
+            return RedirectToAction("ProductsDisplay", "Product");
+        }
     }
 }

@@ -1,0 +1,52 @@
+﻿.sidebar-filter {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    background-color: rgb(25,39,52);
+    padding: 10px 20px;
+    position: fixed;
+    left: 0;
+    top: 75px;
+    font-family: Arial;
+}
+
+.sidebar-filter p{
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+
+
+#filter-announcement{
+    font-size: 30px;
+    color: white;
+}
+
+.filter-option{
+    font-size: 25px;
+    color: palevioletred;
+}
+
+.option-container {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.option-container p,
+.option{
+    margin: 0;
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+}
+
+
+.option:hover{
+    cursor: pointer;
+    color: cornflowerblue;
+}
+
+.filter-icon{
+    width: 30px;
+}
+

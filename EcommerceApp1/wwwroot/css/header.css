@@ -3,6 +3,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    font-family: Arial;
 }
 
 .header-items-container {
@@ -93,6 +94,12 @@
     border: none;
     background: none;
     color: palevioletred;
+    font-size: 18px;
+}
+
+.logout-button:hover{
+    cursor: pointer;
+    color: red;
 }
 
 .shop-logo{
