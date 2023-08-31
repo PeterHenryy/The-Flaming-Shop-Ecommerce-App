@@ -29,7 +29,8 @@
     margin-left: 5px;
 }
 
-.most-popular-products {
+.products-index-grid,
+.products-display-grid{
     display: grid;
     grid-template-columns: 400px 400px 400px;
     column-gap: 40px;
@@ -80,17 +81,21 @@
 }
 
 .product-name{
+    font-size: 26px;
     margin-top: 10px;
     max-width: 100%;
 }
 
 .product-category{
     color: lightgray;
+    font-size: 20px;
 }
 
 .product-price {
+    font-size: 28px;
     color: seagreen;
     margin-bottom: 20px;
+    margin-top: 10px;
 }
 
 .product-buttons-flexbox{
