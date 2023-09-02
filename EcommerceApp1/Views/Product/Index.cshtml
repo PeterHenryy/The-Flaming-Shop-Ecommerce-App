@@ -16,11 +16,6 @@
     </header>
     <main>
         <section>
-            <div class="banner-container">
-                <div class="responsive-container">
-                    <img src="~/Img/gamesbanner.png" />
-                </div>
-            </div>
             <div class="popular-announcement">
                 <i class="fa-solid fa-star fa-xl" style="color: #70832a;"></i>
                 <h1 class="product-h1">MOST POPULAR PRODUCTS</h1>
@@ -80,7 +75,7 @@
                 <h1 class="product-h1">Top Rated Phones</h1>
             </div>
             <div class="responsive-container">
-                <div class="products-grid">
+                <div class="products-index-grid">
                     @{
                         popularProducts = Model.GetMostPopularProducts(3);
                     }
@@ -134,7 +129,7 @@
                 <h1 class="product-h1">Hot Games</h1>
             </div>
             <div class="responsive-container">
-                <div class="products-grid">
+                <div class="products-index-grid">
                     @{
                         popularProducts = Model.GetMostPopularProducts(1);
                     }
@@ -188,7 +183,7 @@
                     <h1 class="product-h1">Popular Computers</h1>
                 </div>
                 <div class="responsive-container">
-                    <div class="products-grid">
+                    <div class="products-index-grid">
                         @{
                             popularProducts = Model.GetMostPopularProducts(2);
                         }
