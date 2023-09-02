@@ -11,6 +11,7 @@
 }
 
 <link rel="stylesheet" href="~/css/header.css" />
+<link href="~/css/productdetails.css" rel="stylesheet" />
 
 <div class="header-items-container">
     <a href="@Url.Action("Index", "Product")">
@@ -47,7 +48,10 @@
         @if (SignInManager.IsSignedIn(User))
         {
             <div class="options-menu-dropdown">
-                <p class="options-menu-trigger">Hello @User.Identity.Name!</p>
+                <div class="user-profile-and-name">
+                    <img class="user-profile-picture" src="~/profilepics/@currentUser.ProfilePicture">
+                    <p>@User.Identity.Name</p>
+                </div>
                 <ul class="options-menu">
                     <li>
                     <a href="@Url.Action("Update", "AppUser")">Update Profile</a>
