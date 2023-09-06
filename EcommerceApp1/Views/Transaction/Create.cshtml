@@ -1,69 +1,105 @@
 ﻿@model TransactionViewModel
+@{
+    Layout = null;
+}
 
-<form asp-controller="Transaction" asp-action="Create">
+<link href="~/css/header.css" rel="stylesheet" />
+<link href="~/css/general.css" rel="stylesheet" />
+<link href="~/css/transactioncreate.css" rel="stylesheet" />
 
-  <div class="form-row">
-    <input type="hidden" asp-for="Transaction.ProductID" />
-    <input type="hidden" asp-for="Transaction.CurrentProduct.Price" />
-    <input type="hidden" asp-for="Transaction.CurrentProduct.CompanyID" />
-    <input type="hidden" asp-for="Transaction.CurrentProduct.CategoryID" />
-    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" />
-    <div class="form-group col-md-6">
-      <label for="inputEmail4">First Name</label>
-      <input type="text" class="form-control" placeholder="First Name" asp-for="Transaction.FirstName">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Last Name</label>
-      <input type="text" class="form-control" placeholder="Last Name" asp-for="Transaction.LastName">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="inputAddress2">Quantity</label>
-    <input type="text" class="form-control" placeholder="Quantity" asp-for="Transaction.QuantityBought">
-  </div>
-  <div class="form-group">
-    <label for="inputAddress2">Email</label>
-    <input type="text" class="form-control" placeholder="Email" asp-for="Transaction.Email">
-  </div>
-  <div class="form-group">
-    <label for="inputAddress2">Phone Number</label>
-    <input type="text" class="form-control" placeholder="Phone Number" asp-for="Transaction.PhoneNumber">
-  </div>
-  <div class="form-group">
-    <label for="inputAddress2">Coupon Code</label>
-    <input type="text" class="form-control" placeholder="Coupon Code" asp-for="Transaction.CouponCode">
-  </div>
-  <div class="form-group col-md-6">
-    <label for="inputEmail4">Payment Method</label>
-    <div class="form-check">
-      <input class="form-check-input" type="radio"  value="CreditCard" name="Transaction.PaymentType" id="flexRadioDefault1" onclick="showDropdown()">
-      <label class="form-check-label">Credit Card</label>
-    </div>
-    <div id="creditCardOptions" style="display: none;">
-      <label for="creditCardOptions">Credit Card Options</label>
-        @foreach (var card in Model.UserCards)
-        {
-            <div class="form-check">
-                <input class="form-check-input" type="radio" value="@card.ID" name="ChosenCardID" id="creditCardOption1">
-                <label class="form-check-label">@card.CardNumber</label>
+<body style="background-color: rgb(230,230,230)">
+    <header class="header">
+        <partial name="_HeaderPartial" />
+    </header>
+
+    <main class="main-container">
+
+        <div class="form-and-product-container">
+            <div class="transaction-form-container">
+                <form class="transaction-form" asp-controller="Transaction" asp-action="Create">
+                    <input type="hidden" asp-for="Transaction.ProductID" />
+                    <input type="hidden" asp-for="Transaction.CurrentProduct.Price" />
+                    <input type="hidden" asp-for="Transaction.CurrentProduct.CompanyID" />
+                    <input type="hidden" asp-for="Transaction.CurrentProduct.CategoryID" />
+                    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" />
+
+                    <div class="info-row">
+                        <input class="transaction-form-input" id="firstname" placeholder="First Name" required/>
+                        <input class="transaction-form-input" id="lastname" placeholder="Last Name" required />
+                    </div>
+
+
+
+                    <div class="info-row">
+
+                        <input class="transaction-form-input" type="email" id="email" placeholder="Email" required />
+                        <input class="transaction-form-input" id="phonenumber" placeholder="Phone Number" required />
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <input class="transaction-form-input" id="couponcode" placeholder="Coupon Code" />
+                    </div>
+                    <div class="info-row">
+                        <select class="transaction-form-input" id="quantity" required onchange="updateChosenQuantity()">
+                            <option value="" disabled selected>Select a Quantity</option>
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+
+                    </div>
+
+                    <div class="payment-methods-container">
+
+                        <label id="payment-method-label" for="paymentmethod">Choose Payment Method</label>
+
+                        <div class="info-row">
+
+                            <input  type="radio" id="creditcard" name="paymentmethod" />
+                            <label class ="payment-method" for="creditcard">Credit Card</label>
+                        </div>
+
+                        <div class="info-row">
+
+                            <input  type="radio" id="rewardpoints" name="paymentmethod" />
+                            <label class="payment-method" for="rewardpoints">Reward Points</label>
+                        </div>
+                    </div>
+
+                    <button class="transaction-purchase-button" type="submit">Purchase</button>
+                </form>
             </div>
+            <div class="product-info-container">
+                <p class="purchase-announcement">You are Purchasing: @Model.Transaction.CurrentProduct.Name</p>
+                <img class="product-picture" src="~/Img/@Model.Transaction.CurrentProduct.Image" />
+                <p class="product-quantity">Quantity Chosen: <span id="chosen-quantity">1</span></p>
+                <p class="transaction-total">Total: <span class="total-price">$@Model.Transaction.CurrentProduct.Price</span></p>
+
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function updateChosenQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const chosenQuantitySpan = document.getElementById('chosen-quantity');
+            const totalPriceSpan = document.querySelector('.total-price');
+            const productPrice = parseFloat('@Model.Transaction.CurrentProduct.Price');
+
+            const chosenQuantity = parseInt(quantityInput.value);
+
+            chosenQuantitySpan.textContent = chosenQuantity;
+
+            const totalPrice = chosenQuantity * productPrice;
+
+            totalPriceSpan.textContent = totalPrice.toFixed(2); 
         }
-    </div>
-    <div class="form-check" >
-      <input class="form-check-input" type="radio"  value="RewardPoints" name="Transaction.PaymentType" id="flexRadioDefault2" onclick="hideDropdown()" checked>
-      <label class="form-check-label">Reward Points</label>
-    </div>
-  </div>
+    </script>
 
-  <button type="submit" class="btn btn-primary">Purchase</button>
-</form>
 
-<script>
-    function showDropdown() {
-        document.getElementById("creditCardOptions").style.display = "block";
-    }
+</body>
 
-    function hideDropdown() {
-        document.getElementById("creditCardOptions").style.display = "none";
-    }
-</script>
