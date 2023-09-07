@@ -10,18 +10,32 @@
     height: 70%;
 }
 
+.purchase-announcement-container{
+    max-width: 400px;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.purchase-announcement {
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
 .form-and-product-container{
     display: flex;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
     border-radius: 8px;
     background-color: white;
-    padding: 20px;
     column-gap: 20px;
+    overflow: hidden;
 
 }
 
 .transaction-form-container {
+    padding: 20px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
@@ -41,6 +55,7 @@
     display: flex;
     flex-direction: column;
     margin-top: 20px;
+    margin-bottom: 30px;
     row-gap: 10px;
 }
 
@@ -60,7 +75,8 @@
 }
 
 .product-picture{
-    width: 500px;
+    width: 650px;
+    height: 650px;
 }
 
 .transaction-purchase-button{
@@ -77,5 +93,31 @@
 
 .transaction-purchase-button:hover{
     cursor: pointer;
+}
+
+.quantity-chosen{
+    font-size: 20px;
+}
+
+.transaction-total{
+    margin-top: 10px;
+    font-size: 26px;
+}
+
+.total-price{
+    color: green;
+}
+
+.dollar-sign{
+    color: green;
+}
+
+.add-card-button{
+    padding: 10px;
+    background-color: royalblue;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    text-decoration: none;
 }
 
