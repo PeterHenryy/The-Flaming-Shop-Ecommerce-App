@@ -59,6 +59,7 @@ namespace EcommerceApp1
             services.AddTransient<CouponService>();
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.ConfigureApplicationCookie(x => x.LoginPath = "/AppUser/Login");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
