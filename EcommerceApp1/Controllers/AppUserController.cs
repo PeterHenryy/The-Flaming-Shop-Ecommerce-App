@@ -1,6 +1,7 @@
 ﻿using EcommerceApp1.Helpers.Enums;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,19 +46,24 @@ namespace EcommerceApp1.Controllers
 
             return RedirectToAction("Login", "AppUser");
         }
-
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["returnUrl"] = returnUrl;
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(AppLogin appLogin)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(AppLogin appLogin, string returnUrl)
         {
             AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
             if (user.Password == appLogin.Password)
             {
                 await _signInManager.SignInAsync(user, false);
+                if (!String.IsNullOrEmpty(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
                 return RedirectToAction("Index", "Product");
             }
             return View();

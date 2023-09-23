@@ -5,12 +5,14 @@ using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace EcommerceApp1.Controllers
 {
+    [Authorize]
     public class TransactionController : Controller
     {
         private readonly TransactionService _transactionService;

@@ -9,7 +9,7 @@
 <div class="login-form-container">
     <h1>Welcome!</h1>
     <form asp-controller="AppUser" asp-action="Login">
-
+      <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
       <input type="text"  placeholder="Username" asp-for="Username">
 
       <input type="password"  placeholder="Password" asp-for="Password">
