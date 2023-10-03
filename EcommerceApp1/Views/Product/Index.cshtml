@@ -58,7 +58,7 @@
                             </a>
                             <div class="product-buttons-flexbox">
                                 <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
-                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = product.ID})" class="product-details-button">Details</a>
+                                <a style="text-decoration: none" href="@Url.Action("AddItemToCart", "ShoppingCart", new {itemID = product.ID, quantity = 1})" class="product-add-to-cart-button">Add to Cart</a>
                             </div>
                         </div>
                     }
@@ -113,7 +113,7 @@
                             </a>
                             <div class="product-buttons-flexbox">
                                 <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
-                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = product.ID})" class="product-details-button">Details</a>
+                                <a style="text-decoration: none" href="@Url.Action("AddItemToCart", "ShoppingCart", new {productID = product.ID, quantity = 1})" class="product-add-to-cart-button">Details</a>
                             </div>
                         </div>
                     }
@@ -169,7 +169,7 @@
                             </a>
                             <div class="product-buttons-flexbox">
                                 <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
-                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = product.ID})" class="product-details-button">Details</a>
+                                <a style="text-decoration: none" href="@Url.Action("AddItemToCart", "ShoppingCart", new {productID = product.ID, quantity = 1})" class="product-add-to-cart-button">Details</a>
                             </div>
                         </div>
                     }
@@ -225,7 +225,7 @@
                                 </a>
                                 <div class="product-buttons-flexbox">
                                     <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
-                                    <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = product.ID})" class="product-details-button">Details</a>
+                                    <a style="text-decoration: none" href="@Url.Action("AddItemToCart", "ShoppingCart", new {productID = product.ID, quantity = 1})" class="product-add-to-cart-button">Details</a>
                                 </div>
                             </div>
                         }

@@ -57,6 +57,8 @@ namespace EcommerceApp1
             services.AddTransient<RefundService>();
             services.AddTransient<CouponRepository>();
             services.AddTransient<CouponService>();
+            services.AddTransient<ShoppingCartRepository>();
+            services.AddTransient<ShoppingCartService> ();
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.ConfigureApplicationCookie(x => x.LoginPath = "/AppUser/Login");
