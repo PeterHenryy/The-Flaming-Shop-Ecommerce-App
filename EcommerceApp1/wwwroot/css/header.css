@@ -113,3 +113,14 @@
     align-items: center;
 }
 
+.cart-icon-container{
+    position: relative;
+}
+
+.cart-item-quantity {
+    font-size: 16px;
+    color: rgb(177,176,241);
+    position: absolute;
+    left: 47%;
+    bottom: -5px;
+}

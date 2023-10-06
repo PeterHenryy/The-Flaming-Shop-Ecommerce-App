@@ -88,7 +88,7 @@ namespace EcommerceApp1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Product}/{action=Index}/{id?}");
+                    pattern: "{controller=AppUser}/{action=Login}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

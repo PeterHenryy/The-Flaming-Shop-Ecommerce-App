@@ -1,0 +1,47 @@
+﻿.cart-products-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cascadia Mono';
+    row-gap: 20px;
+    margin-bottom: 10%;
+}
+
+.cart-product{
+    background-color: white;
+    display: flex;
+    column-gap: 100px;
+    padding: 50px;
+    width: 60%;
+    border-radius: 7px;
+}
+
+.cart-product-info{
+    margin-left: -70px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.cart-product-name{
+    margin: 0;
+    width: 200px;
+}
+
+.cart-product-image{
+    width: 300px;
+    border-radius: 7px;
+}
+
+.delivery-choices{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.item-quantity-and-price{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}

@@ -55,5 +55,10 @@ namespace EcommerceApp1.Services
             return updatedItem;
         }
 
+        public double CalculateCartTotal()
+        {
+            double total = _shoppingCartRepository.CalculateCartTotal();
+            return total;
+        }
     }
 }

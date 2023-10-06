@@ -47,6 +47,7 @@
         }
         @if (SignInManager.IsSignedIn(User))
         {
+            @await Component.InvokeAsync("ShoppingCartItems")
             <div class="options-menu-dropdown">
                 <div class="user-profile-and-name">
                     <img class="user-profile-picture" src="~/profilepics/@currentUser.ProfilePicture">
@@ -86,4 +87,6 @@
         }
     </div>
 </div>
+<script src="https://kit.fontawesome.com/8da1ba04bb.js" crossorigin="anonymous"></script>
+
 

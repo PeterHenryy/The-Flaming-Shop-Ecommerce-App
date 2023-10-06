@@ -20,43 +20,60 @@ namespace EcommerceApp1.Models.Repositories
         }
         public bool AddItemToCart(int itemID, int quantity)
         {
+            ShoppingCart userCart = GetUserCart();
+            if(userCart == null)
+            {
+                userCart = CreateUserCart();
+            }
             CartItem cartItem = GetCartItemByID(itemID);
             if(cartItem != null)
             {
                 cartItem.Quantity += quantity;
                 bool updatedItem = UpdateCartItemQuantity(itemID, cartItem.Quantity);
+                return updatedItem;
             }
             else
             {
-                ShoppingCart userCart = GetUserCart();
                 cartItem = new CartItem
                 {
                     Quantity = quantity,
                     CartID = userCart.ID,
                     ProductID = itemID
                 };
+                try
+                {
+                    _context.CartItems.Add(cartItem);
+                    _context.SaveChanges();
+                    return true;
+                }
+                catch (System.Exception)
+                {
+                    return false;
+                }
             }
+        }
+        public bool DeleteCart()
+        {
             try
             {
-                _context.CartItems.Add(cartItem);
+                ShoppingCart userCart = GetUserCart();
+                _context.ShoppingCarts.Remove(userCart);
                 _context.SaveChanges();
                 return true;
             }
             catch (System.Exception)
             {
+
                 return false;
             }
         }
-
         public bool ClearCart()
         {
             try
             {
-                ShoppingCart userCart = GetUserCart();
-                var cartItems = GetCartItems();
+                IEnumerable<CartItem> cartItems = GetCartItems();
                 _context.CartItems.RemoveRange(cartItems);
-                _context.ShoppingCarts.Remove(userCart);
-                _context.SaveChanges();
+                DeleteCart();
                 return true;
             }
             catch (System.Exception)
@@ -72,6 +89,11 @@ namespace EcommerceApp1.Models.Repositories
                 CartItem item = GetCartItemByID(itemID);
                 _context.CartItems.Remove(item);
                 _context.SaveChanges();
+                IEnumerable<CartItem> cartItems = GetCartItems();
+                if(cartItems.Count() == 0)
+                {
+                    DeleteCart();
+                }
                 return true;
             }
             catch (System.Exception)
@@ -89,23 +111,18 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<CartItem> GetCartItems()
         {
-            var cartItems = _context.CartItems.Where(x => x.CartID == GetUserCart().ID).Include(x => x.Product);
+            ShoppingCart userCart = GetUserCart();
+            IEnumerable<CartItem> cartItems = null;
+            if(userCart != null)
+            {
+                cartItems = _context.CartItems.Where(x => x.CartID == userCart.ID).Include(x => x.Product);
+            }
             return cartItems;
         }
 
         public ShoppingCart GetUserCart()
         {
             ShoppingCart userCart = _context.ShoppingCarts.SingleOrDefault(x => x.UserID == _currentUser.Id);
-            if(userCart == null)
-            {
-                userCart = new ShoppingCart
-                {
-                    UserID = _currentUser.Id
-                };
-                _context.ShoppingCarts.Add(userCart);
-                _context.SaveChanges();
-                return _context.ShoppingCarts.SingleOrDefault(x => x.UserID == _currentUser.Id);
-            }
             return userCart;
         }
 
@@ -123,6 +140,25 @@ namespace EcommerceApp1.Models.Repositories
             {
                 return false;
             }
+        }
+
+        public ShoppingCart CreateUserCart()
+        {
+            ShoppingCart userCart = new ShoppingCart
+            {
+                UserID = _currentUser.Id
+            };
+            _context.ShoppingCarts.Add(userCart);
+            _context.SaveChanges();
+            userCart = GetUserCart() ;
+            return userCart;
+        }
+
+        public double CalculateCartTotal()
+        {
+            IEnumerable<CartItem> cartItems = GetCartItems();
+            double total  = (cartItems == null) ? 0 : cartItems.Sum(x => x.Product.Price * x.Quantity);
+            return total;
         }
     }
 }
