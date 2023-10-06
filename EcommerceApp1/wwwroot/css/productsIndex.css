@@ -103,23 +103,23 @@
     align-items: center;
     justify-content: center;
     column-gap: 15px;
-    margin-left: -10px;
 }
 
 .purchase-button,
 .product-add-to-cart-button{
-    padding: 10px 40px;
     color: white;
     border-radius: 7px;
     font-size: 18px;
     transition: background-color 0.5s, box-shadow 0.5s;
 }
-.purchase-button{
-    background-color: rgb(25,39,52);
+.purchase-button {
+    padding: 10px 30px;
+    background-color: green;
 }
 
-.product-add-to-cart-button{
+.product-add-to-cart-button {
     background-color: rgb(70, 12, 181);
+    padding: 11px 30px;
 }
 
 .purchase-button:hover,
@@ -131,8 +131,11 @@
 .purchase-button:hover {
     background-color: burlywood;
 }
-.product-add-to-cart-button:hover{
+.product-add-to-cart-button:hover
+{
     background-color: royalblue;
+    cursor: pointer;
 }
+
 
 

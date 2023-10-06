@@ -1,4 +1,5 @@
-﻿using EcommerceApp1.Services;
+﻿using EcommerceApp1.Models.ViewModels;
+using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,20 +17,39 @@ namespace EcommerceApp1.Controllers
 
         public IActionResult DisplayCartItems()
         {
-            var items = _shoppingCartService.GetCartItems();
-            return View(items);
+            var shoppingCartViewModel = new ShoppingCartViewModel();
+            shoppingCartViewModel.CartItems = _shoppingCartService.GetCartItems();
+            shoppingCartViewModel.Total = _shoppingCartService.CalculateCartTotal();
+            return View(shoppingCartViewModel);
         }
-
-        public IActionResult AddItemToCart(int itemID, int quantity)
+        [HttpPost]
+        public void AddItemToCart(int itemID, int quantity)
         {
             bool addedItem = _shoppingCartService.AddItemToCart(itemID, quantity);
-            return RedirectToAction("DisplayCartItems");
         }
 
         public IActionResult ClearCart()
         {
             bool clearedCart = _shoppingCartService.ClearCart();
             return RedirectToAction("DisplayCartItems");
+        }
+
+        public IActionResult DeleteCartItem(int itemID)
+        {
+            bool deletedItem = _shoppingCartService.DeleteCartItem(itemID);
+            return RedirectToAction("DisplayCartItems");
+        }
+
+        [HttpPost]
+        public void UpdateCartItemQuantity(int itemID, int quantity)
+        {
+            bool updatedItem = _shoppingCartService.UpdateCartItemQuantity(itemID, quantity);
+        }
+
+        [HttpPost]
+        public void RemoveFromCart(int itemID)
+        {
+            bool removedItem = _shoppingCartService.DeleteCartItem(itemID);
         }
     }
 }
