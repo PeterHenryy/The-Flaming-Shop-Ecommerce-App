@@ -14,85 +14,155 @@
     <header class="header">
         <partial name="_HeaderPartial" />
     </header>
-    @if(Model.CartItems != null)
+    @if(Model != null)
     {
-        <div class="cart-products-container">
-            <a class="btn btn-danger" href="@Url.Action("ClearCart", "ShoppingCart")">Clear Cart</a>
-            @foreach(var item in Model.CartItems)
-            {
-                <div class="cart-product js-cart-product-@item.ProductID">
-                    <img src="~/Img/@item.Product.Image" class="cart-product-image">
-                    <div class="cart-product-info"> 
-                        <p class="cart-product-name">@item.Product.Name</p>
-                        <div class="cart-product-rating">
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                if (i <= @item.Product.AverageRating)
+        <div class="clear-cart">
+            <a class="btn btn-danger" style="font-size: 25px;"  href="@Url.Action("ClearCart", "ShoppingCart")">Clear Cart</a>
+        </div>
+        <div class="products-and-order-container">
+            <div class="cart-products-container">
+                @foreach(var item in Model.CartItems)
+                {
+                    <div class="cart-product js-cart-product-@item.ProductID">
+                        <img src="~/Img/@item.Product.Image" class="cart-product-image">
+                        <div class="cart-product-info"> 
+                            <p class="cart-product-name">@item.Product.Name</p>
+                            <div class="cart-product-rating">
+                                @for (int i = 1; i <= 5; i++)
                                 {
-                                    <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                    if (i <= @item.Product.AverageRating)
+                                    {
+                                        <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                    }
+                                    else if (@item.Product.AverageRating >= (i - 1) + 0.5 && @item.Product.AverageRating < i)
+                                    {
+                                        <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-regular fa-star fa-sm"></i>
+                                    }
                                 }
-                                else if (@item.Product.AverageRating >= (i - 1) + 0.5 && @item.Product.AverageRating < i)
-                                {
-                                    <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                            </div>
+                        </div>
+
+                        <div class="delivery-choices">
+                            <div class="delivery-choice-container">
+                                <input class="delivery-option js-delivery-option" type="radio" id="delivery-option-1-@item.ProductID" name="delivery-options-@item.ProductID" value="0" onchange="calculateShipping(@item.ProductID)" checked="checked">
+                                <label class="delivery-label" for="delivery-option-1-@item.ProductID">Free Shipping</label>
+                            </div>
+
+                            <div class="delivery-choice-container">
+                                <input class=" delivery-option js-delivery-option" type="radio" id="delivery-option-2-@item.ProductID" name="delivery-options-@item.ProductID" value="0" onchange="calculateShipping(@item.ProductID)">
+                                <label class="delivery-label" for="delivery-option-2-@item.ProductID">Pick up Today</label>
+                            </div>
+
+                            <div class="delivery-choice-container">
+                                <input class=" delivery-option js-delivery-option" type="radio" id="delivery-option-3-@item.ProductID" name="delivery-options-@item.ProductID" value="5.99" onchange="calculateShipping(@item.ProductID)">
+                                <label class="delivery-label" for="delivery-option-3-@item.ProductID">Ship Today for $5.99</label>
+                            </div>
+                        </div>
+
+                        <div class="item-quantity-and-price">
+                            <div class="quantity-container">
+                                <span class="quantity-selected">Quantity Selected</span>
+                                @{
+                                    double productPrice = item.Product.Price;
+                                    string formattedPrice = productPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
                                 }
-                                else
-                                {
-                                    <i class="fa-regular fa-star fa-sm"></i>
+                                <select class="quantity-selector" onchange="updateItemsAndPrices(@item.ProductID, this.value, '@formattedPrice')">
+                                    <option style="display: none" selected >@item.Quantity</option>
+                                    @for(int i = 1; i <= 10; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="prices-container">
+                                @{
+                                    double productTotalPrice = @item.Product.Price * @item.Quantity;
+                                    string formattedTotalPrice = productTotalPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
                                 }
-                            }
-                        </div>
-                    </div>
+                                <span class="cart-product-price">$@formattedPrice each</span>
+                            </div>
 
-                    <div class="delivery-choices">
-                        <div class="delivery-choice-container">
-                            <input type="radio" id="delivery-option-1-@item.ProductID" name="delivery-options-@item.ProductID">
-                            <label for="delivery-option-1-@item.ProductID">Free Shipping</label>
-                        </div>
-
-                        <div class="delivery-choice-container">
-                            <input type="radio" id="delivery-option-2-@item.ProductID" name="delivery-options-@item.ProductID">
-                            <label for="delivery-option-2-@item.ProductID">Pick up Today</label>
-                        </div>
-
-                        <div class="delivery-choice-container">
-                            <input type="radio" id="delivery-option-3-@item.ProductID" name="delivery-options-@item.ProductID">
-                            <label for="delivery-option-3-@item.ProductID">Ship Today for $5.99</label>
-                        </div>
-                    </div>
-
-                    <div class="item-quantity-and-price">
-                        <div class="quantity-container">
-                            <span class="quantity-selected">Quantity Selected</span>
-                            @{
-                                double productPrice = item.Product.Price;
-                                string formattedPrice = productPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-                            }
-                            <select class="quantity-selector" onchange="updateItemQuantityInCheckout(@item.ProductID, this.value); updateItemQuantityHTML(@item.ProductID), updateProductTotalPrice(@item.ProductID, this.value, '@formattedPrice')">
-                                <option style="display: none" selected >@item.Quantity</option>
-                                @for(int i = 1; i <= 10; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-
-                        <div class="prices-container">
-                            <span class="cart-product-total-price ">Total: $<span class="js-product-total-@item.ProductID">@(item.Product.Price * @item.Quantity)</span></span>
-                        </div>
-
-                        <span class="cart-product-price">$@item.Product.Price each</span>
-                        <button class="btn btn-danger" onclick="removeFromCart(@item.Product.ID, '@item.Product.Name')">Remove Item</button>
+                            <span class="cart-product-total-price ">Total: $<span class="product-total js-product-total-@item.ProductID">@formattedTotalPrice</span></span>
+                            <button class="btn btn-danger" style="font-size: 20px;" onclick="removeFromCart(@item.Product.ID, '@item.Product.Name')">Remove Item</button>
                 
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="order-summary-container">
+                <div class="order-summary-info">
+                    <p class="order-summary">Order Summary</p>
+                    <div class="summary-row">
+                        <div class="summary-column">
+                            <p class="js-subtotal-items"></p>
+                            <p class="shipping-handling">Shipping & Handling:</p>
+                            <p class="estimated-tax">Estimated Tax:</p>
+                        </div>
+                        <div class="summary-column">
+                            <p>$<span class="js-subtotal-price js-summary-price"></span></p>
+                            <p class="shipping-cost js-summary-price">FREE</p>
+                            <p>$<span class="tax-cost js-summary-price"></span></p>
+                        </div>
+                    </div>
+                    <hr class="summary-hr">
+                    <div class="summary-row">
+                        <p class="order-total">Order Total:</p>
+                        <p class="order-total-price"></p>
                     </div>
                 </div>
-            }
+                <div class="summary-buttons">
+                    <a class="checkout-button btn btn-success" style="color: white; font-size: 20px;" href="@Url.Action("Create", "Transaction")">Proceed to Checkout</a>
+                    <button class="coupon-button btn btn-primary" style="font-size: 20px;">Enter Coupon Code</button>
+                    <div class="coupon-input">
+                        <input type="text" id="coupon-code" >
+                    </div>
+                    <button id="submit-coupon">Submit Code</button>
+                </div>
+
+            </div>
         </div>
     }
     else
     {
-        <h1 style="text-align: center;">There are no items in your cart yet!</h1>
+        <h1 class="no-items-header" style="text-align: center;">You have no items in your cart!!</h1>
     }
     <script src="~/js/shoppingCart.js"></script>
     <script src="https://kit.fontawesome.com/8da1ba04bb.js" crossorigin="anonymous"></script>
+    <!-- Your Razor Page (.cshtml) -->
+    <script>
+        function validateCoupon(couponCode) {
+            $.ajax({
+                type: 'GET',
+                url: '/Transaction/Test',
+                data: { couponCode };
+                success:  (result) => {
+                    handleTestResult(result);
+                },
+                error: function (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        function handleTestResult(result) {
+            // Access the properties directly
+            console.log(result);
+            console.log('Total:', result.total);
+            console.log('IsValid:', result.isValid);
+
+            // Your logic based on the result
+            if (result.IsValid) {
+                // Your logic for a valid result
+            } else {
+                // Your logic for an invalid result
+            }
+        }
+    </script>
+
 
 </body>
