@@ -17,14 +17,14 @@
         <div class="form-and-product-container">
             <div class="transaction-form-container">
                 <div class="purchase-announcement-container">
-                    <p class="purchase-announcement">You are Purchasing: @Model.Transaction.CurrentProduct.Name</p> 
+                    @* <p class="purchase-announcement">You are Purchasing: @Model.Transaction.CurrentProduct.Name</p>  *@
                 </div>
                 <form class="transaction-form" asp-controller="Transaction" asp-action="Create">
-                    <input type="hidden" asp-for="Transaction.ProductID" />
+@*                     <input type="hidden" asp-for="Transaction.ProductID" />
                     <input type="hidden" asp-for="Transaction.CurrentProduct.Price" />
                     <input type="hidden" asp-for="Transaction.CurrentProduct.CompanyID" />
                     <input type="hidden" asp-for="Transaction.CurrentProduct.CategoryID" />
-                    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" />
+                    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" /> *@
 
                     <div class="info-row">
                         <input asp-for="Transaction.FirstName" class="transaction-form-input" id="firstname" placeholder="First Name" required/>
@@ -71,13 +71,13 @@
                     </div>
 
                     <p class="quantity-chosen">Quantity Chosen: <span id="chosen-quantity">1</span></p>
-                    <p class="transaction-total">Total: <span class="dollar-sign">$</span><span class="total-price">@Model.Transaction.CurrentProduct.Price</span></p>
+                    @* <p class="transaction-total">Total: <span class="dollar-sign">$</span><span class="total-price">@Model.Transaction.CurrentProduct.Price</span></p> *@
 
                     <button class="transaction-purchase-button" type="submit">Purchase</button>
                 </form>
             </div>
             <div class="product-image-container">
-                <img class="product-picture" src="~/Img/@Model.Transaction.CurrentProduct.Image" />
+                @* <img class="product-picture" src="~/Img/@Model.Transaction.CurrentProduct.Image" /> *@
             </div>
         </div>
     </main>
@@ -88,7 +88,7 @@
             const quantityInput = document.getElementById('quantity');
             const chosenQuantitySpan = document.getElementById('chosen-quantity');
             const totalPriceSpan = document.querySelector('.total-price');
-            const productPrice = parseFloat('@Model.Transaction.CurrentProduct.Price');
+          
 
             const chosenQuantity = parseInt(quantityInput.value);
 

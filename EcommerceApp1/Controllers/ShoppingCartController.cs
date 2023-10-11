@@ -19,7 +19,6 @@ namespace EcommerceApp1.Controllers
         {
             var shoppingCartViewModel = new ShoppingCartViewModel();
             shoppingCartViewModel.CartItems = _shoppingCartService.GetCartItems();
-            shoppingCartViewModel.Total = _shoppingCartService.CalculateCartTotal();
             return View(shoppingCartViewModel);
         }
         [HttpPost]

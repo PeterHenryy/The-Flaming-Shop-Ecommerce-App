@@ -3,6 +3,7 @@ using EcommerceApp1.Models.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace EcommerceApp1.Models.Repositories
 {
@@ -18,7 +19,6 @@ namespace EcommerceApp1.Models.Repositories
         {
             try
             {
-                transaction.CurrentProduct = null;
                 _context.Transactions.Add(transaction);
                 _context.SaveChanges();
                 return true;
@@ -32,7 +32,7 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<Transaction> GetAllTransactions()
         {
-            var transactions = _context.Transactions.Include(x => x.CurrentProduct).ToList();
+            var transactions = _context.Transactions.ToList();
             return transactions;
         }
 
@@ -62,7 +62,7 @@ namespace EcommerceApp1.Models.Repositories
 
         public IEnumerable<Coupon> GetCoupons()
         {
-            var coupons = _context.Coupons.ToList();
+            var coupons =  _context.Coupons.ToList();
             return coupons;
         }
 
@@ -71,7 +71,14 @@ namespace EcommerceApp1.Models.Repositories
             try
             {
                 coupon.Quantity--;
-                _context.Coupons.Update(coupon);
+                if(coupon.Quantity == 0)
+                {
+                    _context.Coupons.Remove(coupon);
+                }
+                else
+                {
+                    _context.Coupons.Update(coupon);
+                }
                 _context.SaveChanges();
                 return true;
             }

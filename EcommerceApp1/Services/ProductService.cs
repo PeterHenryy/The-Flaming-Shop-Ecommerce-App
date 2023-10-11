@@ -78,8 +78,8 @@ namespace EcommerceApp1.Services
 
         public bool HasUserBoughtProduct(int productID, int userID)
         {
-            var productTransactions = _productRepos.GetTransactions().Where(x => x.UserID == userID)
-                                                                        .Where(x => x.ProductID == productID);
+            var productTransactions = _productRepos.GetTransactions().Where(x => x.UserID == userID);
+                                                                     //   .Where(x => x.ProductID == productID);
             return productTransactions.Any();
         }
 
@@ -212,8 +212,8 @@ namespace EcommerceApp1.Services
         public int GetProductSales(int productID)
         {
             var transactions = _productRepos.GetTransactions();
-            int sales = transactions.Count(x => x.ProductID == productID);
-            return sales;
+            //int sales = transactions.Count(x => x.ProductID == productID);
+            return 0;
         }
 
         public IEnumerable<Product> CategoryFilter(int categoryID)
