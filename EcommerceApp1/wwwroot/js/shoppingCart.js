@@ -103,14 +103,17 @@ function removeFromCart(itemID, productName) {
         calculateOrderTotal();
     }
 }
-
+function calculateProductTotalPrices() {
+    const productPrices = document.querySelectorAll('.product-total');
+    let productsTotal = 0;
+    productPrices.forEach(price => {
+        productsTotal += Number(price.innerHTML);
+    });
+    return productsTotal;
+}
 function calculateOrderSubtotal(couponDiscount = 0) {
     const subtotalPrice = document.querySelector('.js-subtotal-price');
-    const productPrices = document.querySelectorAll('.product-total');
-    let orderTotalPrice = 0;
-    productPrices.forEach(price => {
-        orderTotalPrice += Number(price.innerHTML);
-    });
+    let orderTotalPrice = calculateProductTotalPrices();
     subtotalPrice.innerHTML = ((orderTotalPrice * 100) / 100).toFixed(2);
     if (couponDiscount !== 0) {
         calculateTax();
@@ -151,7 +154,13 @@ function calculateShipping(productID) {
         }
     });
     shippingElement.innerHTML = (shippingCost === 0) ? "FREE" : `$${shippingCost}`;
-    calculateOrderTotal();
+    let wasTotal = calculateOrderTotal();
+    if (couponDiscount !== 0) {
+        const orderProductPrices = calculateProductTotalPrices()
+        wasTotal += Math.round((orderProductPrices * (couponDiscount / 100)) * 100) / 100;
+        const orderTotalBeforeCoupon = document.querySelector('.js-order-total-before-coupon');
+        orderTotalBeforeCoupon.innerHTML = `<p>Was: <span style="position: absolute; right: 0;"> <del>$${wasTotal.toFixed(2)}</del></span></p>`;
+    }
 }
 
 function calculateSummaryPrices() {
@@ -170,6 +179,7 @@ function calculateOrderTotal() {
     const finalPrice = calculateSummaryPrices();
     const formattedFinalPrice = (finalPrice * 100) / 100;
     orderFinalPriceElement.innerHTML = `${formattedFinalPrice.toFixed(2)}`;
+    return formattedFinalPrice;
 }
 
 $(document).ready(function () {
