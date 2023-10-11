@@ -8,6 +8,8 @@ using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace EcommerceApp1.Controllers
@@ -18,12 +20,14 @@ namespace EcommerceApp1.Controllers
         private readonly TransactionService _transactionService;
         private readonly UserService _userService;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ShoppingCartService _shoppingCartService;
 
-        public TransactionController(TransactionService transactionService, UserService userService, UserManager<AppUser> userManager)
+        public TransactionController(TransactionService transactionService, UserService userService, UserManager<AppUser> userManager, ShoppingCartService shoppingCartService)
         {
             _transactionService = transactionService;
             _userService = userService;
             _userManager = userManager;
+            _shoppingCartService = shoppingCartService;
         }
 
         public IActionResult UserTransactions(int userID)
@@ -35,14 +39,14 @@ namespace EcommerceApp1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(int productID)
+        public IActionResult Create(string couponCode = null)
         {
             AppUser currentUser = _userService.GetCurrentUser();
             var transactionViewModel= new TransactionViewModel();
             transactionViewModel.Transaction = new Transaction();
             Transaction currentTransaction = transactionViewModel.Transaction;
-            currentTransaction.ProductID = productID;
-            currentTransaction.CurrentProduct = _transactionService.GetProductByID(productID);
+            //currentTransaction.ProductID = productID;
+            //currentTransaction.CurrentProduct = _transactionService.GetProductByID(productID);
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
             return View(transactionViewModel);
         }
@@ -55,12 +59,12 @@ namespace EcommerceApp1.Controllers
             currentTransaction.UserID = currentUser.Id;
             if(currentTransaction.CouponCode != null)
             {
-                ValidateCoupon(currentTransaction);
+                ValidateCoupon(currentTransaction.CouponCode);
             }
-            else
-            {
-                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
-            }
+            //else
+            //{
+            //    currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
+            //}
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
             bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
             if (pointsPayment)
@@ -80,28 +84,39 @@ namespace EcommerceApp1.Controllers
             bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
-                _transactionService.UpdateProductStock(currentTransaction.ProductID, currentTransaction.QuantityBought);
-                _transactionService.UpdateCompanyProperties(currentTransaction.CurrentProduct.CompanyID, currentTransaction.Total, currentTransaction.QuantityBought);
+                //_transactionService.UpdateProductStock(currentTransaction.ProductID, currentTransaction.QuantityBought);
+                //_transactionService.UpdateCompanyProperties(currentTransaction.CurrentProduct.CompanyID, currentTransaction.Total, currentTransaction.QuantityBought);
                 await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }
             return View(transactionViewModel);
         }
 
-        public void ValidateCoupon(Transaction currentTransaction)
+        [HttpGet]
+        public IActionResult ValidateCoupon(string couponCode)
         {
-            Coupon coupon = _transactionService.GetCoupon(currentTransaction.CouponCode, currentTransaction.CurrentProduct.CompanyID);
-            CouponValidator couponValidator = new CouponValidator();
-            bool isCouponValid = couponValidator.Validate(coupon, currentTransaction.CurrentProduct);
-            if (isCouponValid)
+            IEnumerable<CartItem>cartItems =  _shoppingCartService.GetCartItems();
+            double cartTotal =   _shoppingCartService.CalculateCartTotal();
+            foreach(var item in cartItems)
             {
-                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction, coupon.DiscountPercentage);
-                bool updatedCoupon = _transactionService.UpdateCouponQuantity(coupon);
+                Coupon coupon =  _transactionService.GetCoupon(couponCode, item.Product.CompanyID);
+                CouponValidator couponValidator = new CouponValidator();
+                bool isCouponValid = couponValidator.Validate(coupon, item.Product);
+                if (isCouponValid)
+                {
+                    double transactionTotal = _transactionService.CalculateTransactionTotal(cartTotal, coupon.DiscountPercentage);
+                    return Json(new CouponValidator {
+                        Total = transactionTotal,
+                        CouponValid = true,
+                        CouponPercentage = coupon.DiscountPercentage
+                    });
+                }
             }
-            else
+            return Json(new CouponValidator
             {
-                currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
-            }
+                Total = cartTotal,
+                CouponValid = false
+            });
         }
 
         public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)

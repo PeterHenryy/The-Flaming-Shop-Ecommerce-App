@@ -40,14 +40,9 @@ namespace EcommerceApp1.Services
             return product;
         }
 
-        public double CalculateTransactionTotal(Transaction transaction, double discountPercentage = 0)
+        public double CalculateTransactionTotal(double cartTotal, double discountPercentage = 0)
         {
-            var total = transaction.CurrentProduct.Price * transaction.QuantityBought;
-            if (discountPercentage != 0)
-            {
-                total -= (discountPercentage / 100) * total;
-            }
-            return total;
+            return (discountPercentage != 0) ? cartTotal -= (discountPercentage / 100) * cartTotal : cartTotal;
         }
 
         public List<CreditCard> GetSpecificUserCards(int userID)
