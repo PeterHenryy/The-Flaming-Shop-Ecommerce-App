@@ -45,8 +45,10 @@ namespace EcommerceApp1.Controllers
             var transactionViewModel= new TransactionViewModel();
             transactionViewModel.Transaction = new Transaction();
             Transaction currentTransaction = transactionViewModel.Transaction;
-            //currentTransaction.ProductID = productID;
-            //currentTransaction.CurrentProduct = _transactionService.GetProductByID(productID);
+            currentTransaction.CouponCode = couponCode;
+            double cartTotal = _shoppingCartService.CalculateCartTotal();
+            IEnumerable<CartItem> cartItems = _shoppingCartService.GetCartItems();
+            _transactionService.CalculateTransactionTotal(cartTotal, currentTransaction, cartItems);
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
             return View(transactionViewModel);
         }
@@ -57,14 +59,6 @@ namespace EcommerceApp1.Controllers
             AppUser currentUser = _userService.GetCurrentUser();
             Transaction currentTransaction = transactionViewModel.Transaction;
             currentTransaction.UserID = currentUser.Id;
-            if(currentTransaction.CouponCode != null)
-            {
-                ValidateCoupon(currentTransaction.CouponCode);
-            }
-            //else
-            //{
-            //    currentTransaction.Total = _transactionService.CalculateTransactionTotal(currentTransaction);
-            //}
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
             bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
             if (pointsPayment)
@@ -80,12 +74,18 @@ namespace EcommerceApp1.Controllers
             {
                 return RedirectToAction("Create", "CreditCard");
             }
-
             bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
-                //_transactionService.UpdateProductStock(currentTransaction.ProductID, currentTransaction.QuantityBought);
-                //_transactionService.UpdateCompanyProperties(currentTransaction.CurrentProduct.CompanyID, currentTransaction.Total, currentTransaction.QuantityBought);
+                IEnumerable<CartItem> cartItems = _shoppingCartService.GetCartItems();
+                for(int i = 0; i < cartItems.Count(); i++)
+                {
+                    CartItem cartItem = cartItems.ElementAt(i);
+                    double itemCost = cartItem.Quantity * cartItem.Product.Price;
+                    _transactionService.UpdateProductStock(cartItem.ProductID, cartItem.Quantity);
+                    _transactionService.UpdateCompanyProperties(cartItem.Product.CompanyID, itemCost, cartItem.Quantity);
+                    _transactionService.CreateTransactionItem(cartItems, currentTransaction.ID);
+                }
                 await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }
@@ -93,30 +93,14 @@ namespace EcommerceApp1.Controllers
         }
 
         [HttpGet]
-        public IActionResult ValidateCoupon(string couponCode)
+        public IActionResult ValidateCoupon(string couponCode, Transaction transaction = null)
         {
-            IEnumerable<CartItem>cartItems =  _shoppingCartService.GetCartItems();
-            double cartTotal =   _shoppingCartService.CalculateCartTotal();
-            foreach(var item in cartItems)
-            {
-                Coupon coupon =  _transactionService.GetCoupon(couponCode, item.Product.CompanyID);
-                CouponValidator couponValidator = new CouponValidator();
-                bool isCouponValid = couponValidator.Validate(coupon, item.Product);
-                if (isCouponValid)
-                {
-                    double transactionTotal = _transactionService.CalculateTransactionTotal(cartTotal, coupon.DiscountPercentage);
-                    return Json(new CouponValidator {
-                        Total = transactionTotal,
-                        CouponValid = true,
-                        CouponPercentage = coupon.DiscountPercentage
-                    });
-                }
-            }
-            return Json(new CouponValidator
-            {
-                Total = cartTotal,
-                CouponValid = false
-            });
+            double cartTotal = _shoppingCartService.CalculateCartTotal();
+            transaction.Total = cartTotal;
+            IEnumerable<CartItem>cartItems = _shoppingCartService.GetCartItems();
+            CouponValidator validatedCoupon = _transactionService.ValidateCoupon(transaction, cartItems, couponCode);
+
+            return Json(validatedCoupon);
         }
 
         public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)

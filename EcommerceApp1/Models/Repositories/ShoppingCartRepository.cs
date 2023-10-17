@@ -29,7 +29,7 @@ namespace EcommerceApp1.Models.Repositories
             if(cartItem != null)
             {
                 cartItem.Quantity += quantity;
-                bool updatedItem = UpdateCartItemQuantity(itemID, cartItem.Quantity);
+                bool updatedItem = UpdateCartItem(cartItem);
                 return updatedItem;
             }
             else
@@ -38,7 +38,8 @@ namespace EcommerceApp1.Models.Repositories
                 {
                     Quantity = quantity,
                     CartID = userCart.ID,
-                    ProductID = itemID
+                    ProductID = itemID,
+                    ShippingOption = "Free Shipping"
                 };
                 try
                 {
@@ -126,22 +127,6 @@ namespace EcommerceApp1.Models.Repositories
             return userCart;
         }
 
-        public bool UpdateCartItemQuantity(int itemID, int quantity)
-        {
-            try
-            {
-                CartItem item = GetCartItemByID(itemID);
-                item.Quantity = quantity;
-                _context.CartItems.Update(item);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (System.Exception)
-            {
-                return false;
-            }
-        }
-
         public ShoppingCart CreateUserCart()
         {
             ShoppingCart userCart = new ShoppingCart
@@ -158,7 +143,30 @@ namespace EcommerceApp1.Models.Repositories
         {
             IEnumerable<CartItem> cartItems = GetCartItems();
             double total  = (cartItems == null) ? 0 : cartItems.Sum(x => x.Product.Price * x.Quantity);
-            return total;
+            return (total * 100) / 100;
+        }
+
+        public bool UpdateCartItem(CartItem item)
+        {
+            try
+            {
+                _context.CartItems.Update(item);
+                _context.SaveChanges();
+                return true;
+
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
+
+        }
+
+        public List<DeliveryOption> GetDeliveryOptions()
+        {
+            List<DeliveryOption> options = _context.DeliveryOptions.ToList();
+            return options;
         }
     }
 }

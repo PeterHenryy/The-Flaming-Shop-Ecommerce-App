@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EcommerceApp1.Models
 {
-    public class CartItem
+    public class TransactionItem
     {
         [Key]
         public int ID { get; set; }
@@ -11,11 +11,12 @@ namespace EcommerceApp1.Models
         public double ShippingCost { get; set; }
         public string ShippingOption { get; set; }
 
-        [ForeignKey("ShoppingCarts")]
-        public int CartID { get; set; }
+        [ForeignKey("Transactions")]
+        public int TransactionID { get; set; }
 
         [ForeignKey("Products")]
         public int ProductID { get; set; }
         public Product Product { get; set; }
+
     }
 }

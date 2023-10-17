@@ -17,15 +17,11 @@
         <div class="form-and-product-container">
             <div class="transaction-form-container">
                 <div class="purchase-announcement-container">
-                    @* <p class="purchase-announcement">You are Purchasing: @Model.Transaction.CurrentProduct.Name</p>  *@
+                    <p>You are purchasing several items for $@Model.Transaction.Total</p>
                 </div>
                 <form class="transaction-form" asp-controller="Transaction" asp-action="Create">
-@*                     <input type="hidden" asp-for="Transaction.ProductID" />
-                    <input type="hidden" asp-for="Transaction.CurrentProduct.Price" />
-                    <input type="hidden" asp-for="Transaction.CurrentProduct.CompanyID" />
-                    <input type="hidden" asp-for="Transaction.CurrentProduct.CategoryID" />
-                    <input type="hidden" asp-for="Transaction.CurrentProduct.ID" /> *@
-
+                    <input type="hidden" asp-for="@Model.Transaction.CouponCode" />
+                    <input type="hidden" asp-for="@Model.Transaction.Total" />
                     <div class="info-row">
                         <input asp-for="Transaction.FirstName" class="transaction-form-input" id="firstname" placeholder="First Name" required/>
                         <input asp-for="Transaction.LastName" class="transaction-form-input" id="lastname" placeholder="Last Name" required />
@@ -34,17 +30,6 @@
 
                         <input asp-for="Transaction.Email" class="transaction-form-input" type="email" id="email" placeholder="Email" required />
                         <input asp-for="Transaction.PhoneNumber" class="transaction-form-input" id="phonenumber" placeholder="Phone Number" required />
-                    </div>
-                    <div class="info-row">
-
-                        <input asp-for="Transaction.CouponCode" class="transaction-form-input" id="couponcode" placeholder="Coupon Code" />
-                        <select asp-for="Transaction.QuantityBought" class="transaction-form-input" id="quantity" required onchange="updateChosenQuantity()">
-                            <option value="" disabled selected>Select a Quantity</option>
-                            @for (int i = 1; i <= 10; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
                     </div>
                     @{
                         var hasCreditCards = Model.UserCards.Count() > 0;
@@ -70,71 +55,15 @@
                         </div>
                     </div>
 
-                    <p class="quantity-chosen">Quantity Chosen: <span id="chosen-quantity">1</span></p>
                     @* <p class="transaction-total">Total: <span class="dollar-sign">$</span><span class="total-price">@Model.Transaction.CurrentProduct.Price</span></p> *@
 
                     <button class="transaction-purchase-button" type="submit">Purchase</button>
                 </form>
             </div>
-            <div class="product-image-container">
-                @* <img class="product-picture" src="~/Img/@Model.Transaction.CurrentProduct.Image" /> *@
-            </div>
+
         </div>
     </main>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        function updateChosenQuantity() {
-            const quantityInput = document.getElementById('quantity');
-            const chosenQuantitySpan = document.getElementById('chosen-quantity');
-            const totalPriceSpan = document.querySelector('.total-price');
-          
-
-            const chosenQuantity = parseInt(quantityInput.value);
-
-            chosenQuantitySpan.textContent = chosenQuantity;
-
-            const totalPrice = chosenQuantity * productPrice;
-
-            totalPriceSpan.textContent = totalPrice.toFixed(2); 
-        }
-    </script>
-    <script>
-        $(document).ready(function () {
-            $('#creditCardSelect').hide();
-
-            $('#creditcard').click(function () {
-                $('#creditCardSelect').show();
-            });
-
-            $('#rewardpoints').click(function () {
-                $('#creditCardSelect').hide();
-            });
-            $('#noCreditCardMessage').hide();
-
-            $('#creditcard').click(function () {
-                // Check if the user has credit cards
-                var hasCreditCards = @Model.UserCards.Count() > 0;
-
-                if (!hasCreditCards) {
-                    $('#noCreditCardMessage').show();
-                } else {
-                    $('#noCreditCardMessage').hide();
-                }
-            });
-
-            $('#rewardpoints').click(function () {
-                $('#noCreditCardMessage').hide();
-            });
-
-            $('a#addCreditCardLink').click(function () {
-            });
-        });
-    </script>
-
-
-
-
 
 </body>
 

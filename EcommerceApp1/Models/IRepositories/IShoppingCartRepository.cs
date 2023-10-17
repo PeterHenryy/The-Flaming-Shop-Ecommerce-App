@@ -9,7 +9,7 @@ namespace EcommerceApp1.Models.IRepositories
         bool AddItemToCart(int itemID, int quantity);
         bool ClearCart();
         bool DeleteCart();
-        bool UpdateCartItemQuantity(int itemID, int quantity);
+        bool UpdateCartItem(CartItem item);
         IEnumerable<CartItem> GetCartItems();
         ShoppingCart GetUserCart();
         CartItem GetCartItemByID(int itemID);

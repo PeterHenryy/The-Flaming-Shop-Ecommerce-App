@@ -2,6 +2,8 @@
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Globalization;
 
 namespace EcommerceApp1.Controllers
 {
@@ -19,6 +21,7 @@ namespace EcommerceApp1.Controllers
         {
             var shoppingCartViewModel = new ShoppingCartViewModel();
             shoppingCartViewModel.CartItems = _shoppingCartService.GetCartItems();
+            shoppingCartViewModel.DeliveryOptions = _shoppingCartService.GetDeliveryOptions();
             return View(shoppingCartViewModel);
         }
         [HttpPost]
@@ -49,6 +52,13 @@ namespace EcommerceApp1.Controllers
         public void RemoveFromCart(int itemID)
         {
             bool removedItem = _shoppingCartService.DeleteCartItem(itemID);
+        }
+
+        [HttpPost]
+        public void UpdateCartItemShippingOption(int itemID, string newShippingCost, string newShippingOption)
+        {
+            double shippingCost = double.Parse(newShippingCost, CultureInfo.GetCultureInfo("en-US"));
+            bool updatedShippingCost = _shoppingCartService.UpdateCartItemShippingOption(itemID, shippingCost, newShippingOption);
         }
     }
 }

@@ -124,5 +124,19 @@ namespace EcommerceApp1.Models.Repositories
             }
         }
 
+        public bool CreateTransactionItem(TransactionItem item)
+        {
+            try
+            {
+                _context.TransactionItems.Add(item);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
+        }
     }
 }
