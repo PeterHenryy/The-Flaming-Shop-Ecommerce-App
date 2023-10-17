@@ -13,8 +13,10 @@
     toastr.success(`Added ${productName} to Cart! (x${quantity})`);
 }
 
+let couponDiscount = 0;
 calculateOrderSubtotal();
 displayOrderItems();
+calculateShipping();
 calculateTax();
 calculateOrderTotal();
 
@@ -24,7 +26,7 @@ function updateItemsAndPrices(productID, quantity, price) {
     updateProductTotalPrice(productID, quantity, price);
     calculateOrderSubtotal(couponDiscount);
     displayOrderItems();
-    calculateShipping(productID);
+    calculateShipping();
     calculateOrderTotal();
     subtotalPriceBeforeCoupon = document.querySelector('.js-subtotal-price').innerHTML;
     totalBeforeCoupon = document.querySelector('.order-total-price').innerHTML;
@@ -203,7 +205,9 @@ let totalBeforeCoupon = document.querySelector('.order-total-price').innerHTML;
 let submitedCouponCode = "";
 
 submitCouponButton.addEventListener('click', () => {
-    
+    var url = '/Transaction/Create?couponCode=' + encodeURIComponent(couponCodeInput.value);
+
+    document.getElementById('checkout-link').setAttribute('href', url);
     if (submitedCouponCode !== couponCodeInput.value) {
         submitedCouponCode = couponCodeInput.value;
         validateCoupon(submitedCouponCode);
@@ -217,6 +221,7 @@ function validateCoupon(couponCode) {
         data: { couponCode },
         success: (result) => {
             if (result.couponValid) {
+                console.log(result);
                 giveTransactionDiscount(result, couponCode);
             }
             else {
@@ -236,7 +241,6 @@ function validateCoupon(couponCode) {
     });
 }
 
-let couponDiscount = 0;
 
 function giveTransactionDiscount(result, couponCode) {
     const summaryPriceElement = document.querySelector('.js-summary-price');
@@ -249,4 +253,12 @@ function giveTransactionDiscount(result, couponCode) {
     newOrderTotal.innerHTML = "New Order Total:";
     toastr.success(`Coupon "${couponCode}" applied!`);
     couponDiscount = result.couponPercentage;
+}
+
+function updateCartItemShippingOption(itemID, newShippingCost, newShippingOption) {
+    $.ajax({
+        type: 'POST',
+        url: '/ShoppingCart/UpdateCartItemShippingOption',
+        data: { itemID, newShippingCost, newShippingOption }
+    });
 }

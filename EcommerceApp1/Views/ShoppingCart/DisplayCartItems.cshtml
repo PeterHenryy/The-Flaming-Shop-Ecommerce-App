@@ -49,22 +49,18 @@
                         </div>
 
                         <div class="delivery-choices">
-                            <div class="delivery-choice-container">
-                                <input class="delivery-option js-delivery-option" type="radio" id="delivery-option-1-@item.ProductID" name="delivery-options-@item.ProductID" value="0" onchange="calculateShipping(@item.ProductID)" checked="checked">
-                                <label class="delivery-label" for="delivery-option-1-@item.ProductID">Free Shipping</label>
-                            </div>
+                            @foreach(var option in Model.DeliveryOptions)
+                            {
+                                string formattedCost = @option.Cost.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                                bool isChecked = (item.ShippingOption.Equals(option.Name));
 
-                            <div class="delivery-choice-container">
-                                <input class=" delivery-option js-delivery-option" type="radio" id="delivery-option-2-@item.ProductID" name="delivery-options-@item.ProductID" value="0" onchange="calculateShipping(@item.ProductID)">
-                                <label class="delivery-label" for="delivery-option-2-@item.ProductID">Pick up Today</label>
-                            </div>
-
-                            <div class="delivery-choice-container">
-                                <input class=" delivery-option js-delivery-option" type="radio" id="delivery-option-3-@item.ProductID" name="delivery-options-@item.ProductID" value="5.99" onchange="calculateShipping(@item.ProductID)">
-                                <label class="delivery-label" for="delivery-option-3-@item.ProductID">Ship Today for $5.99</label>
-                            </div>
+                                <div class="delivery-choice-container">
+                                    <input class="delivery-option js-delivery-option" type="radio" id="@option.ID-@item.ProductID" name="delivery-options-@item.ProductID" checked="@isChecked" value="@formattedCost" onchange="calculateShipping(); updateCartItemShippingOption(@item.ProductID, @formattedCost, '@option.Name')">
+                                    <label class="delivery-label" for="@option.ID-@item.ProductID">@option.Name</label>
+                                </div>
+                            }
                         </div>
-
+                       
                         <div class="item-quantity-and-price">
                             <div class="quantity-container">
                                 <span class="quantity-selected">Quantity Selected</span>
@@ -119,10 +115,10 @@
                     </div>
                 </div>
                 <div class="summary-buttons">
-                    <a class="checkout-button btn btn-success" style="color: white; font-size: 20px;" href="@Url.Action("Create", "Transaction")">Proceed to Checkout</a>
+                    <a class="checkout-button btn btn-success" style="color: white; font-size: 20px;" href="@Url.Action("Create","Transaction")" id="checkout-link">Proceed to Checkout</a>
                     <button class="coupon-button btn btn-primary" style="font-size: 20px;">Enter Coupon Code</button>
                     <div class="coupon-input">
-                        <input type="text" id="coupon-code" >
+                        <input type="text" id="coupon-code">
                     </div>
                     <button id="submit-coupon">Submit Code</button>
                 </div>

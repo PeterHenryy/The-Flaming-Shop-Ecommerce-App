@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EcommerceApp1.Models.ViewModels;
+using System;
+using EcommerceApp1.Helpers;
 
 namespace EcommerceApp1.Services
 {
@@ -40,9 +42,16 @@ namespace EcommerceApp1.Services
             return product;
         }
 
-        public double CalculateTransactionTotal(double cartTotal, double discountPercentage = 0)
+        public void CalculateTransactionTotal(double cartTotal, Transaction currentTransaction, IEnumerable<CartItem> cartItems)
         {
-            return (discountPercentage != 0) ? cartTotal -= (discountPercentage / 100) * cartTotal : cartTotal;
+            currentTransaction.Total = cartTotal;
+            ValidateCoupon(currentTransaction, cartItems, currentTransaction.CouponCode);
+            currentTransaction.Total += CalculateTransactionTax(cartTotal);
+            foreach (var item in cartItems)
+            {
+                currentTransaction.Total += item.ShippingCost;
+            }
+            currentTransaction.Total = Math.Round((currentTransaction.Total * 100)) / 100;
         }
 
         public List<CreditCard> GetSpecificUserCards(int userID)
@@ -83,14 +92,57 @@ namespace EcommerceApp1.Services
             return updatedProduct;
         }
 
-        public bool UpdateCompanyProperties(int? companyID, double transactionTotal, int quantityBought)
+        public bool UpdateCompanyProperties(int? companyID, double productTotal, int quantityBought)
         {
             Company company = _transactionRepos.GetCompanyByID(companyID);
-            company.Revenue += transactionTotal;
+            company.Revenue += productTotal;
             company.ProductsInStock -= quantityBought;
             company.TotalSales += quantityBought;
             bool updatedCompany = _transactionRepos.UpdateCompany(company);
             return updatedCompany;
+        }
+
+        public void CreateTransactionItem(IEnumerable<CartItem> cartItems, int transactionID)
+        {
+            for (int i = 0; i < cartItems.Count(); i++)
+            {
+                CartItem cartItem = cartItems.ElementAt(i);
+                TransactionItem transactionItem = new TransactionItem
+                {
+                    Quantity = cartItem.Quantity,
+                    TransactionID = transactionID,
+                    ProductID = cartItem.ProductID,
+                    ShippingCost = cartItem.ShippingCost
+                };
+                bool createdItem = _transactionRepos.CreateTransactionItem(transactionItem);
+            }
+        }
+
+        public double CalculateTransactionTax(double cartItemsTotal)
+        {
+            double taxPercentage = 8;
+            double tax = Math.Round((cartItemsTotal * (taxPercentage / 100)) * 100) / 100;
+            return tax;
+        }
+
+        public CouponValidator ValidateCoupon(Transaction transaction, IEnumerable<CartItem> cartItems, string couponCode)
+        {
+            CouponValidator couponValidator = new CouponValidator();
+            
+            foreach (var item in cartItems)
+            {
+                Coupon coupon = GetCoupon(couponCode, item.Product.CompanyID);
+                bool isCouponValid = couponValidator.Validate(coupon, item.Product);
+                if (isCouponValid)
+                {
+                    transaction.Total -= (transaction.Total * (coupon.DiscountPercentage / 100)) * 100 / 100;
+                    couponValidator.CouponValid = isCouponValid;
+                    couponValidator.CouponPercentage = coupon.DiscountPercentage;
+                    break;
+                }
+            }
+            couponValidator.Total = transaction.Total;
+            return couponValidator;
         }
     }
 }

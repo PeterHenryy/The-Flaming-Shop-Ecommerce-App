@@ -51,8 +51,10 @@ namespace EcommerceApp1.Services
 
         public bool UpdateCartItemQuantity(int itemID, int quantity)
         {
-            bool updatedItem = _shoppingCartRepository.UpdateCartItemQuantity(itemID, quantity);
-            return updatedItem;
+            CartItem item = _shoppingCartRepository.GetCartItemByID(itemID);
+            item.Quantity = quantity;
+            bool updatedQuantity = _shoppingCartRepository.UpdateCartItem(item);
+            return updatedQuantity;
         }
 
         public double CalculateCartTotal()
@@ -60,5 +62,21 @@ namespace EcommerceApp1.Services
             double total = _shoppingCartRepository.CalculateCartTotal();
             return total;
         }
+        public bool UpdateCartItemShippingOption(int itemID, double newShippingCost, string shippingOption)
+        {
+            CartItem item = GetCartItemByID(itemID);
+            item.ShippingCost = newShippingCost;
+            item.ShippingOption = shippingOption;
+            bool updatedShippingCost = _shoppingCartRepository.UpdateCartItem(item);
+            return updatedShippingCost;
+        }
+
+        public List<DeliveryOption> GetDeliveryOptions()
+        {
+            List<DeliveryOption> options = _shoppingCartRepository.GetDeliveryOptions();
+            return options;
+        }
+
     }
+        
 }

@@ -29,5 +29,7 @@ namespace EcommerceApp1.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<TransactionItem> TransactionItems { get; set; }
+        public DbSet<DeliveryOption> DeliveryOptions { get; set; }
     }
 }
