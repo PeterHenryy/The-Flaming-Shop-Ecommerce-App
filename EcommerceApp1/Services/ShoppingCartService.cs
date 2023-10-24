@@ -2,6 +2,7 @@
 using EcommerceApp1.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcommerceApp1.Services
 {
@@ -77,6 +78,12 @@ namespace EcommerceApp1.Services
             return options;
         }
 
+        public int GetItemsBoughtQuantity()
+        {
+            IEnumerable<CartItem> cartItems = _shoppingCartRepository.GetCartItems();
+            int itemsBought = cartItems.Sum(x => x.Quantity);
+            return itemsBought;
+        }
     }
         
 }

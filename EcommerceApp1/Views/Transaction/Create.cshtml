@@ -6,6 +6,8 @@
 <link href="~/css/header.css" rel="stylesheet" />
 <link href="~/css/general.css" rel="stylesheet" />
 <link href="~/css/transactioncreate.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link href="~/css/general.css" rel="stylesheet" />
 
 <body style="background-color: rgb(230,230,230)">
     <header class="header">
@@ -15,10 +17,30 @@
     <main class="main-container">
 
         <div class="form-and-product-container">
+            <div class="summary-products">
+                <p class="purchase-announcement">You are purchasing:</p>
+                @foreach(CartItem item in Model.CartItems)
+                {
+                    <div class="summary-product-container">
+                        <div class="summary-product-category-container">
+                            @{
+                                string categoryIcon = Model.GetSummaryProductCategory(item.Product.CategoryID) + "Icon.svg";
+                            }
+                            <img class="summary-product-category" src="~/icons/@categoryIcon"/>
+                        </div>
+                        <div class="summary-product-info">
+                            @{
+                                string summaryItemCost = (item.Product.Price * item.Quantity).ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-us"));
+                                string itemQuantity = $"(x{@item.Quantity})";
+                            }
+                            <p class="summary-product-name-quantity">@item.Product.Name @itemQuantity</p>
+                            <p class="summary-product-price">@summaryItemCost</p>
+                        </div>
+                    </div>
+                }
+            </div>
             <div class="transaction-form-container">
-                <div class="purchase-announcement-container">
-                    <p>You are purchasing several items for $@Model.Transaction.Total</p>
-                </div>
+
                 <form class="transaction-form" asp-controller="Transaction" asp-action="Create">
                     <input type="hidden" asp-for="@Model.Transaction.CouponCode" />
                     <input type="hidden" asp-for="@Model.Transaction.Total" />
