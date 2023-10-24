@@ -50,6 +50,9 @@ namespace EcommerceApp1.Controllers
             IEnumerable<CartItem> cartItems = _shoppingCartService.GetCartItems();
             _transactionService.CalculateTransactionTotal(cartTotal, currentTransaction, cartItems);
             transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
+            transactionViewModel.CartItems = cartItems;
+            transactionViewModel.Categories = _transactionService.GetCategories();
+            transactionViewModel.ItemsBought = _shoppingCartService.GetItemsBoughtQuantity();
             return View(transactionViewModel);
         }
 
@@ -74,6 +77,7 @@ namespace EcommerceApp1.Controllers
             {
                 return RedirectToAction("Create", "CreditCard");
             }
+            currentTransaction.ItemsBought = _shoppingCartService.GetItemsBoughtQuantity();
             bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
@@ -84,8 +88,9 @@ namespace EcommerceApp1.Controllers
                     double itemCost = cartItem.Quantity * cartItem.Product.Price;
                     _transactionService.UpdateProductStock(cartItem.ProductID, cartItem.Quantity);
                     _transactionService.UpdateCompanyProperties(cartItem.Product.CompanyID, itemCost, cartItem.Quantity);
-                    _transactionService.CreateTransactionItem(cartItems, currentTransaction.ID);
+                    _transactionService.CreateTransactionItem(cartItem, currentTransaction.ID);
                 }
+                bool clearedCart = _shoppingCartService.ClearCart();
                 await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
                 return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
             }

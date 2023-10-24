@@ -102,20 +102,17 @@ namespace EcommerceApp1.Services
             return updatedCompany;
         }
 
-        public void CreateTransactionItem(IEnumerable<CartItem> cartItems, int transactionID)
+        public void CreateTransactionItem(CartItem cartItem, int transactionID)
         {
-            for (int i = 0; i < cartItems.Count(); i++)
+            TransactionItem transactionItem = new TransactionItem
             {
-                CartItem cartItem = cartItems.ElementAt(i);
-                TransactionItem transactionItem = new TransactionItem
-                {
-                    Quantity = cartItem.Quantity,
-                    TransactionID = transactionID,
-                    ProductID = cartItem.ProductID,
-                    ShippingCost = cartItem.ShippingCost
-                };
-                bool createdItem = _transactionRepos.CreateTransactionItem(transactionItem);
-            }
+                Quantity = cartItem.Quantity,
+                TransactionID = transactionID,
+                ProductID = cartItem.ProductID,
+                ShippingCost = cartItem.ShippingCost,
+                ShippingOption = cartItem.ShippingOption
+            };
+            bool createdItem = _transactionRepos.CreateTransactionItem(transactionItem);
         }
 
         public double CalculateTransactionTax(double cartItemsTotal)
@@ -143,6 +140,12 @@ namespace EcommerceApp1.Services
             }
             couponValidator.Total = transaction.Total;
             return couponValidator;
+        }
+
+        public List<Category> GetCategories()
+        {
+            List<Category> categories = _transactionRepos.GetCategories();
+            return categories;
         }
     }
 }

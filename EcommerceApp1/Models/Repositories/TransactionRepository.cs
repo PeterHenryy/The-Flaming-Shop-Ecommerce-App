@@ -138,5 +138,11 @@ namespace EcommerceApp1.Models.Repositories
                 return false;
             }
         }
+        
+        public List<Category> GetCategories()
+        {
+            List<Category> categories = _context.Categories.ToList();
+            return categories;
+        }
     }
 }
