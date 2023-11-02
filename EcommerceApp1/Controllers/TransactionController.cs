@@ -53,6 +53,7 @@ namespace EcommerceApp1.Controllers
             transactionViewModel.CartItems = cartItems;
             transactionViewModel.Categories = _transactionService.GetCategories();
             transactionViewModel.ItemsBought = _shoppingCartService.GetItemsBoughtQuantity();
+            transactionViewModel.TransactionTax = _transactionService.CalculateTransactionTax(cartTotal);
             return View(transactionViewModel);
         }
 

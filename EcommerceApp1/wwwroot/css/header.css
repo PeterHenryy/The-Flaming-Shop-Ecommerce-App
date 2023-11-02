@@ -124,3 +124,27 @@
     left: 47%;
     bottom: -5px;
 }
+
+.reward-points-container{
+    position: relative;
+}
+
+.reward-points{
+    margin: 0;
+}
+
+.reward-points-exaplanation {
+    width: 400px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    background-color: rgb(25,39,52);
+    color: palevioletred;
+    border-radius: 7px;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.reward-points-container:hover .reward-points-exaplanation {
+    display: inline-block;
+}

@@ -70,6 +70,17 @@
                     </li>
                 </ul> 
             </div>
+
+            <div class="reward-points-container">
+                <div>
+                    <i class="fa-solid fa-bag-shopping fa-xl" style="color: #db7093;"></i>
+                    <span style="color: #db7093;">@Math.Round(currentUser.UserRewardPoints, 2)</span>
+                </div>
+                <div class="reward-points-exaplanation">
+                    <p class="reward-points">These are your reward points, you gain points each time you purchase products with money</p>
+                </div>
+            </div>
+
             <form class="form-inline" asp-controller="AppUser" asp-action="Logout">
                 <button class="logout-button" type="submit" >Logout</button>
             </form>
