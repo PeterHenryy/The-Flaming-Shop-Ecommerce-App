@@ -25,6 +25,6 @@ namespace EcommerceApp1.Models.ViewModels
             }
             return popularProducts;
         }
-
+        public string UserName { get; set; }
     }
 }
