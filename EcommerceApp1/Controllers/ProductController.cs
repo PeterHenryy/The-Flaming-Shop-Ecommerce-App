@@ -32,6 +32,7 @@ namespace EcommerceApp1.Controllers
         {
             var productIndexViewModel = new ProductIndexViewModel();
             productIndexViewModel.Products = _productService.GetAllProducts().ToList();
+            productIndexViewModel.UserName = _user.UserName;
             var reviews = _productService.GetReviews();
             return View(productIndexViewModel);
         }
@@ -96,20 +97,20 @@ namespace EcommerceApp1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(ProductCreateViewModel productVM)
         {
             var files = HttpContext.Request.Form.Files;
-            product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
-            product.UserID = _user.Id;
-            bool createdProduct = _productService.Create(product);
-            _productService.HandleProductImages(product, files);
+            productVM.Product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
+            productVM.Product.UserID = _user.Id;
+            bool createdProduct = _productService.Create(productVM.Product);
+            _productService.HandleProductImages(productVM.Product, files);
             if (createdProduct)
             {
-                bool updatedStock = _productService.UpdateCompanyProductStock(product.CompanyID, product.Stock, "increase");
+                bool updatedStock = _productService.UpdateCompanyProductStock(productVM.Product.CompanyID, productVM.Product.Stock, "increase");
                 return RedirectToAction("CompanyProducts", "Product");
             }
 
-            return View(product);
+            return View(productVM.Product);
         }
 
         public IActionResult Details(int productID)
