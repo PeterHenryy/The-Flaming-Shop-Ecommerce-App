@@ -116,6 +116,7 @@ namespace EcommerceApp1.Controllers
         public IActionResult Details(int productID)
         {
             Product product = _productService.GetProductByID(productID);
+            product.AverageRating = _productService.CalculateProductAverageRating(productID);
             var detailsViewModel = new ProductDetailsViewModel();
             detailsViewModel.Product = product;
             detailsViewModel.Reviews = _productService.GetReviewsOfSpecificProduct(productID).ToList();
