@@ -144,5 +144,11 @@ namespace EcommerceApp1.Models.Repositories
             List<Category> categories = _context.Categories.ToList();
             return categories;
         }
+
+        public List<TransactionItem> GetTransactionItems()
+        {
+            List<TransactionItem> transactionItems = _context.TransactionItems.ToList();
+            return transactionItems;
+        }
     }
 }
