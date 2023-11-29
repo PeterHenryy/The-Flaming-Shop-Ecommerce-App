@@ -13,7 +13,7 @@ namespace EcommerceApp1.Models
 
         [ForeignKey("Transactions")]
         public int TransactionID { get; set; }
-
+        public Transaction Transaction { get; set; }
         [ForeignKey("Products")]
         public int ProductID { get; set; }
         public Product Product { get; set; }
