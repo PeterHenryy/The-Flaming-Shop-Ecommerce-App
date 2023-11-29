@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="~/css/productDetails.css" />
 <link rel="stylesheet" href="~/css/productsIndex.css" />
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
 <body style="background-color: rgb(230,230,230);">
     <header class="header">
@@ -54,9 +57,7 @@
                             <p class="product-stock">In Stock: <span class="info-text">@Model.Product.Stock</span></p>
                             <p class="product-sales">Sold: <span class="info-text">@Model.ProductSales</span></p>
                             <p class="product-price">$@Model.Product.Price</p>
-                            <div class="purchase-button-flexbox">
-                                <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = Model.Product.ID})" class="big-purchase-button">Purchase</a>
-                            </div>
+                            <button class="product-add-to-cart-button" style="width: 100%" onclick="addItemToCart(@Model.Product.ID, 1, '@Model.Product.Name'); updateCartItemQuantity(1)">Add to Cart</button>
                         </div>
                     </div>
                     <div class="description-container">
@@ -272,4 +273,5 @@
             });
         });
     </script>
+    <script src="~/js/shoppingCart.js"></script>
 </body>

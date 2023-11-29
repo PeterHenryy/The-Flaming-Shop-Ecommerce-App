@@ -78,9 +78,9 @@ namespace EcommerceApp1.Services
 
         public bool HasUserBoughtProduct(int productID, int userID)
         {
-            var productTransactions = _productRepos.GetTransactions().Where(x => x.UserID == userID);
-                                                                     //   .Where(x => x.ProductID == productID);
-            return productTransactions.Any();
+            var transactionItems = _productRepos.GetTransactionItems();
+            bool hasBought = transactionItems.Any(x => x.Transaction.UserID == userID && x.ProductID == productID);
+            return hasBought;
         }
 
         public IEnumerable<Comment> GetAllComments()
@@ -110,9 +110,16 @@ namespace EcommerceApp1.Services
         public double CalculateProductAverageRating(int productID)
         {
             var productReviews = GetReviewsOfSpecificProduct(productID);
-            double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
-            double roundedRating = Math.Round(rating, 1);
-            return roundedRating;
+            if (productReviews.Any())
+            {
+                double rating = productReviews.Sum(x => x.Rating) / (double)productReviews.Count();
+                double roundedRating = Math.Round(rating, 1);
+                return roundedRating;
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public IEnumerable<Product> GetCompanyProducts(int companyID)

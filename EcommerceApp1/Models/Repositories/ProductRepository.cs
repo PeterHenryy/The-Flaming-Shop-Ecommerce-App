@@ -155,5 +155,11 @@ namespace EcommerceApp1.Models.Repositories
             List<Image> images = _context.Images.ToList();
             return images;
         }
+
+        public List<TransactionItem> GetTransactionItems()
+        {
+            var transactionItems = _context.TransactionItems.Include(x => x.Transaction).ToList();
+            return transactionItems;
+        }
     }
 }
