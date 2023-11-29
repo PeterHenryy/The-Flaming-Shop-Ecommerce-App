@@ -147,5 +147,11 @@ namespace EcommerceApp1.Services
             List<Category> categories = _transactionRepos.GetCategories();
             return categories;
         }
+
+        public List<TransactionItem> GetTransactionItems(int transactionID)
+        {
+            List<TransactionItem> transactionItems = _transactionRepos.GetTransactionItems().Where(x => x.TransactionID == transactionID).ToList();
+            return transactionItems;
+        }
     }
 }

@@ -1,0 +1,107 @@
+﻿@model List<TransactionItem>
+@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/css/general.css" />
+<link rel="stylesheet" href="~/css/header.css" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/shoppingCart.css" />
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+<body style="background-color: rgb(230,230,230)">
+    <header class="header">
+        <partial name="_HeaderPartial" />
+    </header>
+
+    
+
+        <div class="products-and-order-container">
+            <div class="cart-products-container">
+                @foreach(var item in Model)
+                {
+                    <div class="cart-product js-cart-product-@item.ProductID">
+                        <img src="~/Img/@item.Product.Image" class="cart-product-image">
+                        <div class="cart-product-info"> 
+                            <p class="cart-product-name">@item.Product.Name</p>
+                            <div class="cart-product-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= @item.Product.AverageRating)
+                                    {
+                                        <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                    }
+                                    else if (@item.Product.AverageRating >= (i - 1) + 0.5 && @item.Product.AverageRating < i)
+                                    {
+                                        <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa-regular fa-star fa-sm"></i>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>Delivery Chosen: </p>
+                            <p>@item.ShippingOption</p>
+                        </div>
+                       
+                        <div class="item-quantity-and-price">
+                            <div class="quantity-container">
+                                <span class="quantity-selected">Quantity Bought: @item.Quantity</span>
+                                @{
+                                    double productPrice = item.Product.Price;
+                                    string formattedPrice = productPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                            </div>
+
+                            <div class="prices-container">
+                                @{
+                                    double productTotalPrice = @item.Product.Price * @item.Quantity;
+                                    string formattedTotalPrice = productTotalPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                                }
+                                <span class="cart-product-price">$@formattedPrice each</span>
+                            </div>
+
+                            <span class="cart-product-total-price ">Total: $<span class="product-total js-product-total-@item.ProductID">@formattedTotalPrice</span></span>
+                
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="order-summary-container">
+                <div class="order-summary-info">
+                    <p class="order-summary">Order Summary</p>
+                    <div class="summary-row">
+                        <div class="summary-column">
+                            <p class="js-subtotal-items"></p>
+                            <p class="shipping-handling">Shipping & Handling:</p>
+                            <p class="estimated-tax">Estimated Tax:</p>
+                        </div>
+                        <div class="summary-column">
+                            <p>$<span class="js-subtotal-price js-summary-price"></span></p>
+                            <p class="shipping-cost js-summary-price">FREE</p>
+                            <p>$<span class="tax-cost js-summary-price"></span></p>
+                        </div>
+                    </div>
+                    <hr class="summary-hr">
+                    <div class="js-order-total-before-coupon" style="position: relative"></div>
+                    <div class="summary-row">
+                        <p class="order-total">Order Total:</p>
+                        <p style="font-size: 25px;">$<span class="order-total-price"></span></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    <script src="~/js/shoppingCart.js"></script>
+    <script src="https://kit.fontawesome.com/8da1ba04bb.js" crossorigin="anonymous"></script>
+
+</body>

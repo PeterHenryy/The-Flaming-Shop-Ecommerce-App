@@ -123,6 +123,11 @@ namespace EcommerceApp1.Controllers
             await _userManager.UpdateAsync(currentUser);
         }
 
+        public IActionResult TransactionItems(int transactionID)
+        {
+            IEnumerable<TransactionItem> transactionItems = _transactionService.GetTransactionItems(transactionID);
+            return View(transactionItems);
+        }
 
     }
 }
