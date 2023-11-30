@@ -86,7 +86,7 @@
                             </div>
 
                             <span class="cart-product-total-price ">Total: $<span class="product-total js-product-total-@item.ProductID">@formattedTotalPrice</span></span>
-                            <button class="btn btn-danger" style="font-size: 20px;" onclick="removeFromCart(@item.Product.ID, '@item.Product.Name')">Remove Item</button>
+                            <button class="btn btn-danger" style="font-size: 16px;" onclick="removeFromCart(@item.Product.ID, '@item.Product.Name')">Remove Item</button>
                 
                         </div>
                     </div>
@@ -111,12 +111,12 @@
                     <div class="js-order-total-before-coupon" style="position: relative"></div>
                     <div class="summary-row">
                         <p class="order-total">Order Total:</p>
-                        <p style="font-size: 25px;">$<span class="order-total-price"></span></p>
+                        <p style="font-size: 18px;">$<span class="order-total-price"></span></p>
                     </div>
                 </div>
                 <div class="summary-buttons">
-                    <a class="checkout-button btn btn-success" style="color: white; font-size: 20px;" href="@Url.Action("Create","Transaction")" id="checkout-link">Proceed to Checkout</a>
-                    <button class="coupon-button btn btn-primary" style="font-size: 20px;">Enter Coupon Code</button>
+                    <a class="checkout-button btn btn-success" style="color: white; font-size: 18px;" href="@Url.Action("Create","Transaction")" id="checkout-link">Proceed to Checkout</a>
+                    <button class="coupon-button btn btn-primary" style="font-size: 18px;">Enter Coupon Code</button>
                     <div class="coupon-input">
                         <input type="text" id="coupon-code">
                     </div>

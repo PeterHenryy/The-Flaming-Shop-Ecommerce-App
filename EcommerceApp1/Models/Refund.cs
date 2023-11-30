@@ -22,5 +22,9 @@ namespace EcommerceApp1.Models
         [ForeignKey("Transactions")]
         public int? TransactionID { get; set; }
         public virtual Transaction Transaction { get; set; }
+
+        [ForeignKey("TransactionItems")]
+        public int? TransactionItemID { get; set; }
+        public virtual TransactionItem TransactionItem { get; set; }
     }
 }

@@ -8,10 +8,5 @@ namespace EcommerceApp1.Models.ViewModels
         public IEnumerable<Transaction> UserTransactions { get; set; }
         public IEnumerable<Refund> UserRefunds { get; set; }
 
-        public Refund GetUserRefundRequest(int transactionID)
-        {
-            Refund requestedRefund = UserRefunds.SingleOrDefault(x => x.TransactionID == transactionID);
-            return requestedRefund;
-        }
     }
 }

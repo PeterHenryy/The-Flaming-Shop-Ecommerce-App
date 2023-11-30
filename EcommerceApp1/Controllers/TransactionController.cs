@@ -125,8 +125,15 @@ namespace EcommerceApp1.Controllers
 
         public IActionResult TransactionItems(int transactionID)
         {
-            IEnumerable<TransactionItem> transactionItems = _transactionService.GetTransactionItems(transactionID);
-            return View(transactionItems);
+            AppUser currentUser = _userService.GetCurrentUser();
+            List<TransactionItem> transactionItems = _transactionService.GetTransactionItems(transactionID);
+            var transaction = _transactionService.GetTransactionByID(transactionID);
+            var transactionItemsVM = new TransactionItemsViewModel();
+            transactionItemsVM.Transactionitems = transactionItems;
+            transactionItemsVM.TransactionTotal = "$" +transaction.Total.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+            transactionItemsVM.Refunds = _transactionService.GetAllUserRefunds(currentUser.Id);
+            transactionItemsVM.TransactionQuantityBought = transaction.ItemsBought;
+            return View(transactionItemsVM);
         }
 
     }

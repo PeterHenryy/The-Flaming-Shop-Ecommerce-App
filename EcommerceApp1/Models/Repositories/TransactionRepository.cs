@@ -147,7 +147,7 @@ namespace EcommerceApp1.Models.Repositories
 
         public List<TransactionItem> GetTransactionItems()
         {
-            List<TransactionItem> transactionItems = _context.TransactionItems.ToList();
+            List<TransactionItem> transactionItems = _context.TransactionItems.Include(x => x.Product).ToList();
             return transactionItems;
         }
     }
