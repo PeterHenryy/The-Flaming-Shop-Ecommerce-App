@@ -5,6 +5,7 @@
     <input type="hidden" asp-for="TransactionID" />
     <input type="hidden" asp-for="UserID" />
     <input type="hidden" asp-for="ProductID" />
+    <input type="hidden" asp-for="TransactionItemID" />
     <div class="form-row">
         <select asp-for="Reason" id="reasonSelect">
             <option value="@RefundReasons.DefectiveProduct.ToString()">Defective Product</option>

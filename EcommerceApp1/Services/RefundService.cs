@@ -1,8 +1,10 @@
 ﻿using EcommerceApp1.Helpers.Enums.Refunds;
 using EcommerceApp1.Models;
 using EcommerceApp1.Models.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcommerceApp1.Services
 {
@@ -55,5 +57,14 @@ namespace EcommerceApp1.Services
             return false;
 
         }
+
+        public TransactionItem GetTransactionItem(int? transactionID, int? productID)
+        {
+            List<TransactionItem> transactionItems = _refundRepos.GetTransactionItems();
+            TransactionItem transactionItem = transactionItems.SingleOrDefault(x => x.TransactionID == transactionID && x.ProductID == productID);
+            return transactionItem;
+        }
+
+
     }
 }

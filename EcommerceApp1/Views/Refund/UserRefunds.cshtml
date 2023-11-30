@@ -4,17 +4,20 @@
     <tr>
         <th>Product</th>
         <th>Refund Reason</th>
-        <th>Order Value</th>
+        <th>Quantity Bought</th>
+        <th>Price Paid</th>
         <th>Transaction ID</th>
         <th>Status</th>
     </tr>
 
     @foreach(var refund in @Model)
     {
+        double transactionItemPrice = refund.TransactionItem.Quantity * refund.Product.Price;
         <tr>
             <td>@refund.Product.Name</td>
             <td>@refund.Reason</td>
-            <td>$@refund.Transaction.Total</td>
+            <td>@refund.TransactionItem.Quantity</td>
+            <td>$@transactionItemPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</td>
             <td>@refund.TransactionID</td>
             <td>@refund.Status</td>
         </tr>

@@ -4,6 +4,7 @@ using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace EcommerceApp1.Controllers
@@ -36,12 +37,13 @@ namespace EcommerceApp1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(int transactionID, int productID)
+        public IActionResult Create(int transactionID, int productID, int transactionItemID)
         {
             Refund refund = new Refund();
             refund.TransactionID = transactionID;
             refund.ProductID = productID;
             refund.UserID = _currentUser.Id;
+            refund.TransactionItemID = transactionItemID;
             return View(refund);
         }
 
@@ -56,26 +58,28 @@ namespace EcommerceApp1.Controllers
             return View(refund);
         }
 
-        public async Task<IActionResult> UpdateRefundStatus(int refundID, bool accepted, double transactionTotal, string paymentType)
+        public async Task<IActionResult> UpdateRefundStatus(int refundID, bool accepted,  string paymentType)
         {
             Refund refund = _refundService.GetRefundByID(refundID);
+            TransactionItem transactionItem = _refundService.GetTransactionItem(refund.TransactionID, refund.ProductID);
+            double transactionItemTotal = transactionItem.Quantity * transactionItem.Product.Price;
             bool refundAccepted = _refundService.HasAdminAcceptedRefund(accepted, refund);
             if (refundAccepted)
             {
-                await RefundUserRewardPoints(transactionTotal, paymentType, refund.UserID);
+                await RefundUserRewardPoints(transactionItemTotal, paymentType, refund.UserID);
             }
             _refundService.Update(refund);
             return RedirectToAction("CompanyRefunds", "Refund");
         }
 
-        public async Task RefundUserRewardPoints(double transactionTotal, string paymentType, int? userID)
+        public async Task RefundUserRewardPoints(double transactionItemTotal, string paymentType, int? userID)
         {
             AppUser user = _userManager.FindByIdAsync(userID.ToString()).Result;
             if(paymentType == PaymentTypes.CreditCard.ToString())
             {
-                user.UserRewardPoints -= transactionTotal / 2;
+                user.UserRewardPoints -= transactionItemTotal / 2;
             }
-            user.UserRewardPoints += transactionTotal * 5;
+            user.UserRewardPoints += transactionItemTotal * 5;
             await _userManager.UpdateAsync(user);
         }
     }

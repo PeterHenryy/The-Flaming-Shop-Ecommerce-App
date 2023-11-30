@@ -69,7 +69,7 @@
                                         <option value="@i">@i</option>
                                     }
                                 </select>
-                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button" onclick="addItemToCart(@product.ID, 1, '@product.Name')">Details</a>
+                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
                     }
@@ -123,7 +123,6 @@
                                 </div>
                             </a>
                             <div class="product-buttons-flexbox">
-                                <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
                                 <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
                                     <option style="display: none" selected>Add to Cart</option>
                                     @for (int i = 1; i <= 10; i++)
@@ -131,6 +130,7 @@
                                         <option value="@i">@i</option>
                                     }
                                 </select>
+                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
                     }
@@ -185,7 +185,6 @@
                                 </div>
                             </a>
                             <div class="product-buttons-flexbox">
-                                <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
                                 <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
                                     <option style="display: none" selected>Add to Cart</option>
                                     @for (int i = 1; i <= 10; i++)
@@ -193,6 +192,7 @@
                                         <option value="@i">@i</option>
                                     }
                                 </select>
+                                <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
                     }
@@ -247,7 +247,6 @@
                                     </div>
                                 </a>
                                 <div class="product-buttons-flexbox">
-                                    <a style="text-decoration: none" href="@Url.Action("Create", "Transaction", new{productID = product.ID})" class="purchase-button">Purchase</a>
                                     <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
                                         <option style="display: none" selected>Add to Cart</option>
                                         @for (int i = 1; i <= 10; i++)
@@ -255,6 +254,7 @@
                                             <option value="@i">@i</option>
                                         }
                                     </select>
+                                    <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                                 </div>
                             </div>
                         }

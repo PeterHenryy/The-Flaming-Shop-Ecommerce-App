@@ -33,8 +33,9 @@ namespace EcommerceApp1.Models.Repositories
         public IEnumerable<Refund> GetCompanyRefunds(int companyID)
         {
             var refunds = _context.Refunds.Include(x => x.Product)
-                                           .Include(x => x.Transaction)
-                                           .Include(x => x.User);
+                                                               .Include(x => x.Transaction)
+                                                               .Include(x => x.User)
+                                                               .Include(x => x.TransactionItem);
 
             var companyRefunds = refunds.Where(x => x.Product.CompanyID == companyID).ToList();
             return companyRefunds;
@@ -49,8 +50,9 @@ namespace EcommerceApp1.Models.Repositories
         public IEnumerable<Refund> GetUserRefunds(int userID)
         {
             var userRefunds = _context.Refunds.Include(x => x.Product)
-                                               .Include(x => x.Transaction)
-                                               .Where(x => x.UserID == userID).ToList();
+                                                                         .Include(x => x.Transaction)
+                                                                         .Include(x => x.TransactionItem)
+                                                                         .Where(x => x.UserID == userID).ToList();
             return userRefunds;
         }
 
@@ -66,6 +68,12 @@ namespace EcommerceApp1.Models.Repositories
             {
                 return false;
             }
+        }
+
+        public List<TransactionItem> GetTransactionItems()
+        {
+            List<TransactionItem> transactionItems = _context.TransactionItems.Include(x => x.Product).ToList();
+            return transactionItems;
         }
     }
 }
