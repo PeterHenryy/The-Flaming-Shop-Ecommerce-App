@@ -36,7 +36,7 @@
                             {
                                 <tr>
                                     <td>@transaction.ID</td>
-                                    <td>@transaction.Total</td>
+                                    <td>$@transaction.Total.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</td>
                                     <td>@transaction.Email</td>
                                     <td>@transaction.PhoneNumber</td>
                                     <td>@transaction.TransactionDate</td>
