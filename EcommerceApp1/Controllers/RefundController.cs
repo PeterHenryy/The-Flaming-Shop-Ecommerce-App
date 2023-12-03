@@ -1,6 +1,7 @@
 ﻿using EcommerceApp1.Helpers.Enums;
 using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,26 +37,12 @@ namespace EcommerceApp1.Controllers
             return View(companyRefunds);
         }
 
-        [HttpGet]
-        public IActionResult Create(int transactionID, int productID, int transactionItemID)
-        {
-            Refund refund = new Refund();
-            refund.TransactionID = transactionID;
-            refund.ProductID = productID;
-            refund.UserID = _currentUser.Id;
-            refund.TransactionItemID = transactionItemID;
-            return View(refund);
-        }
-
         [HttpPost]
-        public IActionResult Create(Refund refund)
+        public IActionResult Create(TransactionItemsViewModel refundForm)
         {
-            bool createdRefund = _refundService.Create(refund);
-            if (createdRefund)
-            {
-                return RedirectToAction("UserTransactions", "Transaction", new {userID = _currentUser.Id});
-            }
-            return View(refund);
+            refundForm.Refund.UserID = _currentUser.Id;
+            bool createdRefund = _refundService.Create(refundForm.Refund);
+            return RedirectToAction("UserRefunds", "Refund");
         }
 
         public async Task<IActionResult> UpdateRefundStatus(int refundID, bool accepted,  string paymentType)
