@@ -9,7 +9,7 @@ namespace EcommerceApp1.Models.ViewModels
         public IEnumerable<Refund> Refunds { get; set; }
         public string TransactionTotal { get; set; }
         public int TransactionQuantityBought { get; set; }
-
+        public Refund Refund { get; set; }
         public bool HasRequestedRefund(int transactionItemID)
         {
             bool refundExists = Refunds.Any(x => x.TransactionItemID == transactionItemID);
