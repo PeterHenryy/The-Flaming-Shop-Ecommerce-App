@@ -1,0 +1,83 @@
+﻿h1{
+    text-align: center;
+}
+
+
+.company-name{
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.company-logo{
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+}
+
+.general-stats{
+    display: flex;
+    column-gap: 25px;
+}
+
+.general-stats p{
+    font-family: 'Cascadia Mono';
+}
+
+.statistics-of-year{
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    margin-top: 5px;
+    border-radius: 8px;
+}
+
+.little-diamond{
+    background-color: rgb(0, 186, 157);
+}
+
+.customers{
+    background-color: royalblue;
+}
+
+.orders{
+    background-color: green;
+}
+
+.stats-container{
+    display: flex;
+    align-items: center;
+    column-gap: 50px;
+
+}
+
+.specific-stat-container{
+    display: flex;
+    column-gap: 20px;
+    align-items: start;
+}
+
+.specific-stat-container p{
+    margin: 0;
+}
+
+.stats-display{
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.stat-show{
+    font-size: 30px;
+}
+
+.stat-label{
+    color: gray;
+}

@@ -1,7 +1,9 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EcommerceApp1.Services
 {
@@ -42,6 +44,50 @@ namespace EcommerceApp1.Services
         {
             var updatedCompany = _companiesRepo.Update(company);
             return updatedCompany;
+        }
+
+        public IEnumerable<TransactionItem> GetCompanyTransactionItems(int companyID)
+        {
+            return _companiesRepo.GetTransactionItems().Where(x => x.Product.CompanyID == companyID);
+        }
+
+        public double GetCompanyYearRevenue(int companyID)
+        {
+            IEnumerable<TransactionItem> companyTransactionItems = GetCompanyTransactionItems(companyID);
+            var yearRevenue = GetCompanyYearTransactions(companyID).Sum(x => x.Product.Price * x.Quantity);
+            return yearRevenue;
+        }
+
+        public IEnumerable<TransactionItem> GetCompanyYearTransactions(int companyID)
+        {
+            return GetCompanyTransactionItems(companyID).Where(x => x.Transaction.TransactionDate.Year == DateTime.Now.Year);
+        }
+
+        public int GetCompanyYearCustomers(int companyID) {
+            var companyYearTransctions = GetCompanyYearTransactions(companyID);
+            int customers = companyYearTransctions.GroupBy(x => x.Transaction.UserID).Count();
+            return customers;
+        }
+
+        public int GetCompanyYearOrders(int companyID)
+        {
+            int orders = GetCompanyYearTransactions(companyID).Count();
+            return orders;
+        }
+
+
+        public List<double> GetCompanyRevenuesPerMonth(int companyID)
+        {
+            IEnumerable<TransactionItem> companyYearTransactions = GetCompanyYearTransactions(companyID);
+            List<double> revenuesPerMonth = new List<double>();
+            for(int i = 1; i <= 12; i++)
+            {
+                double monthRevenue = 0;
+                monthRevenue += companyYearTransactions.Where(x => x.Transaction.TransactionDate.Month == i)
+                                                            .Sum(x => x.Product.Price * x.Quantity);
+                revenuesPerMonth.Add(monthRevenue);
+            }
+            return revenuesPerMonth;
         }
     }
 }

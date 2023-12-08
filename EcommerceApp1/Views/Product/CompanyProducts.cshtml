@@ -25,7 +25,7 @@
         <p class="filter-option">Category</p>
         @foreach (var filterOption in Model.Categories)
         {
-            <a class="option" href="@Url.Action("CategoryFilter", "Product", new {categoryID = filterOption.ID, companyProductsFilter = true })">
+            <a style="text-decoration: none;" class="option" href="@Url.Action("CategoryFilter", "Product", new {categoryID = filterOption.ID, companyProductsFilter = true })">
                 <div class="option-container">
                     @{
                         string iconName = filterOption.Name + "Icon.svg";
@@ -36,26 +36,26 @@
             </a>
         }       
         <p class="filter-option">Price</p>
-        <a class="option" href="@Url.Action("PriceFilter", "Product", new {order = "ascending", companyProductsFilter = true })">
+        <a style="text-decoration: none;" class="option" href="@Url.Action("PriceFilter", "Product", new {order = "ascending", companyProductsFilter = true })">
             <div class="option-container">
                 <i class="fa-solid fa-money-bill" style="color: #000000;"></i>
                 <p class="option">Lowest</p>
             </div>
         </a>
-        <a class="option" href="@Url.Action("PriceFilter", "Product", new {order = "descending", companyProductsFilter = true })">
+        <a style="text-decoration: none;" class="option" href="@Url.Action("PriceFilter", "Product", new {order = "descending", companyProductsFilter = true })">
             <div class="option-container">
                 <i class="fa-solid fa-sack-dollar" style="color: #000000;"></i>
                 <p class="option">Highest</p>
             </div>
         </a>
         <p class="filter-option">Rating</p>
-        <a class="option" href="@Url.Action("RatingFilter", "Product", new {order = "descending", companyProductsFilter = true })">
+        <a style="text-decoration: none;" class="option" href="@Url.Action("RatingFilter", "Product", new {order = "descending", companyProductsFilter = true })">
             <div class="option-container">
                 <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
                 <p class="option">Highest</p>
             </div>
         </a>
-        <a class="option" href="@Url.Action("RatingFilter", "Product", new {order = "ascending", companyProductsFilter = true })">
+        <a style="text-decoration: none;" class="option" href="@Url.Action("RatingFilter", "Product", new {order = "ascending", companyProductsFilter = true })">
             <div class="option-container">
                 <i class="fa-solid fa-star fa-sm" style="color: red;"></i>
                 <p class="option">Lowest</p>

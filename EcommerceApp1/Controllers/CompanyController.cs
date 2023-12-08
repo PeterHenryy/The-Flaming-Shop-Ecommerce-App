@@ -1,7 +1,9 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace EcommerceApp1.Controllers
 {
@@ -26,7 +28,12 @@ namespace EcommerceApp1.Controllers
         {
             AppUser user = _userService.GetCurrentUser();
             Company userCompany = _companyService.GetCompanyByID(user.CompanyID);
-            return View(userCompany);
+            var companyStatsViewModel = new CompanyStatsViewModel();
+            companyStatsViewModel.Company = userCompany;
+            companyStatsViewModel.YearCustomers = _companyService.GetCompanyYearCustomers(userCompany.ID);
+            companyStatsViewModel.YearOrders = _companyService.GetCompanyYearOrders(userCompany.ID);
+            companyStatsViewModel.YearRevenue = _companyService.GetCompanyYearRevenue(userCompany.ID);
+            return View(companyStatsViewModel);
         }
 
         [HttpGet]
@@ -70,5 +77,12 @@ namespace EcommerceApp1.Controllers
             return RedirectToAction("Index", "Company");
         }
 
+        [HttpGet]
+        public IActionResult GetCompanyRevenuesPerMonth()
+        {
+            AppUser user = _userService.GetCurrentUser();
+            var revenues = _companyService.GetCompanyRevenuesPerMonth(user.CompanyID);
+            return Json(revenues);
+        }
     }
 }
