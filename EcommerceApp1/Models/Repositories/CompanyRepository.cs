@@ -2,6 +2,7 @@
 using System.Linq;
 using EcommerceApp1.Data;
 using EcommerceApp1.Models.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceApp1.Models.Repositories
 {
@@ -69,6 +70,17 @@ namespace EcommerceApp1.Models.Repositories
 
                 return false;
             }
+        }
+
+        public List<Transaction> GetTransactions()
+        {
+            return _context.Transactions.ToList();
+        }
+
+        public List<TransactionItem> GetTransactionItems()
+        {
+            return _context.TransactionItems.Include(x => x.Product)
+                                                .Include(x => x.Transaction).ToList();
         }
     }
 }
