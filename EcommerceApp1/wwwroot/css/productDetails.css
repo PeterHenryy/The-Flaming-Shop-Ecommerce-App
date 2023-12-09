@@ -124,7 +124,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    column-gap: 30px;
+    column-gap: 10px;
 }
 
 .stars-container{

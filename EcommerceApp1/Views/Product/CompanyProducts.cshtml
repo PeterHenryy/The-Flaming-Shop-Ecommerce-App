@@ -65,6 +65,9 @@
     <main>
         <section>
             <div class="responsive-container">
+                <div class="add-product-container">
+                    <a class="btn btn-success" style="font-size: 24px;" href="@Url.Action("Create", "Product")">Add Product</a>
+                </div>
                 <div class="products-display-grid">
 
                     @foreach (var product in Model.Products)

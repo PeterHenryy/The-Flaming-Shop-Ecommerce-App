@@ -72,3 +72,9 @@
     row-gap: 15px;
 }
 
+.add-product-container{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+

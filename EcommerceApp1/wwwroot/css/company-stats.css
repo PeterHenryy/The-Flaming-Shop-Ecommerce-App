@@ -4,24 +4,22 @@
 
 
 .company-name{
-    font-size: 27px;
+    font-size: 33px;
     font-weight: bold;
 }
 
 .company-logo{
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     border-radius: 8px;
 }
 
 .general-stats{
     display: flex;
     column-gap: 25px;
+    align-items: center;
 }
 
-.general-stats p{
-    font-family: 'Cascadia Mono';
-}
 
 .statistics-of-year{
     font-weight: bold;
@@ -80,4 +78,71 @@
 
 .stat-label{
     color: gray;
+}
+
+.revenue-total-and-image {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+    background: linear-gradient(to bottom right, rgb(206, 224, 246), #ffffff);
+    width: 660px;
+    height: 330px;
+    border-radius: 7px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+}
+
+.revenue-image{
+    width: 400px;
+    height: 310px;
+}
+
+.revenue-display,
+.total-revenue,
+.reviews-announcement,
+.general-stats p {
+    font-family: 'Cascadia Mono';
+}
+
+.revenue-display{
+    font-size: 35px;
+    margin-bottom: 5px;
+}
+
+.total-revenue{
+    font-size: 23px;
+}
+
+.table-announcement{
+    font-size: 20px;
+}
+
+.table-announcement {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.purchased-products-container{
+    width: 1000px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.review-adjusted {
+    overflow: hidden;
+    padding: 10px;
+    margin-bottom: 20px;
+    max-width: 610px;
+    height: 220px;
+}
+
+.review-body {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.view-all-container{
+    display: flex;
+    justify-content: center;
 }
