@@ -66,7 +66,7 @@ namespace EcommerceApp1.Services
 
         public IEnumerable<Review> GetReviewsOfSpecificProduct(int productID)
         {
-            var productReviews = _productRepos.GetReviews().Where(x => x.ProductID == productID);
+            var productReviews = _productRepos.GetReviews().Where(x => x.ProductID == productID).OrderByDescending(x => x.Date);
             return productReviews;
         }
 

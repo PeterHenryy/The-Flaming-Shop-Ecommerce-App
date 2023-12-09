@@ -11,11 +11,13 @@ namespace EcommerceApp1.Controllers
     {
         private readonly CompanyService _companyService;
         private readonly UserService _userService;
+        private readonly AppUser _currentUser;
 
         public CompanyController(CompanyService companyService, UserService userService)
         {
             _companyService = companyService;
             _userService = userService;
+            _currentUser = userService.GetCurrentUser();
         }
 
         public IActionResult Index()
@@ -26,8 +28,7 @@ namespace EcommerceApp1.Controllers
 
         public IActionResult CompanyStats()
         {
-            AppUser user = _userService.GetCurrentUser();
-            Company userCompany = _companyService.GetCompanyByID(user.CompanyID);
+            Company userCompany = _companyService.GetCompanyByID(_currentUser.CompanyID);
             var companyStatsViewModel = new CompanyStatsViewModel();
             companyStatsViewModel.Company = userCompany;
             companyStatsViewModel.YearCustomers = _companyService.GetCompanyYearCustomers(userCompany.ID);
@@ -82,9 +83,20 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult GetCompanyRevenuesPerMonth()
         {
-            AppUser user = _userService.GetCurrentUser();
-            var revenues = _companyService.GetCompanyRevenuesPerMonth(user.CompanyID);
+            var revenues = _companyService.GetCompanyRevenuesPerMonth(_currentUser.CompanyID);
             return Json(revenues);
+        }
+
+        public IActionResult CompanyProductReviews()
+        {
+            var companyProductReviews = _companyService.GetCompanyReviews(_currentUser.CompanyID);
+            return View(companyProductReviews);
+        }
+
+        public IActionResult CompanyPurchasedProducts()
+        {
+            var companyPurchasedProducts = _companyService.GetCompanyTransactionItems(_currentUser.CompanyID); 
+            return View(companyPurchasedProducts);
         }
     }
 }

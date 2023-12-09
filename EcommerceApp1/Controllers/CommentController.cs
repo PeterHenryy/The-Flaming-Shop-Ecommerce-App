@@ -16,12 +16,6 @@ namespace EcommerceApp1.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         [HttpPost]
         public IActionResult Create(Comment comment)
         {

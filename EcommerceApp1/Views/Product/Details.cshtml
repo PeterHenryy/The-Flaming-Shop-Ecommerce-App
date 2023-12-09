@@ -99,10 +99,6 @@
                                     string reviewCounter = (Model.Reviews.Count()) > 1 ? "Reviews" : "Review";
                                 }
                                 <p class="reviews-count">@Model.Reviews.Count() @reviewCounter</p>
-                                @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
-                                {
-                                    <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
-                                }
                              </div>
                             <div class="percentage-bars-container">
                                 @for(int i = 5; i >= 1; i--)
@@ -120,6 +116,27 @@
                                 }
                             </div>
                         </div> 
+                        @if (Model.HasUserBoughtProduct && !Model.HasUserReviewedProduct)
+                        {
+                            <form id="reviewForm" asp-controller="Review" asp-action="Create">
+                                <div class="review-radios">
+                                    <label for="rating">Rate your experience with this product:</label>
+                                    <div class="rating-options">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" id="Review.Rating@(i)" name="Review.Rating" value="@i" class="rating-radio" required />
+                                            <label for="Review.Rating@(i)">@i</label>
+                                        }
+                                    </div>
+                                </div>
+                                <input type="hidden" value="@Model.ProductID" asp-for="Review.ProductID" />
+                                <div class="user">
+                                    <img class="user-profile-picture" src="~/profilepics/@Model.CurrentUser.ProfilePicture">
+                                    <textarea id="reviewBody" placeholder="Type your review here..." class="add-review-input" asp-for="Review.Body" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="float: right;">Add Review</button>
+                            </form>
+                        }
                         @foreach (var review in Model.Reviews)
                         {
                             var reviewComments = Model.GetCommentsForReview(review.ID);
@@ -128,7 +145,7 @@
                             Like userLikeInReview = Model.FindUserLikeInReview(Model.CurrentUser.Id, review.ID);
                             Dislike userDislikeInReview = Model.FindUserDislikeInReview(Model.CurrentUser.Id, review.ID);
                             string reviewVibe = (review.Rating > 3) ? "review-container-green" : "review-container-red";
-                            <div class="@reviewVibe">
+                            <div class="@reviewVibe" style="margin-top: 70px;">
                                 <div class="rating-container">
                                     <p class="review-rating">@review.Rating</p>
                                     <div class="stars-container">
@@ -152,6 +169,7 @@
                                 <div class="user">
                                     <img class="user-profile-picture" src="~/profilepics/@review.User.ProfilePicture">
                                     <p class="username">@review.User.UserName</p>
+                                    <p class="review-date">@review.Date.ToString("MM/dd/yyyy")</p>
                                 </div>
                                 <p class="review-body">@review.Body</p>
                                 <div class="rating-buttons-container">
@@ -243,35 +261,37 @@
             else
             {
                 <div class="no-review-announcement">
-                    <p>THIS PRODUCT HAS NO REVIEWS YET</p>
                     @if (Model.HasUserBoughtProduct)
                     {
-                        <p>Be the first to review this product</p>
-                        <a class="btn btn-primary" href="@Url.Action("Create", "Review", new {productID = @Model.Product.ID})">Add Review</a>
+                        <div class="container col-7 shadow p-3 mb-5 bg-white rounded">
+                            <p class="first-review">Be the first to review this product</p>
+                            <form id="reviewForm" asp-controller="Review" asp-action="Create">
+                                <div class="review-radios">
+                                    <label for="rating">Rate your experience with this product:</label>
+                                    <div class="rating-options">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <input type="radio" id="Review.Rating@(i)" name="Review.Rating" value="@i" class="rating-radio" required />
+                                            <label for="Review.Rating@(i)">@i</label>
+                                        }
+                                    </div>
+                                </div>
+                                <input type="hidden" value="@Model.ProductID" asp-for="Review.ProductID" />
+                                <div class="user">
+                                    <img class="user-profile-picture" src="~/profilepics/@Model.CurrentUser.ProfilePicture">
+                                    <textarea id="reviewBody" placeholder="Type your review here..." class="add-review-input" asp-for="Review.Body" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="float: right;">Add Review</button>
+                            </form>
+                        </div>
                     }
                 </div>
             }
         </section>
     </main>
     <script src="https://kit.fontawesome.com/8da1ba04bb.js" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let showCommentsButton = document.getElementById("showCommentsButton");
-            let commentContainers = document.querySelectorAll(".comment-container");
-            let areCommentsVisible = false; 
-
-            showCommentsButton.addEventListener("click", function () {
-                areCommentsVisible = !areCommentsVisible; 
-
-                commentContainers.forEach(function (container) {
-                    container.style.display = areCommentsVisible ? "block" : "none";
-                });
-
-                let commentCount = parseInt(showCommentsButton.getAttribute("data-comment-count"));
-
-                showCommentsButton.textContent = areCommentsVisible ? "Hide Comments (" + commentCount + ")" : "Show Comments (" + commentCount + ")";
-            });
-        });
-    </script>
     <script src="~/js/shoppingCart.js"></script>
+    <script src="~/js/productDetails.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
 </body>

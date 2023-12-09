@@ -55,16 +55,19 @@
                 </div>
                 <ul class="options-menu">
                     <li>
-                    <a href="@Url.Action("Update", "AppUser")">Update Profile</a>
+                        <a href="@Url.Action("Update", "AppUser")">Update Profile</a>
                     </li>
                     <li>
-                    <a href="@Url.Action("UserCards", "CreditCard", new {userID = userIntID})">Your Credit Cards</a>
+                        <a href="@Url.Action("UserCards", "CreditCard", new {userID = userIntID})">Your Credit Cards</a>
                     </li>
                     <li>
-                    <a  href="@Url.Action("UserRefunds", "Refund", new {userID = userIntID})">Your Refunds</a>
+                        <a href="@Url.Action("UserRefunds", "Refund", new {userID = userIntID})">Your Refunds</a>
                     </li>
                     <li>
-                    <a  href="@Url.Action("UserTransactions", "Transaction", new {userID = userIntID})">Activity</a>
+                        <a href="@Url.Action("UserReviews", "Review", new {userID = userIntID})">Your Reviews</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("UserTransactions", "Transaction", new {userID = userIntID})">Activity</a>
                     </li>
                     <li>
                     </li>

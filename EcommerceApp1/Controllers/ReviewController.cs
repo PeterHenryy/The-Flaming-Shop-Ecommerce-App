@@ -26,14 +26,6 @@ namespace EcommerceApp1.Controllers
             return View(userReviews);
         }
 
-        [HttpGet]
-        public IActionResult Create(int productID)
-        {
-            var review = new Review();
-            review.ProductID = productID;
-            return View(review);
-        }
-
         [HttpPost]
         public IActionResult Create(Review review)
         {

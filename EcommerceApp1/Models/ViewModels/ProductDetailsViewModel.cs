@@ -21,7 +21,7 @@ namespace EcommerceApp1.Models.ViewModels
         public bool HasUserReviewedProduct { get; set; }
         public List<Image> ProductImages { get; set; }
         public int ProductSales { get; set; }
-
+        public Review Review { get; set; }
         public IEnumerable<Comment> GetCommentsForReview(int reviewID)
         {
             var comments = Comments.Where(x => x.ReviewID == reviewID);

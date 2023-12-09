@@ -92,10 +92,8 @@ namespace EcommerceApp1.Services
 
         public List<Review> GetCompanyLatestReviews(int companyID)
         {
-            var reviews = _companiesRepo.GetReviews()
-                                            .Where(x => x.Product.CompanyID == companyID)
-                                                .OrderByDescending(x => x.Date)
-                                                    .Take(4)
+            var reviews = GetCompanyReviews(companyID).OrderByDescending(x => x.Date)
+                                                        .Take(4)
                                                         .ToList();
 
             return reviews;
@@ -108,6 +106,15 @@ namespace EcommerceApp1.Services
                                                                     .ToList();
             return purchases;
         }
+
+        public List<Review> GetCompanyReviews(int companyID)
+        {
+            var reviews = _companiesRepo.GetReviews()
+                                            .Where(x => x.Product.CompanyID == companyID)
+                                                .ToList();
+            return reviews;
+        }
+
 
     }
 }
