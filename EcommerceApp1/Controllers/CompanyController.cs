@@ -33,6 +33,8 @@ namespace EcommerceApp1.Controllers
             companyStatsViewModel.YearCustomers = _companyService.GetCompanyYearCustomers(userCompany.ID);
             companyStatsViewModel.YearOrders = _companyService.GetCompanyYearOrders(userCompany.ID);
             companyStatsViewModel.YearRevenue = _companyService.GetCompanyYearRevenue(userCompany.ID);
+            companyStatsViewModel.CompanyProductsReviews = _companyService.GetCompanyLatestReviews(userCompany.ID);
+            companyStatsViewModel.CompanyPurchasedItems = _companyService.GetCompanyLatestPurchases(userCompany.ID);
             return View(companyStatsViewModel);
         }
 

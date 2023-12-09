@@ -89,5 +89,25 @@ namespace EcommerceApp1.Services
             }
             return revenuesPerMonth;
         }
+
+        public List<Review> GetCompanyLatestReviews(int companyID)
+        {
+            var reviews = _companiesRepo.GetReviews()
+                                            .Where(x => x.Product.CompanyID == companyID)
+                                                .OrderByDescending(x => x.Date)
+                                                    .Take(4)
+                                                        .ToList();
+
+            return reviews;
+        }
+
+        public List<TransactionItem> GetCompanyLatestPurchases(int companyID)
+        {
+            var purchases = GetCompanyTransactionItems(companyID).OrderByDescending(x => x.Transaction.TransactionDate)
+                                                                    .Take(3)
+                                                                    .ToList();
+            return purchases;
+        }
+
     }
 }

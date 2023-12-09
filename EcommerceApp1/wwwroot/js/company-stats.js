@@ -19,7 +19,7 @@ function updateChart(revenues) {
         data: {
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [{
-                label: 'Company Revenue $',
+                label: 'Company Monthly Revenue $',
                 data: revenues,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.6)',

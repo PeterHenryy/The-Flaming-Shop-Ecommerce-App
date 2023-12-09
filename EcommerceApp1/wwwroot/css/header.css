@@ -127,6 +127,7 @@
 
 .reward-points-container{
     position: relative;
+    z-index: 5;
 }
 
 .reward-points{

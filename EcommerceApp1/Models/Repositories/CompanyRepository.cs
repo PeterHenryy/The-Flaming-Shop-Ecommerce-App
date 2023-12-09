@@ -82,5 +82,11 @@ namespace EcommerceApp1.Models.Repositories
             return _context.TransactionItems.Include(x => x.Product)
                                                 .Include(x => x.Transaction).ToList();
         }
+
+        public List<Review> GetReviews()
+        {
+            return _context.Reviews.Include(x => x.User)
+                                        .Include(x => x.Product).ToList();
+        }
     }
 }
