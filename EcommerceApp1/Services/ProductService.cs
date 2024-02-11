@@ -218,9 +218,9 @@ namespace EcommerceApp1.Services
 
         public int GetProductSales(int productID)
         {
-            var transactions = _productRepos.GetTransactions();
-            //int sales = transactions.Count(x => x.ProductID == productID);
-            return 0;
+            List<TransactionItem> transactionItems = _productRepos.GetTransactionItems();
+            int productSales = transactionItems.Where(x => x.ProductID == productID).Sum(x => x.Quantity);
+            return productSales;
         }
 
         public IEnumerable<Product> CategoryFilter(int categoryID)
