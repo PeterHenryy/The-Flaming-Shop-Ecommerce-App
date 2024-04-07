@@ -123,7 +123,7 @@
 }
 
 .purchased-products-container{
-    width: 1000px;
+    width: 60%;
     background-color: white;
     border-radius: 8px;
     padding: 20px;
@@ -149,5 +149,5 @@
 
 
 .latest-reviews-container{
-    width: 635px;
+    width: 35%;
 }
