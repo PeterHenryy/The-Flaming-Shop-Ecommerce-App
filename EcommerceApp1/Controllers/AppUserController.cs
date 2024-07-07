@@ -57,14 +57,21 @@ namespace EcommerceApp1.Controllers
         public async Task<IActionResult> Login(AppLogin appLogin, string returnUrl)
         {
             AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
-            if (user.Password == appLogin.Password)
+            try
             {
-                await _signInManager.SignInAsync(user, false);
-                if (!String.IsNullOrEmpty(returnUrl))
+                if (user.Password == appLogin.Password)
                 {
-                    return Redirect(returnUrl);
+                    await _signInManager.SignInAsync(user, false);
+                    if (!String.IsNullOrEmpty(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    return RedirectToAction("Index", "Product");
                 }
-                return RedirectToAction("Index", "Product");
+            }
+            catch (Exception)
+            {
+                return View();
             }
             return View();
         }
@@ -113,6 +120,14 @@ namespace EcommerceApp1.Controllers
             return RedirectToAction("CompanyStats", "Company");
         }
         
+        public IActionResult About()
+        {
+            return View();
+        }
 
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
 }

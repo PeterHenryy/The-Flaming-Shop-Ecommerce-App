@@ -20,9 +20,8 @@
     <ul class="header-items-list">
         <li class="header-item"> <a href="@Url.Action("Index", "Product")">Home</a></li>
         <li class="header-item"><a href="@Url.Action("ProductsDisplay", "Product")">Products</a></li>
-        <li class="header-item"><a>About</a></li>
-        <li class="header-item"><a>FAQ</a></li>
-        <li class="header-item"><a>Contact</a></li>
+        <li class="header-item"><a href="@Url.Action("About", "AppUser")">About</a></li>
+        <li class="header-item"><a href="@Url.Action("Contact", "AppUser")">Contact</a></li>
     </ul>
     <div class="user-options">
         @if (User.IsInRole(UserRolesEnum.Admin.ToString()))
@@ -75,12 +74,12 @@
             </div>
 
             <div class="reward-points-container">
-                <div>
+                <div class="reward-points-inner-container">
                     <i class="fa-solid fa-bag-shopping fa-xl" style="color: #db7093;"></i>
                     <span style="color: #db7093;">@Math.Round(currentUser.UserRewardPoints, 2)</span>
                 </div>
                 <div class="reward-points-exaplanation">
-                    <p class="reward-points">These are your reward points, you gain points each time you purchase products with money</p>
+                    <p class="reward-points">These are your reward points, you gain points each time you purchase products with money!</p>
                 </div>
             </div>
 

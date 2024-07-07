@@ -149,3 +149,9 @@
 .reward-points-container:hover .reward-points-exaplanation {
     display: inline-block;
 }
+
+.reward-points-inner-container{
+    display: flex;
+    align-items: center;
+    column-gap: 7px;
+}
