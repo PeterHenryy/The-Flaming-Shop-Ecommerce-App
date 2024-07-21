@@ -14,9 +14,9 @@ namespace EcommerceApp1.Services
         {
             _shoppingCartRepository = shoppingCartRepository;
         }
-        public bool AddItemToCart(int itemID, int quantity)
+        public bool AddItemToCart(int itemID, int quantity, int userID)
         {
-            bool addedItem = _shoppingCartRepository.AddItemToCart(itemID, quantity);
+            bool addedItem = _shoppingCartRepository.AddItemToCart(itemID, quantity, userID);
             return addedItem;
         }
 
@@ -44,11 +44,6 @@ namespace EcommerceApp1.Services
             return cartItems;
         }
 
-        public ShoppingCart GetUserCart()
-        {
-            ShoppingCart userCart = _shoppingCartRepository.GetUserCart();
-            return userCart;
-        }
 
         public bool UpdateCartItemQuantity(int itemID, int quantity)
         {

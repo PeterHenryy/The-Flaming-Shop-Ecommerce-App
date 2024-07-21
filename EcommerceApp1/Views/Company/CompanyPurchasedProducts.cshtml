@@ -37,7 +37,7 @@
                             {
                                 double totalPrice = item.Product.Price * item.Quantity;
                                 <tr>
-                                    <td> <img style="height: 100px; width: 100px; border-radius: 8px;" src="~/Img/@item.Product.Image" /></td>
+                                    <td> <img style="height: 100px; width: 100px; border-radius: 8px;" src="@item.Product.Image" /></td>
                                     <td>@item.Product.Name</td>
                                     <td>@item.Quantity</td>
                                     <td>$@item.Product.Price.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</td>

@@ -1,10 +1,12 @@
 ﻿using EcommerceApp1.Helpers.Enums;
+using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 
 namespace EcommerceApp1.Controllers
@@ -12,18 +14,20 @@ namespace EcommerceApp1.Controllers
     public class AppUserController : Controller
     {
         private readonly SignInManager<AppUser> _signInManager; 
-        private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly UserService _userService;
+        private readonly ShoppingCartService _shoppingCartService;
+        private readonly IBlobService _blobService;
         private readonly AppUser _currentUser;
 
         public AppUserController(SignInManager<AppUser> signInManager,
-            RoleManager<AppRole> roleManager, UserManager<AppUser> userManger, UserService userService)
+            UserManager<AppUser> userManger, UserService userService, ShoppingCartService shoppingCartService, IBlobService blobService)
         {
             _userManager = userManger;
             _userService = userService;
+            _shoppingCartService = shoppingCartService;
+            _blobService = blobService;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _currentUser = userService.GetCurrentUser();
 
         }
@@ -39,7 +43,7 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public async Task<RedirectToActionResult> Register(AppUser appUser)
         {
-            appUser.ProfilePicture = "user-solid.svg";
+            await HandleBlob(appUser);
             var role = UserRolesEnum.Customer.ToString();
             var userRegister = await _userManager.CreateAsync(appUser);
             var assignRole = await _userManager.AddToRoleAsync(appUser, role);
@@ -47,33 +51,59 @@ namespace EcommerceApp1.Controllers
             return RedirectToAction("Login", "AppUser");
         }
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string returnUrl = null, int cartItemQuantity = 0, int cartItemProductID = 0)
         {
+            
             ViewData["returnUrl"] = returnUrl;
+            ViewData["cartItemQuantity"] = cartItemQuantity;
+            ViewData["cartItemProductID"] = cartItemProductID;
             return View();
         }
+
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(AppLogin appLogin, string returnUrl)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(AppLogin appLogin, string returnUrl, int cartItemQuantity = 0, int cartItemProductID = 0)
         {
-            AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
-            try
+            if (ModelState.IsValid && appLogin.Username != null)
             {
-                if (user.Password == appLogin.Password)
+                AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
+
+                if (user == null)
                 {
-                    await _signInManager.SignInAsync(user, false);
-                    if (!String.IsNullOrEmpty(returnUrl))
+                    ModelState.AddModelError(string.Empty, "Username not found.");
+                    return View(appLogin);
+                }
+
+                try
+                {
+                    bool correctPassword = user.Password.Equals(appLogin.Password);
+                    if (correctPassword)
                     {
-                        return Redirect(returnUrl);
+                        await _signInManager.SignInAsync(user, false);
+                        if(cartItemProductID != 0 && cartItemQuantity != 0)
+                        {
+                            bool addedItemToCart = _shoppingCartService.AddItemToCart(cartItemProductID, cartItemQuantity, user.Id);
+                        }
+                        if (!String.IsNullOrEmpty(returnUrl))
+                        {
+                            return Redirect("https://localhost:44338/" +returnUrl);
+                        }
+                        return RedirectToAction("Index", "Product");
                     }
-                    return RedirectToAction("Index", "Product");
+
+                    ModelState.AddModelError(string.Empty, "Invalid password.");
+                    return View(appLogin);
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occurred during login.");
+                    return View(appLogin);
                 }
             }
-            catch (Exception)
-            {
-                return View();
-            }
-            return View();
+
+            return View(appLogin);
+
         }
 
         public async Task<RedirectToActionResult> Logout()
@@ -91,16 +121,26 @@ namespace EcommerceApp1.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(AppUser updatedUser)
         {
-            var files = HttpContext.Request.Form.Files;
-            if(files.Count > 0)
-            {
-                updatedUser.ProfilePicture = files[0].FileName;
-                _userService.HandleUserProfilePicture(files);
-            }
+            await HandleBlob(updatedUser);
             updatedUser.SecurityStamp = Guid.NewGuid().ToString();
             AppUser mappedUser = await _userService.MapUserUpdates(updatedUser, _currentUser, _userManager);
             var user = await _userManager.UpdateAsync(mappedUser);
             return RedirectToAction("Index", "Product");
+        }
+
+        public async Task HandleBlob(AppUser updatedUser)
+        {
+            var files = HttpContext.Request.Form.Files;
+            if (files.Count > 0)
+            {
+                bool uploadedBlob = await _blobService.UploadBlob(files[0].FileName, files[0], new Blob());
+                updatedUser.ProfilePicture = _blobService.GetBlob(files[0].FileName);
+                //_userService.HandleUserProfilePicture(files);
+            }
+            else
+            {
+                updatedUser.ProfilePicture = "user-solid.svg";
+            }
         }
 
         [HttpGet]

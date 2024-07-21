@@ -74,7 +74,7 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="~/Img/@product.Image">
+                                <img src="@product.Image">
                                 <div class="product-info">
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
@@ -106,7 +106,6 @@
                                     <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                                 </div>
                                 <div class="product-buttons-flexbox">
-                                    <a style="font-size: 18px; padding: 10px 30px; border-radius: 7px;" class="btn btn-danger" href="@Url.Action("Delete", "Product", new {productID = @product.ID})">Delete</a>
                                     @if (!product.Archived)
                                     {
                                         <a style="font-size: 18px; padding: 10px 30px; border-radius: 7px;" class="btn btn-info" href="@Url.Action("ManageProductArchiving", "Product", new {productID = product.ID, option = 1})">Archive</a>
@@ -152,7 +151,7 @@
         <td>@product.Category.Name</td>
         <td>@product.Stock</td>
         <td>@product.Price</td>
-        <td> <img style="width: 200px;" src="~/Img/@product.Image"> </td>
+        <td> <img style="width: 200px;" src="@product.Image"> </td>
         <td>@product.ReleaseDate</td>
         <td>@product.UserID</td>
         <td> <a class="btn btn-secondary" href="@Url.Action("Update", "Product", new {productID = product.ID})">Update</a></td>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EcommerceApp1.Models.Identity;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EcommerceApp1.Models.ViewModels
@@ -25,6 +26,6 @@ namespace EcommerceApp1.Models.ViewModels
             }
             return popularProducts;
         }
-        public string UserName { get; set; }
+        public AppUser User { get; set; }
     }
 }

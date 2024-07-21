@@ -61,7 +61,7 @@
 
             <div class="revenue-total-and-image">
                 <div class="revenue-image-container">
-                    <img class="revenue-image" src="~/Img/company-balance.webp" />
+                    <img class="revenue-image" src="company-balance.webp" />
                 </div>
                 <div class="revenue-total-container">
                     <p class="revenue-display">$@Model.Company.Revenue.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)</p>
@@ -82,7 +82,7 @@
                         @foreach (var item in Model.CompanyPurchasedItems)
                         {
                             <div class="cart-product js-cart-product-@item.ProductID">
-                                <img src="~/Img/@item.Product.Image" style="width: 200px;height: 200px;" class="cart-product-image">
+                                <img src="@item.Product.Image" style="width: 200px;height: 200px;" class="cart-product-image">
                                 <div class="cart-product-info">
                                     <p class="cart-product-name">@item.Product.Name</p>
                                     <div class="cart-product-rating">
@@ -159,7 +159,7 @@
                             </div>
                         </div>
                         <div class="user">
-                            <img class="user-profile-picture" src="~/profilepics/@review.User.ProfilePicture">
+                            <img class="user-profile-picture" src="@review.User.ProfilePicture">
                             <p class="username">@review.User.UserName</p>
                         </div>
                         <p class="review-body">@review.Body</p>
