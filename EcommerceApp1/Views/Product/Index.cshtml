@@ -35,7 +35,7 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="~/Img/@product.Image">
+                                <img src="@product.Image">
                                 <div class="product-info">
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
@@ -62,13 +62,26 @@
                                 </div>
                             </a>
                             <div class="product-buttons-flexbox">
-                                <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
-                                    <option style="display: none" selected>Add to Cart</option>
-                                    @for (int i = 1; i <= 10; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
+                                @if(Model.User != null)
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name', true); updateCartItemQuantity(this.value); resetDropdown(this);">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="redirectToLogin('@Url.Action("Login", "AppUser")', @product.ID, this.value)">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
                                 <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
@@ -96,7 +109,7 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="~/Img/@product.Image">
+                                <img src="@product.Image">
                                 <div class="product-info">
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
@@ -123,13 +136,26 @@
                                 </div>
                             </a>
                             <div class="product-buttons-flexbox">
-                                <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
-                                    <option style="display: none" selected>Add to Cart</option>
-                                    @for (int i = 1; i <= 10; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
+                                @if (Model.User != null)
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name', true); updateCartItemQuantity(this.value); resetDropdown(this);">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="redirectToLogin('@Url.Action("Login", "AppUser")', @product.ID, this.value)">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
                                 <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
@@ -158,7 +184,7 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="~/Img/@product.Image">
+                                <img src="@product.Image">
                                 <div class="product-info">
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
@@ -185,13 +211,26 @@
                                 </div>
                             </a>
                             <div class="product-buttons-flexbox">
-                                <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
-                                    <option style="display: none" selected>Add to Cart</option>
-                                    @for (int i = 1; i <= 10; i++)
-                                    {
-                                        <option value="@i">@i</option>
-                                    }
-                                </select>
+                                @if (Model.User != null)
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name', true); updateCartItemQuantity(this.value); resetDropdown(this);">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="redirectToLogin('@Url.Action("Login", "AppUser")', @product.ID, this.value)">
+                                        <option style="display: none" selected>Add to Cart</option>
+                                        @for (int i = 1; i <= 10; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                }
                                 <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                             </div>
                         </div>
@@ -220,7 +259,7 @@
                         {
                             <div class="product-card">
                                 <a  style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})" >
-                                    <img src="~/Img/@product.Image">    
+                                    <img src="@product.Image">    
                                     <div class="product-info">
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
@@ -247,13 +286,26 @@
                                     </div>
                                 </a>
                                 <div class="product-buttons-flexbox">
-                                    <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name'); updateCartItemQuantity(this.value); resetDropdown(this);">
-                                        <option style="display: none" selected>Add to Cart</option>
-                                        @for (int i = 1; i <= 10; i++)
-                                        {
-                                            <option value="@i">@i</option>
-                                        }
-                                    </select>
+                                    @if (Model.User != null)
+                                    {
+                                        <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="addItemToCart(@product.ID, this.value,'@product.Name', true); updateCartItemQuantity(this.value); resetDropdown(this);">
+                                            <option style="display: none" selected>Add to Cart</option>
+                                            @for (int i = 1; i <= 10; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <select class="product-add-to-cart-button" id="product-add-to-cart-button-@product.ID" onchange="redirectToLogin('@Url.Action("Login", "AppUser")', @product.ID, this.value)">
+                                            <option style="display: none" selected>Add to Cart</option>
+                                            @for (int i = 1; i <= 10; i++)
+                                            {
+                                                <option value="@i">@i</option>
+                                            }
+                                        </select>
+                                    }
                                     <a style="text-decoration: none" href="@Url.Action("Details", "Product", new {productID = @product.ID})" class="details-button">Details</a>
                                 </div>
                             </div>
@@ -266,4 +318,5 @@
 
     <script src="https://kit.fontawesome.com/8da1ba04bb.js" crossorigin="anonymous"></script>
     <script src="~/js/shoppingCart.js"></script>
+   
 </body>

@@ -262,3 +262,12 @@ function updateCartItemShippingOption(itemID, newShippingCost, newShippingOption
         data: { itemID, newShippingCost, newShippingOption }
     });
 }
+
+function redirectToLogin(loginUrl, productId, quantity) {
+    var returnUrl = 'ShoppingCart/DisplayCartItems';
+    var url = loginUrl + '?returnUrl=' + encodeURIComponent(returnUrl) +
+        '&cartItemQuantity=' + encodeURIComponent(quantity) +
+        '&cartItemProductID=' + encodeURIComponent(productId);
+
+    window.location.href = url;
+}

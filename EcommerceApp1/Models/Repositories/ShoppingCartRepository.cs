@@ -18,14 +18,18 @@ namespace EcommerceApp1.Models.Repositories
             _context = context;
             _currentUser = userService.GetCurrentUser();
         }
-        public bool AddItemToCart(int itemID, int quantity)
+        public bool AddItemToCart(int itemID, int quantity, int userID)
         {
-            ShoppingCart userCart = GetUserCart();
+            if(userID == 0)
+            {
+                userID = _currentUser.Id;
+            }
+            ShoppingCart userCart = GetUserCart(userID);
             if(userCart == null)
             {
-                userCart = CreateUserCart();
+                userCart = CreateUserCart(userID);
             }
-            CartItem cartItem = GetCartItemByID(itemID);
+            CartItem cartItem = GetCartItemByID(itemID, userID);
             if(cartItem != null)
             {
                 cartItem.Quantity += quantity;
@@ -57,7 +61,7 @@ namespace EcommerceApp1.Models.Repositories
         {
             try
             {
-                ShoppingCart userCart = GetUserCart();
+                ShoppingCart userCart = GetUserCart(_currentUser.Id);
                 _context.ShoppingCarts.Remove(userCart);
                 _context.SaveChanges();
                 return true;
@@ -87,7 +91,7 @@ namespace EcommerceApp1.Models.Repositories
         {
             try
             {
-                CartItem item = GetCartItemByID(itemID);
+                CartItem item = GetCartItemByID(itemID, _currentUser.Id);
                 _context.CartItems.Remove(item);
                 _context.SaveChanges();
                 IEnumerable<CartItem> cartItems = GetCartItems();
@@ -103,16 +107,20 @@ namespace EcommerceApp1.Models.Repositories
             }
         }
 
-        public CartItem GetCartItemByID(int itemID)
+        public CartItem GetCartItemByID(int itemID, int userID = 0)
         {
-            ShoppingCart userCart = GetUserCart();
+            if(userID == 0)
+            {
+                userID = _currentUser.Id;
+            }
+            ShoppingCart userCart = GetUserCart(userID);
             CartItem item = _context.CartItems.Where(x => x.CartID == userCart.ID).SingleOrDefault(x => x.ProductID == itemID);
             return item;
         }
 
         public IEnumerable<CartItem> GetCartItems()
         {
-            ShoppingCart userCart = GetUserCart();
+            ShoppingCart userCart = GetUserCart(_currentUser.Id);
             IEnumerable<CartItem> cartItems = null;
             if(userCart != null)
             {
@@ -121,21 +129,21 @@ namespace EcommerceApp1.Models.Repositories
             return cartItems;
         }
 
-        public ShoppingCart GetUserCart()
+        public ShoppingCart GetUserCart(int userID)
         {
-            ShoppingCart userCart = _context.ShoppingCarts.SingleOrDefault(x => x.UserID == _currentUser.Id);
+            ShoppingCart userCart = _context.ShoppingCarts.SingleOrDefault(x => x.UserID == userID);
             return userCart;
         }
 
-        public ShoppingCart CreateUserCart()
+        public ShoppingCart CreateUserCart(int userID)
         {
             ShoppingCart userCart = new ShoppingCart
             {
-                UserID = _currentUser.Id
+                UserID = userID,
             };
             _context.ShoppingCarts.Add(userCart);
             _context.SaveChanges();
-            userCart = GetUserCart() ;
+            userCart = GetUserCart(userID) ;
             return userCart;
         }
 

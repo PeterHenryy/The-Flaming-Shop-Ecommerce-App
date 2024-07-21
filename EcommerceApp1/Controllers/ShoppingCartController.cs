@@ -25,9 +25,9 @@ namespace EcommerceApp1.Controllers
             return View(shoppingCartViewModel);
         }
         [HttpPost]
-        public void AddItemToCart(int itemID, int quantity)
+        public void AddItemToCart(int itemID, int quantity, int userID)
         {
-            bool addedItem = _shoppingCartService.AddItemToCart(itemID, quantity);
+            bool addedItem = _shoppingCartService.AddItemToCart(itemID, quantity, userID);
         }
 
         public IActionResult ClearCart()

@@ -23,7 +23,7 @@
             @foreach (var item in Model.Transactionitems)
             {
                 <div class="cart-product js-cart-product-@item.ProductID">
-                    <img src="~/Img/@item.Product.Image" class="cart-product-image">
+                    <img src="@item.Product.Image" class="cart-product-image">
                     <div class="cart-product-info">
                         <p class="cart-product-name">@item.Product.Name</p>
                         <div class="cart-product-rating">

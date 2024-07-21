@@ -9,7 +9,10 @@
 <div class="login-form-container">
     <h1>Welcome!</h1>
     <form asp-controller="AppUser" asp-action="Login">
+    <div asp-validation-summary="All" class="text-danger error-message"></div>
       <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
+      <input type="hidden" name="cartItemQuantity" value="@ViewData["cartItemQuantity"]" />
+      <input type="hidden" name="cartItemProductID" value="@ViewData["cartItemProductID"]" />
       <input type="text"  placeholder="Username" asp-for="Username">
 
       <input type="password"  placeholder="Password" asp-for="Password">

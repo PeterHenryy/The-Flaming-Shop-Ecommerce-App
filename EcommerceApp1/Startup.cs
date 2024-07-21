@@ -1,4 +1,6 @@
+using Azure.Storage.Blobs;
 using EcommerceApp1.Data;
+using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Models.Repositories;
 using EcommerceApp1.Services;
@@ -61,6 +63,11 @@ namespace EcommerceApp1
             services.AddRazorPages().AddRazorRuntimeCompilation();                 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.ConfigureApplicationCookie(x => x.LoginPath = "/AppUser/Login");
+            services.AddSingleton(u => new BlobServiceClient(
+        Configuration.GetValue<string>("BlobConnection")
+            ));
+            services.AddSingleton<IBlobService, BlobService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -87,7 +94,7 @@ namespace EcommerceApp1
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=AppUser}/{action=Login}/{id?}");
+                    pattern: "{controller=Product}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
