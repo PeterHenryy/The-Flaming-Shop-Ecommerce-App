@@ -65,7 +65,7 @@ namespace EcommerceApp1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AppLogin appLogin, string returnUrl, int cartItemQuantity = 0, int cartItemProductID = 0)
         {
-            if (ModelState.IsValid && appLogin.Username != null)
+            if (appLogin.Username != null)
             {
                 AppUser user = await _userManager.FindByNameAsync(appLogin.Username);
 
@@ -91,7 +91,6 @@ namespace EcommerceApp1.Controllers
                         }
                         return RedirectToAction("Index", "Product");
                     }
-
                     ModelState.AddModelError(string.Empty, "Invalid password.");
                     return View(appLogin);
                 }

@@ -77,3 +77,10 @@ button:hover {
     border: none;
     box-shadow: 0px 0px 5px lightblue;
 }
+
+.error-login {
+    color: palevioletred;
+    font-weight: bold;
+    font-size: 18px;
+    font-family: Arial;
+}
