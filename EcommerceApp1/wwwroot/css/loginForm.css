@@ -45,18 +45,17 @@ input::placeholder {
 }
 
 h1{
-    position: absolute;
-    top: 40px;
     font-family: Arial;
     animation-name: appear;
     animation-duration: 4s;
+    margin-bottom: 15px;
 }
 
 @keyframes appear{
     from{opacity: 0}
 }
 
-button {
+button, .register-button {
     position: relative;
     top: 15px;
     border: none;
@@ -69,9 +68,10 @@ button {
     color: lightgray;
     width: 100%;
     transition: background-color 0.5s, box-shadow 0.5s;
+    margin-bottom: 10px;
 }
 
-button:hover {
+button:hover, .register-button:hover {
     cursor: pointer;
     background-color: rgb(66, 155, 210);
     border: none;

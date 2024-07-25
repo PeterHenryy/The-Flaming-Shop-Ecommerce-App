@@ -17,5 +17,6 @@
       <input type="password"  placeholder="Password" asp-for="Password">
       <div asp-validation-summary="All"  class="error-login"></div>
       <button type="submit" >Login</button>
+      <input type="button" class="register-button" value="Register" onclick="@("window.location.href='" + @Url.Action("Register", "AppUser") + "'");" />
     </form>
 </div>
