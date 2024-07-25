@@ -67,7 +67,12 @@ namespace EcommerceApp1
         Configuration.GetValue<string>("BlobConnection")
             ));
             services.AddSingleton<IBlobService, BlobService>();
-
+            services.AddRazorPages()
+            .AddMvcOptions(options =>
+            {
+                options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(
+                    _ => "");
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

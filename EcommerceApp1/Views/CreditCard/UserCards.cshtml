@@ -14,13 +14,14 @@
 <header class="header">
     <partial name="_HeaderPartial" />
 </header>
-
+<div class="add-card-button-container">
+     <a style="margin-bottom: 15px;" class="btn btn-outline-primary add-card-button" href="@Url.Action("Create", "CreditCard")">Add a Credit Card</a>
+</div>
 <div class="container shadow p-3 mb-5 bg-white rounded">
     <div class="row">
         <div class="col-lg-12 col-12">
             <div class="row">
                 <div class="col-12">
-                    <a style="margin-bottom: 15px;" class="btn btn-outline-primary" href="@Url.Action("Create", "CreditCard")">Add a Credit Card</a>
                     <table id="credit-cards-table" class="table table-striped">
                         <thead>
                             <tr>
@@ -28,7 +29,6 @@
                                 <th>Name On Card</th>
                                 <th>CVV</th>
                                 <th>Expiry</th>
-                                <th>Action</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -40,7 +40,6 @@
                                     <td>@card.NameOnCard</td>
                                     <td>@card.CVV</td>
                                     <td>@card.Expiry</td>
-                                    <td> <a class="btn btn-primary" href="@Url.Action("Update", "CreditCard", new {cardID = card.ID})">Update</a></td>
                                     <td> <a class="btn btn-danger" href="@Url.Action("Delete", "CreditCard", new {cardID = card.ID})">Remove</a></td>
                                 </tr>
                             }
