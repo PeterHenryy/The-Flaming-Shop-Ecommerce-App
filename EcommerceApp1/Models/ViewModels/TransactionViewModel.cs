@@ -18,5 +18,6 @@ namespace EcommerceApp1.Models.ViewModels
             string categoryName = Categories.SingleOrDefault(x => x.ID == categoryID).Name;
             return categoryName;
         }
+
     }
 }

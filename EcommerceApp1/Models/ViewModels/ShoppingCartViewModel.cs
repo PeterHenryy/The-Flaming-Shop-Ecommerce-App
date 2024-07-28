@@ -6,5 +6,6 @@ namespace EcommerceApp1.Models.ViewModels
     {
         public IEnumerable<CartItem> CartItems { get; set; }
         public List<DeliveryOption> DeliveryOptions { get; set; }
+        public bool UserHasCreditCard { get; set; }
     }
 }

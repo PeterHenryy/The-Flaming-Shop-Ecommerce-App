@@ -111,11 +111,9 @@ namespace EcommerceApp1.Controllers
         public async Task<IActionResult> Create(ProductCreateViewModel productVM)
         {
             var files = HttpContext.Request.Form.Files;
-            //productVM.Product.Image = Guid.NewGuid().ToString() + Path.GetExtension(files[0].FileName);
             productVM.Product.UserID = _user.Id;
             await HandleBlob(productVM.Product);
             bool createdProduct = _productService.Create(productVM.Product);
-           // _productService.HandleProductImages(productVM.Product, files);
             if (createdProduct)
             {
                 bool updatedStock = _productService.UpdateCompanyProductStock(productVM.Product.CompanyID, productVM.Product.Stock, "increase");
