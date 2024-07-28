@@ -1,6 +1,5 @@
 ﻿using EcommerceApp1.Helpers;
 using EcommerceApp1.Helpers.Enums;
-using EcommerceApp1.Helpers.Payments;
 using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
 using EcommerceApp1.Models.ViewModels;
@@ -21,13 +20,17 @@ namespace EcommerceApp1.Controllers
         private readonly UserService _userService;
         private readonly UserManager<AppUser> _userManager;
         private readonly ShoppingCartService _shoppingCartService;
+        private readonly CouponService _couponService;
+        private readonly AppUser _currentUser;
 
-        public TransactionController(TransactionService transactionService, UserService userService, UserManager<AppUser> userManager, ShoppingCartService shoppingCartService)
+        public TransactionController(TransactionService transactionService, UserService userService, UserManager<AppUser> userManager, ShoppingCartService shoppingCartService, CouponService couponService)
         {
             _transactionService = transactionService;
             _userService = userService;
             _userManager = userManager;
             _shoppingCartService = shoppingCartService;
+            _couponService = couponService;
+            _currentUser = userService.GetCurrentUser();
         }
 
         public IActionResult UserTransactions(int userID)
@@ -41,7 +44,6 @@ namespace EcommerceApp1.Controllers
         [HttpGet]
         public IActionResult Create(string couponCode = null)
         {
-            AppUser currentUser = _userService.GetCurrentUser();
             var transactionViewModel= new TransactionViewModel();
             transactionViewModel.Transaction = new Transaction();
             Transaction currentTransaction = transactionViewModel.Transaction;
@@ -49,32 +51,23 @@ namespace EcommerceApp1.Controllers
             double cartTotal = _shoppingCartService.CalculateCartTotal();
             IEnumerable<CartItem> cartItems = _shoppingCartService.GetCartItems();
             _transactionService.CalculateTransactionTotal(cartTotal, currentTransaction, cartItems);
-            transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
+            _couponService.ValidateCoupon(currentTransaction, cartItems, couponCode);
+            transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(_currentUser.Id);
             transactionViewModel.CartItems = cartItems;
             transactionViewModel.Categories = _transactionService.GetCategories();
             transactionViewModel.ItemsBought = _shoppingCartService.GetItemsBoughtQuantity();
             transactionViewModel.TransactionTax = _transactionService.CalculateTransactionTax(cartTotal);
+            currentTransaction.Total += transactionViewModel.TransactionTax;
             return View(transactionViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(TransactionViewModel transactionViewModel)
         {
-            AppUser currentUser = _userService.GetCurrentUser();
             Transaction currentTransaction = transactionViewModel.Transaction;
-            currentTransaction.UserID = currentUser.Id;
-            transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(currentUser.Id);
-            bool pointsPayment = currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString();
-            if (pointsPayment)
-            {
-                var pointsPaymentValidator = new PointsPayment();
-                pointsPayment = pointsPaymentValidator.ValidatePointsForTransaction(currentUser, currentTransaction.Total);
-                if (!pointsPayment)
-                {
-                    return View(transactionViewModel);
-                }
-            }
-            else if (!currentUser.HasCreditCard)
+            currentTransaction.UserID = _currentUser.Id;
+            transactionViewModel.UserCards = _transactionService.GetSpecificUserCards(_currentUser.Id);
+            if (!_currentUser.HasCreditCard)
             {
                 return RedirectToAction("Create", "CreditCard");
             }
@@ -82,6 +75,10 @@ namespace EcommerceApp1.Controllers
             bool createdTransaction = _transactionService.Create(currentTransaction);
             if (createdTransaction)
             {
+                if(currentTransaction.CouponCode != null)
+                {
+                   bool decreasedCoupon = _couponService.DecreaseCouponQuantity(currentTransaction.CouponCode, _shoppingCartService.GetCartItems());
+                }
                 IEnumerable<CartItem> cartItems = _shoppingCartService.GetCartItems();
                 for(int i = 0; i < cartItems.Count(); i++)
                 {
@@ -92,8 +89,14 @@ namespace EcommerceApp1.Controllers
                     _transactionService.CreateTransactionItem(cartItem, currentTransaction.ID);
                 }
                 bool clearedCart = _shoppingCartService.ClearCart();
-                await UpdateUserRewardPoints(currentTransaction.Total, currentUser, pointsPayment);
-                return RedirectToAction("UserTransactions", "Transaction", new {userID = currentUser.Id});
+                bool validRewardPoints = false;
+                if(currentTransaction.PaymentType == PaymentTypes.RewardPoints.ToString())
+                {
+                    validRewardPoints = _transactionService.ValidatePointsForTransaction(_currentUser.UserRewardPoints,currentTransaction.Total);
+                }
+                _transactionService.UpdateUserRewardPoints(currentTransaction.Total, _currentUser, validRewardPoints);
+                await _userManager.UpdateAsync(_currentUser);
+                return RedirectToAction("UserTransactions", "Transaction", new {userID = _currentUser.Id});
             }
             return View(transactionViewModel);
         }
@@ -104,37 +107,28 @@ namespace EcommerceApp1.Controllers
             double cartTotal = _shoppingCartService.CalculateCartTotal();
             transaction.Total = cartTotal;
             IEnumerable<CartItem>cartItems = _shoppingCartService.GetCartItems();
-            CouponValidator validatedCoupon = _transactionService.ValidateCoupon(transaction, cartItems, couponCode);
+            CouponValidator validatedCoupon = _couponService.ValidateCoupon(transaction, cartItems, couponCode);
 
             return Json(validatedCoupon);
         }
 
-        public async Task UpdateUserRewardPoints(double transactionTotal, AppUser currentUser, bool paidWithPoints = false)
-        {
-            if (paidWithPoints)
-            {
-                currentUser.UserRewardPoints -= transactionTotal * 5;                
-            }
-            else
-            {
-                var rewardPoints = _userService.CalculateUserRewardPoints(transactionTotal);
-                currentUser.UserRewardPoints += rewardPoints;
-            }
-            await _userManager.UpdateAsync(currentUser);
-        }
-
         public IActionResult TransactionItems(int transactionID)
         {
-            AppUser currentUser = _userService.GetCurrentUser();
             List<TransactionItem> transactionItems = _transactionService.GetTransactionItems(transactionID);
             var transaction = _transactionService.GetTransactionByID(transactionID);
             var transactionItemsVM = new TransactionItemsViewModel();
             transactionItemsVM.Transactionitems = transactionItems;
             transactionItemsVM.TransactionTotal = "$" +transaction.Total.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-            transactionItemsVM.Refunds = _transactionService.GetAllUserRefunds(currentUser.Id);
+            transactionItemsVM.Refunds = _transactionService.GetAllUserRefunds(_currentUser.Id);
             transactionItemsVM.TransactionQuantityBought = transaction.ItemsBought;
             return View(transactionItemsVM);
         }
 
+        [HttpGet]
+        public IActionResult CheckRewardPoints(double transactionTotal)
+        {
+            bool result = _transactionService.ValidatePointsForTransaction(_currentUser.UserRewardPoints, transactionTotal);
+            return Json(new { success = result });
+        }
     }
 }

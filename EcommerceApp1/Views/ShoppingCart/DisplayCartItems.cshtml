@@ -115,7 +115,15 @@
                     </div>
                 </div>
                 <div class="summary-buttons">
-                    <a class="checkout-button btn btn-success" style="color: white; font-size: 18px;" href="@Url.Action("Create","Transaction")" id="checkout-link">Proceed to Checkout</a>
+                    
+                    @if (Model.UserHasCreditCard)
+                    {
+                        <a class="checkout-button btn btn-success" style="color: white; font-size: 18px;" href="@Url.Action("Create","Transaction")" id="checkout-link">Proceed to Checkout</a>
+                    }
+                    else
+                    {
+                        <a class="checkout-button btn btn-success" style="color: white; font-size: 18px;" href="@Url.Action("Create","CreditCard", new {redirectToTransaction = true})" id="checkout-link">Proceed to Checkout</a>
+                    }
                     <button class="coupon-button btn btn-primary" style="font-size: 18px;">Enter Coupon Code</button>
                     <div class="coupon-input">
                         <input type="text" id="coupon-code">

@@ -1,4 +1,5 @@
-﻿using EcommerceApp1.Models.ViewModels;
+﻿using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,14 @@ namespace EcommerceApp1.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly ShoppingCartService _shoppingCartService;
+        private readonly UserService _userService;
+        private readonly AppUser _currentUser;
 
-        public ShoppingCartController(ShoppingCartService shoppingCartService)
+        public ShoppingCartController(ShoppingCartService shoppingCartService, UserService userService)
         {
             _shoppingCartService = shoppingCartService;
+            _userService = userService;
+            _currentUser = userService.GetCurrentUser();
         }
 
         public IActionResult DisplayCartItems()
@@ -22,6 +27,7 @@ namespace EcommerceApp1.Controllers
             var shoppingCartViewModel = new ShoppingCartViewModel();
             shoppingCartViewModel.CartItems = _shoppingCartService.GetCartItems();
             shoppingCartViewModel.DeliveryOptions = _shoppingCartService.GetDeliveryOptions();
+            shoppingCartViewModel.UserHasCreditCard = _currentUser.HasCreditCard;
             return View(shoppingCartViewModel);
         }
         [HttpPost]

@@ -1,5 +1,6 @@
 ﻿using EcommerceApp1.Models;
 using EcommerceApp1.Models.Identity;
+using EcommerceApp1.Models.ViewModels;
 using EcommerceApp1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,23 +31,30 @@ namespace EcommerceApp1.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(bool redirectToTransaction)
         {
-            return View();
+            var creditCardVM = new CreditCardViewModel();
+            creditCardVM.RedirectToTransaction = redirectToTransaction;
+            return View(creditCardVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreditCard card)
+        public async Task<IActionResult> Create(CreditCardViewModel cardVM)
         {
-            card.UserID = _currentUser.Id;
-            bool createdCard = _cardService.Create(card);
+            cardVM.CreditCard.UserID = _currentUser.Id;
+            bool createdCard = _cardService.Create(cardVM.CreditCard);
             if (createdCard)
             {
                 _currentUser.HasCreditCard = true;
                 await _userManager.UpdateAsync(_currentUser);
+                if (cardVM.RedirectToTransaction)
+                {
+                    return RedirectToAction("Create", "Transaction");
+                }
                 return RedirectToAction("UserCards", "CreditCard", new {userID = _currentUser.Id});
+                
             }
-            return View(card);
+            return View(cardVM.CreditCard);
         }
 
         [HttpGet]

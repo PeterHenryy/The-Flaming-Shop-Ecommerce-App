@@ -44,7 +44,7 @@ namespace EcommerceApp1.Models.Repositories
             }
         }
 
-        public IEnumerable<Coupon> GetCompanyCoupons(int companyID)
+        public IEnumerable<Coupon> GetCompanyCoupons(int? companyID)
         {
             var companyCoupons = _context.Coupons.Where(x => x.CompanyID == companyID)
                                                    .Include(x => x.Product)
@@ -69,5 +69,22 @@ namespace EcommerceApp1.Models.Repositories
             var products = _context.Products.ToList();
             return products;
         }
+
+        public bool Update(Coupon coupon)
+        {
+            try
+            {
+                _context.Coupons.Update(coupon);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (System.Exception)
+            {
+
+                return false;
+            }
+        }
+
+       
     }
 }

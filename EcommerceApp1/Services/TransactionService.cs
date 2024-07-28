@@ -6,6 +6,9 @@ using System.Linq;
 using EcommerceApp1.Models.ViewModels;
 using System;
 using EcommerceApp1.Helpers;
+using EcommerceApp1.Models.Identity;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace EcommerceApp1.Services
 {
@@ -45,8 +48,6 @@ namespace EcommerceApp1.Services
         public void CalculateTransactionTotal(double cartTotal, Transaction currentTransaction, IEnumerable<CartItem> cartItems)
         {
             currentTransaction.Total = cartTotal;
-            ValidateCoupon(currentTransaction, cartItems, currentTransaction.CouponCode);
-            currentTransaction.Total += CalculateTransactionTax(cartTotal);
             foreach (var item in cartItems)
             {
                 currentTransaction.Total += item.ShippingCost;
@@ -72,17 +73,7 @@ namespace EcommerceApp1.Services
             return refunds;
         }
 
-        public Coupon GetCoupon(string code, int? companyID)
-        {
-            Coupon coupon = _transactionRepos.GetCoupons().SingleOrDefault(x => x.Code == code && x.CompanyID == companyID);
-            return coupon;
-        }
-
-        public bool UpdateCouponQuantity(Coupon coupon)
-        {
-            bool updatedCoupon = _transactionRepos.UpdateCouponQuantity(coupon);
-            return updatedCoupon;
-        }
+     
 
         public bool UpdateProductStock(int? productID, int quantity)
         {
@@ -122,25 +113,6 @@ namespace EcommerceApp1.Services
             return tax;
         }
 
-        public CouponValidator ValidateCoupon(Transaction transaction, IEnumerable<CartItem> cartItems, string couponCode)
-        {
-            CouponValidator couponValidator = new CouponValidator();
-            
-            foreach (var item in cartItems)
-            {
-                Coupon coupon = GetCoupon(couponCode, item.Product.CompanyID);
-                bool isCouponValid = couponValidator.Validate(coupon, item.Product);
-                if (isCouponValid)
-                {
-                    transaction.Total -= (transaction.Total * (coupon.DiscountPercentage / 100)) * 100 / 100;
-                    couponValidator.CouponValid = isCouponValid;
-                    couponValidator.CouponPercentage = coupon.DiscountPercentage;
-                    break;
-                }
-            }
-            couponValidator.Total = transaction.Total;
-            return couponValidator;
-        }
 
         public List<Category> GetCategories()
         {
@@ -153,5 +125,23 @@ namespace EcommerceApp1.Services
             List<TransactionItem> transactionItems = _transactionRepos.GetTransactionItems().Where(x => x.TransactionID == transactionID).ToList();
             return transactionItems;
         }
+        public void UpdateUserRewardPoints(double transactionTotal, AppUser _currentUser, bool paidWithPoints = false)
+        {
+            if (paidWithPoints)
+            {
+                _currentUser.UserRewardPoints -= transactionTotal * 5;
+            }
+            else
+            {
+                double rewardPoints = transactionTotal / 2;
+                _currentUser.UserRewardPoints += rewardPoints;
+            }
+        }
+        public bool ValidatePointsForTransaction(double userRewardPoints, double transactionTotal)
+        {
+            return userRewardPoints >= transactionTotal * 5;
+        }
+
+        
     }
 }

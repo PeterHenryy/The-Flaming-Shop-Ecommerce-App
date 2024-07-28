@@ -30,11 +30,6 @@ namespace EcommerceApp1.Services
             return user;
         }
 
-        public double CalculateUserRewardPoints(double productPrice)
-        {
-            double rewardPoints = productPrice / 2;
-            return rewardPoints;
-        }
 
         public async Task<AppUser> MapUserUpdates(AppUser updatedUser, AppUser currentUser, UserManager<AppUser> userManager)
         {

@@ -7,6 +7,7 @@ namespace EcommerceApp1.Models.IRepositories
         bool Create(Coupon coupon);
         bool Delete(int couponID);
         Coupon GetCouponByID(int couponID);
-        IEnumerable<Coupon> GetCompanyCoupons(int companyID);
+        IEnumerable<Coupon> GetCompanyCoupons(int? companyID);
+        bool Update(Coupon coupon);
     }
 }
