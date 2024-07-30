@@ -3,11 +3,9 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    margin-bottom: 55px;
 }
 
-.banner-container img{
-    width: 100%;
-}
 
 .banner-container img:hover{
     cursor: pointer;
@@ -73,15 +71,9 @@
     position: relative;
 }
 
-.product-rating{
-    position: absolute;
-    right: 3px;
-    top: 12px;
-}
 
 .product-name-container{
-    max-width: 235px;
-    height: 75px;
+    max-width: 100%;
     overflow: hidden;
     margin-bottom: 3px;
 }
@@ -95,6 +87,7 @@
 .product-category{
     color: lightgray;
     font-size: 20px;
+    margin-top: 5px;
 }
 
 .product-price {
@@ -145,3 +138,6 @@
     cursor: pointer;
 }
 
+.image-card{
+    padding: 20px;
+}
