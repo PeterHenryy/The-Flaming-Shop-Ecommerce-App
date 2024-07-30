@@ -35,8 +35,13 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="@product.Image">
+                                <div class="image-card">
+                                    <img src="@product.Image">
+                                </div>
                                 <div class="product-info">
+                                    <div class="product-name-container">
+                                        <h3 class="product-name">@product.Name</h3>
+                                    </div>
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
                                         {
@@ -53,9 +58,6 @@
                                                 <i class="fa-regular fa-star fa-sm"></i>
                                             }
                                         }
-                                    </div>
-                                    <div class="product-name-container">
-                                        <h3 class="product-name">@product.Name</h3>
                                     </div>
                                     <h5 class="product-category">@product.Category.Name</h5>
                                     <h3 class="product-price">$@product.Price</h3>
@@ -93,13 +95,11 @@
             <div class="banner-container">
                 <div class="responsive-container">
                     <a href="@Url.Action("CategoryFilter", "Product", new{categoryID = 3})">
-                        <img src="~/Img/phonebanner.png" />
+                        <img class="banner" src="~/Img/phones.png" />
                     </a>
                 </div>
             </div>
-            <div class="popular-announcement">
-                <h1 class="product-h1">Top Rated Phones</h1>
-            </div>
+
             <div class="responsive-container">
                 <div class="products-index-grid">
                     @{
@@ -109,8 +109,13 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="@product.Image">
+                                <div class="image-card">
+                                    <img src="@product.Image">
+                                </div>
                                 <div class="product-info">
+                                    <div class="product-name-container">
+                                        <h3 class="product-name">@product.Name</h3>
+                                    </div>
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
                                         {
@@ -127,9 +132,6 @@
                                                 <i class="fa-regular fa-star fa-sm"></i>
                                             }
                                         }
-                                    </div>
-                                    <div class="product-name-container">
-                                        <h3 class="product-name">@product.Name</h3>
                                     </div>
                                     <h5 class="product-category">@product.Category.Name</h5>
                                     <h3 class="product-price">$@product.Price</h3>
@@ -167,25 +169,28 @@
         <section>
             <div class="banner-container">
                 <div class="responsive-container">
-                    <a href="@Url.Action("CategoryFilter", "Product", new{categoryID = 1})">
-                        <img src="~/Img/gamesbanner.png" />
+                    <a href="@Url.Action("CategoryFilter", "Product", new{categoryID = 2})">
+                        <img class="banner" src="~/Img/leatherjackets.png" />
                     </a>
                 </div>
             </div>
-            <div class="popular-announcement">
-                <h1 class="product-h1">Hot Games</h1>
-            </div>
+
             <div class="responsive-container">
                 <div class="products-index-grid">
                     @{
-                        popularProducts = Model.GetMostPopularProducts(1);
+                        popularProducts = Model.GetMostPopularProducts(2);
                     }
                     @foreach (var product in popularProducts)
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="@product.Image">
+                                <div class="image-card">
+                                    <img src="@product.Image">
+                                </div>
                                 <div class="product-info">
+                                    <div class="product-name-container">
+                                        <h3 class="product-name">@product.Name</h3>
+                                    </div>
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)
                                         {
@@ -202,9 +207,6 @@
                                                 <i class="fa-regular fa-star fa-sm"></i>
                                             }
                                         }
-                                    </div>
-                                    <div class="product-name-container">
-                                        <h3 class="product-name">@product.Name</h3>
                                     </div>
                                     <h5 class="product-category">@product.Category.Name</h5>
                                     <h3 class="product-price">$@product.Price</h3>
@@ -242,25 +244,30 @@
             <section>
                 <div class="banner-container">
                     <div class="responsive-container">
-                        <a href="@Url.Action("CategoryFilter", "Product", new{categoryID = 2})">
-                            <img src="~/Img/computersbanner.png">
+                        <a href="@Url.Action("CategoryFilter", "Product", new{categoryID = 1})">
+                             <img src="~/Img/gymbanner.jpg"> 
                         </a>
                     </div>
                 </div>
                 <div class="popular-announcement">
-                    <h1 class="product-h1">Popular Computers</h1>
+                    <h1 class="product-h1">Popular Gym Equipment</h1>
                 </div>
                 <div class="responsive-container">
                     <div class="products-index-grid">
                         @{
-                            popularProducts = Model.GetMostPopularProducts(2);
+                            popularProducts = Model.GetMostPopularProducts(1);
                         }
                         @foreach (var product in popularProducts)
                         {
                             <div class="product-card">
                                 <a  style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})" >
-                                    <img src="@product.Image">    
+                                    <div class="image-card">
+                                        <img src="@product.Image">
+                                    </div>
                                     <div class="product-info">
+                                        <div class="product-name-container">
+                                            <h3 class="product-name">@product.Name</h3>
+                                        </div>
                                         <div class="product-rating">
                                             @for (int i = 1; i <= 5; i++)
                                             {
@@ -277,9 +284,6 @@
                                                     <i class="fa-regular fa-star fa-sm"></i>
                                                 }
                                             }
-                                        </div>
-                                        <div class="product-name-container">
-                                            <h3 class="product-name">@product.Name</h3>
                                         </div>
                                         <h5 class="product-category">@product.Category.Name</h5>
                                         <h3 class="product-price">$@product.Price</h3>
