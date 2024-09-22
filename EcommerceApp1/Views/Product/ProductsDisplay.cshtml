@@ -84,7 +84,9 @@
                     {
                         <div class="product-card">
                             <a style="text-decoration: none" class="details-link" href="@Url.Action("Details", "Product", new {productID = product.ID})">
-                                <img src="@product.Image">
+                                <div class="image-card">
+                                    <img src="@product.Image">
+                                </div>
                                 <div class="product-info">
                                     <div class="product-rating">
                                         @for (int i = 1; i <= 5; i++)

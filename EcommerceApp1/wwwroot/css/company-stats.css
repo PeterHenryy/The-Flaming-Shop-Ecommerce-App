@@ -151,3 +151,8 @@
 .latest-reviews-container{
     width: 35%;
 }
+
+.review-wraper{
+    display: flex;
+    justify-content: center;
+}
