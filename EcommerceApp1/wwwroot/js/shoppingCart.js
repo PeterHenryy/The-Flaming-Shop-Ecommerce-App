@@ -113,6 +113,7 @@ function calculateProductTotalPrices() {
     });
     return productsTotal;
 }
+
 function calculateOrderSubtotal(couponDiscount = 0) {
     const subtotalPrice = document.querySelector('.js-subtotal-price');
     let orderTotalPrice = calculateProductTotalPrices();

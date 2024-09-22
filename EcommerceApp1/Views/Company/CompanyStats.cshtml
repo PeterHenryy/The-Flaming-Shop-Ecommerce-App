@@ -75,102 +75,113 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-between">
-            <div class="purchased-products-container" style="height: 1100px;">
-                <p class="table-announcement">Latest Purchased Company Products</p>
-                    <div class="cart-products-container">
-                        @foreach (var item in Model.CompanyPurchasedItems)
-                        {
-                            <div class="cart-product js-cart-product-@item.ProductID">
-                                <img src="@item.Product.Image" style="width: 200px;height: 200px;" class="cart-product-image">
-                                <div class="cart-product-info">
-                                    <p class="cart-product-name">@item.Product.Name</p>
-                                    <div class="cart-product-rating">
-                                        @for (int i = 1; i <= 5; i++)
-                                        {
-                                            if (i <= @item.Product.AverageRating)
+        @if(Model.Company.TotalSales > 0)
+        {
+            
+            <div class="row justify-content-between">
+                <div class="purchased-products-container" style="height: 1100px;">
+                    <p class="table-announcement">Latest Purchased Company Products</p>
+                        <div class="cart-products-container">
+                            @foreach (var item in Model.CompanyPurchasedItems)
+                            {
+                                <div class="cart-product js-cart-product-@item.ProductID">
+                                    <img src="@item.Product.Image" style="width: 200px;height: 200px;" class="cart-product-image">
+                                    <div class="cart-product-info">
+                                        <p class="cart-product-name">@item.Product.Name</p>
+                                        <div class="cart-product-rating">
+                                            @for (int i = 1; i <= 5; i++)
                                             {
-                                                <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                                if (i <= @item.Product.AverageRating)
+                                                {
+                                                    <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                                }
+                                                else if (@item.Product.AverageRating >= (i - 1) + 0.5 && @item.Product.AverageRating < i)
+                                                {
+                                                    <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa-regular fa-star fa-sm"></i>
+                                                }
                                             }
-                                            else if (@item.Product.AverageRating >= (i - 1) + 0.5 && @item.Product.AverageRating < i)
-                                            {
-                                                <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
-                                            }
-                                            else
-                                            {
-                                                <i class="fa-regular fa-star fa-sm"></i>
-                                            }
-                                        }
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <p style="margin-bottom: 10px;">Delivery Chosen:</p>
-                                    <p>@item.ShippingOption</p>
-                                </div>
-
-                                <div class="item-quantity-and-price">
-                                    <div class="quantity-container">
-                                        <p style="margin-bottom: 5px;">Quantity Bought: @item.Quantity</p>
+                                        </div>
                                     </div>
 
-                                    <div class="prices-container">
-                                        @{
-                                            double productTotalPrice = @item.Product.Price * @item.Quantity;
-                                            string formattedTotalPrice = productTotalPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-                                            double productPrice = item.Product.Price;
-                                            string formattedPrice = productPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-                                        }
-                                        <span class="cart-product-price">$@formattedPrice each</span>
+                                    <div>
+                                        <p style="margin-bottom: 10px;">Delivery Chosen:</p>
+                                        <p>@item.ShippingOption</p>
                                     </div>
-                                    <span class="cart-product-total-price ">Total: $<span class="product-total js-product-total-@item.ProductID">@formattedTotalPrice</span></span>
+
+                                    <div class="item-quantity-and-price">
+                                        <div class="quantity-container">
+                                            <p style="margin-bottom: 5px;">Quantity Bought: @item.Quantity</p>
+                                        </div>
+
+                                        <div class="prices-container">
+                                            @{
+                                                double productTotalPrice = @item.Product.Price * @item.Quantity;
+                                                string formattedTotalPrice = productTotalPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                                                double productPrice = item.Product.Price;
+                                                string formattedPrice = productPrice.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
+                                            }
+                                            <span class="cart-product-price">$@formattedPrice each</span>
+                                        </div>
+                                        <span class="cart-product-total-price ">Total: $<span class="product-total js-product-total-@item.ProductID">@formattedTotalPrice</span></span>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                        <a class="btn btn-primary" style="font-size: 20px;" href="@Url.Action("CompanyPurchasedProducts", "Company")">View All</a>
-                    </div>
+                            }
+                            <a class="btn btn-primary" style="font-size: 20px;" href="@Url.Action("CompanyPurchasedProducts", "Company")">View All</a>
+                        </div>
                 
-            </div>
-            <div class="latest-reviews-container p-3 mb-5 bg-white rounded">
-                <p class="table-announcement">Latest Reviews on Company Products</p>
-                @foreach(var review in Model.CompanyProductsReviews)
+                </div>
+                @if(Model.CompanyProductsReviews.Count > 0)
                 {
-                    string reviewVibe = (review.Rating > 3) ? "review-container-green" : "review-container-red";
-                    <div class="@reviewVibe review-adjusted review-height" style="margin-bottom: 20px; padding: 10px;">
-                        <p style="font-weight: bold; font-size: 20px;">@review.Product.Name</p>
-                        <div class="rating-container">
-                            <p class="review-rating">@review.Rating</p>
-                            <div class="stars-container">
-                                @for (int i = 1; i <= 5; i++)
-                                {
-                                    if (i <= review.Rating)
-                                    {
-                                        <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
-                                    }
-                                    else if (review.Rating >= (i - 1) + 0.5 && review.Rating < i)
-                                    {
-                                        <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-regular fa-star fa-sm"></i>
-                                    }
-                                }
+                    <div class="latest-reviews-container p-3 mb-5 bg-white rounded">
+                        <p class="table-announcement">Latest Reviews on Company Products</p>
+                        @foreach(var review in Model.CompanyProductsReviews)
+                        {
+                            string reviewVibe = (review.Rating > 3) ? "review-container-green" : "review-container-red";
+                            <div class="review-wraper">
+
+                                <div class="@reviewVibe review-adjusted review-height" style="margin-bottom: 20px; padding: 10px;">
+                                    <p style="font-weight: bold; font-size: 20px;">@review.Product.Name</p>
+                                    <div class="rating-container">
+                                        <p class="review-rating">@review.Rating</p>
+                                        <div class="stars-container">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="fa-solid fa-star fa-sm" style="color: #29db47;"></i>
+                                                }
+                                                else if (review.Rating >= (i - 1) + 0.5 && review.Rating < i)
+                                                {
+                                                    <i class="fa-solid fa-star-half-stroke fa-sm" style="color: #29db47;"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa-regular fa-star fa-sm"></i>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="user">
+                                        <img class="user-profile-picture" src="@review.User.ProfilePicture">
+                                        <p class="username">@review.User.UserName</p>
+                                    </div>
+                                    <p class="review-body">@review.Body</p>
+                                </div>
                             </div>
+
+                        }
+                        <div class="view-all-container">
+                            <a class="btn btn-primary" style="font-size: 20px;" href="@Url.Action("CompanyProductReviews", "Company")">View All</a>
                         </div>
-                        <div class="user">
-                            <img class="user-profile-picture" src="@review.User.ProfilePicture">
-                            <p class="username">@review.User.UserName</p>
-                        </div>
-                        <p class="review-body">@review.Body</p>
                     </div>
                 }
-                <div class="view-all-container">
-                    <a class="btn btn-primary" style="font-size: 20px;" href="@Url.Action("CompanyProductReviews", "Company")">View All</a>
-                </div>
-            </div>
 
-    </div>
+            </div>
+        }
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
