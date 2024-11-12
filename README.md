@@ -1,4 +1,4 @@
-#The Flaming Shop
+# The Flaming Shop
 Welcome to The Flaming Shop, an innovative eCommerce application designed to enhance your online shopping experience. This README provides an overview of the app's functionalities, guiding users through its features and capabilities.
 
 Overview
