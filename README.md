@@ -30,5 +30,5 @@ The Flaming Shop offers a user-friendly interface that allows customers to brows
 **Sales and Stats Monitoring**: Admins can access an admin menu to monitor sales statistics and overall performance of their products.
 
 # **Conclusion**
-The Flaming Shop not only simplifies the shopping experience for users but also provides robust management tools for administrators. Whether you are looking for trendy items or managing your own product line, The Flaming Shop is designed to meet your needs effectively.
-Feel free to explore the app and enjoy a seamless shopping experience! For any inquiries or support, please reach out to me via email: peterhryk@gmail.com
+The Flaming Shop not only simplifies the shopping experience for users, but also provides robust management tools for administrators.
+Feel free to explore the app and give me your feedback! For any inquiries or support, please reach out to me via email: peterhryk@gmail.com
